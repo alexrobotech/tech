@@ -1,0 +1,2812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>ALEX ROBOTECH | Code. Create. Innovate.</title>
+
+<meta name="description"
+content="ALEX ROBOTECH — Technology, robotics, Arduino, 3D design, websites and custom projects.">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+:root{
+    --bg:#03050a;
+    --panel:#080d16;
+    --panel2:#0c1421;
+    --line:rgba(100,200,255,.16);
+    --text:#eef7ff;
+    --muted:#8ea2bd;
+    --cyan:#15d8ff;
+    --blue:#397bff;
+    --purple:#9d6cff;
+}
+
+body{
+    font-family:Arial,Segoe UI,sans-serif;
+    background:
+        radial-gradient(circle at 80% 0%,rgba(30,113,255,.14),transparent 30%),
+        radial-gradient(circle at 10% 30%,rgba(0,214,255,.08),transparent 25%),
+        var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:45px 45px;
+    z-index:-1;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.container{
+    width:min(1160px,92%);
+    margin:auto;
+}
+
+/* NAVBAR */
+
+.nav{
+    position:fixed;
+    top:14px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(1120px,94%);
+    z-index:1000;
+
+    padding:10px 14px;
+
+    border:1px solid var(--line);
+    border-radius:20px;
+
+    background:rgba(5,9,16,.72);
+    backdrop-filter:blur(18px);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:900;
+}
+
+.brand img{
+    width:43px;
+    height:43px;
+    object-fit:contain;
+    border-radius:12px;
+}
+
+.brand span{
+    background:linear-gradient(90deg,#fff,#6edfff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.navlinks{
+    display:flex;
+    gap:4px;
+}
+
+.navlinks a{
+    font-size:12px;
+    color:#aebed4;
+    padding:10px 12px;
+    border-radius:11px;
+}
+
+.navlinks a:hover{
+    color:#fff;
+    background:rgba(255,255,255,.05);
+}
+
+/* BUTTONS */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    border:1px solid var(--line);
+    background:#0b1220;
+    color:white;
+
+    border-radius:13px;
+    padding:13px 17px;
+
+    font-weight:800;
+    font-size:13px;
+
+    cursor:pointer;
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    border-color:rgba(21,216,255,.45);
+}
+
+.primary{
+    border:0;
+    background:linear-gradient(135deg,var(--cyan),var(--blue));
+    color:#021018;
+
+    box-shadow:0 10px 35px rgba(21,216,255,.18);
+}
+
+/* HERO */
+
+.hero{
+    min-height:100vh;
+
+    display:grid;
+    place-items:center;
+
+    padding:140px 0 80px;
+
+    position:relative;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:55px;
+    align-items:center;
+}
+
+.eyebrow{
+    display:inline-flex;
+
+    padding:8px 12px;
+
+    border:1px solid rgba(21,216,255,.22);
+    border-radius:999px;
+
+    color:#8feaff;
+    background:rgba(21,216,255,.05);
+
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:1.8px;
+    text-transform:uppercase;
+
+    margin-bottom:20px;
+}
+
+h1{
+    font-size:clamp(54px,8vw,100px);
+    line-height:.9;
+    letter-spacing:-5px;
+}
+
+.gradient{
+    background:linear-gradient(
+        90deg,
+        #fff,
+        #45dcff 48%,
+        #6d83ff
+    );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    max-width:650px;
+
+    color:var(--muted);
+
+    font-size:17px;
+    line-height:1.8;
+
+    margin:25px 0;
+}
+
+.actions{
+    display:flex;
+    gap:11px;
+    flex-wrap:wrap;
+}
+
+.hero-logo{
+    display:grid;
+    place-items:center;
+}
+
+.hero-logo img{
+    width:min(420px,90%);
+
+    filter:
+        drop-shadow(0 0 35px rgba(21,216,255,.25));
+
+    animation:float 5s ease-in-out infinite;
+}
+
+.mini-stats{
+    display:flex;
+    gap:10px;
+    margin-top:30px;
+    flex-wrap:wrap;
+}
+
+.stat{
+    padding:13px 16px;
+
+    border:1px solid var(--line);
+    border-radius:14px;
+
+    background:rgba(255,255,255,.025);
+}
+
+.stat b{
+    display:block;
+    font-size:18px;
+}
+
+.stat span{
+    font-size:10px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+/* SECTIONS */
+
+section{
+    padding:110px 0;
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    gap:35px;
+    align-items:end;
+    margin-bottom:35px;
+}
+
+.kicker{
+    color:#69dcff;
+
+    font-size:11px;
+    font-weight:900;
+
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+.section-head h2{
+    font-size:clamp(36px,5vw,62px);
+    letter-spacing:-2px;
+    margin-top:8px;
+}
+
+.section-head p{
+    max-width:520px;
+    color:var(--muted);
+    line-height:1.75;
+}
+
+/* CARDS */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.card{
+    border:1px solid var(--line);
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(12,20,33,.82),
+            rgba(5,8,14,.78)
+        );
+
+    padding:25px;
+
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-7px);
+
+    border-color:rgba(21,216,255,.32);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.55),
+        0 0 35px rgba(21,216,255,.06);
+}
+
+.icon{
+    font-size:30px;
+    margin-bottom:18px;
+}
+
+.card h3{
+    font-size:20px;
+    margin-bottom:9px;
+}
+
+.card p{
+    color:var(--muted);
+    line-height:1.7;
+    font-size:13px;
+}
+
+.tags{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-top:17px;
+}
+
+.tag{
+    font-size:10px;
+    color:#a9bfd9;
+
+    border:1px solid var(--line);
+
+    padding:6px 8px;
+
+    border-radius:999px;
+}
+
+/* SERVICES */
+
+.service-card{
+    min-height:285px;
+
+    display:flex;
+    flex-direction:column;
+
+    cursor:pointer;
+}
+
+.service-bottom{
+    margin-top:auto;
+    padding-top:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.price{
+    font-size:11px;
+    color:#71849e;
+}
+
+.order-mini{
+    border:1px solid rgba(21,216,255,.28);
+
+    background:rgba(21,216,255,.06);
+
+    color:#bdefff;
+
+    border-radius:10px;
+
+    padding:9px 12px;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+/* FOUNDER */
+
+.founder{
+    display:grid;
+    grid-template-columns:.8fr 1.2fr;
+    gap:18px;
+}
+
+.portrait{
+    min-height:430px;
+
+    display:grid;
+    place-items:center;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.avatar{
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    display:grid;
+    place-items:center;
+
+    font-size:70px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111d35,
+            #050912
+        );
+
+    border:1px solid rgba(21,216,255,.5);
+
+    box-shadow:
+        0 0 70px rgba(21,216,255,.18),
+        0 0 0 20px rgba(21,216,255,.025);
+}
+
+.ring{
+    position:absolute;
+
+    width:245px;
+    height:245px;
+
+    border:1px solid rgba(21,216,255,.25);
+
+    border-radius:50%;
+
+    animation:spin 16s linear infinite;
+}
+
+.ring::after{
+    content:"";
+
+    position:absolute;
+
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--cyan);
+
+    top:-4px;
+    left:50%;
+
+    box-shadow:0 0 18px var(--cyan);
+}
+
+.role{
+    font-size:11px;
+
+    color:#6bdfff;
+
+    font-weight:900;
+
+    letter-spacing:1.6px;
+
+    text-transform:uppercase;
+}
+
+.founder h3{
+    font-size:43px;
+    margin:9px 0;
+}
+
+.founder-copy{
+    color:var(--muted);
+    line-height:1.8;
+}
+
+.pills{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin:20px 0;
+}
+
+.pill{
+    padding:8px 11px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px solid var(--line);
+
+    font-size:11px;
+}
+
+.founder-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+}
+
+.founder-stat{
+    padding:15px;
+
+    border:1px solid var(--line);
+
+    border-radius:15px;
+
+    background:rgba(255,255,255,.025);
+}
+
+.founder-stat b{
+    font-size:24px;
+    display:block;
+}
+
+.founder-stat small{
+    color:var(--muted);
+}
+
+/* ORDER */
+
+.order-layout{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:18px;
+}
+
+.steps{
+    display:grid;
+    gap:11px;
+}
+
+.step{
+    display:flex;
+    gap:14px;
+
+    padding:19px;
+
+    border:1px solid var(--line);
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.025);
+}
+
+.stepno{
+    width:35px;
+    height:35px;
+    min-width:35px;
+
+    border-radius:11px;
+
+    display:grid;
+    place-items:center;
+
+    background:rgba(21,216,255,.08);
+
+    border:1px solid rgba(21,216,255,.24);
+
+    color:#9beaff;
+
+    font-weight:900;
+}
+
+.step p{
+    margin-top:5px;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    line-height:1.6;
+}
+
+/* FORM */
+
+.form{
+    display:grid;
+    gap:13px;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.field label{
+    display:block;
+
+    font-size:10px;
+
+    color:#8297b4;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:7px;
+}
+
+.input,
+.select,
+.textarea{
+    width:100%;
+
+    border:1px solid var(--line);
+
+    border-radius:13px;
+
+    background:#050a12;
+
+    color:white;
+
+    padding:13px 14px;
+
+    outline:0;
+
+    font:inherit;
+}
+
+.textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus{
+    border-color:var(--cyan);
+
+    box-shadow:
+        0 0 0 3px rgba(21,216,255,.07);
+}
+
+.summary{
+    padding:15px;
+
+    border-radius:15px;
+
+    border:1px solid rgba(21,216,255,.18);
+
+    background:rgba(21,216,255,.035);
+}
+
+.sum{
+    display:flex;
+    justify-content:space-between;
+
+    padding:6px 0;
+
+    font-size:12px;
+
+    color:#9aacc4;
+}
+
+.sum strong{
+    color:white;
+}
+
+.form-actions{
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+}
+
+.whatsapp{
+    background:linear-gradient(
+        135deg,
+        #16c878,
+        #078d51
+    );
+
+    border:0;
+}
+
+.notice{
+    font-size:10px;
+    color:#667995;
+    line-height:1.6;
+}
+
+/* STORE */
+
+.store-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.store-card{
+    min-height:220px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+
+    position:relative;
+    overflow:hidden;
+}
+
+.coming::after{
+    content:"COMING SOON";
+
+    position:absolute;
+
+    top:17px;
+    right:-37px;
+
+    transform:rotate(38deg);
+
+    font-size:9px;
+
+    font-weight:900;
+
+    letter-spacing:1.5px;
+
+    padding:6px 42px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--cyan),
+            var(--blue)
+        );
+
+    color:#021018;
+}
+
+/* CONTACT */
+
+.contact-box{
+    text-align:center;
+    padding:55px 25px;
+}
+
+.contact-box p{
+    color:var(--muted);
+
+    max-width:650px;
+
+    margin:15px auto 25px;
+
+    line-height:1.7;
+}
+
+/* FOOTER */
+
+footer{
+    padding:35px 0;
+
+    border-top:1px solid var(--line);
+
+    color:#63758f;
+
+    font-size:11px;
+
+    text-align:center;
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    z-index:2000;
+
+    display:none;
+
+    place-items:center;
+
+    background:rgba(0,0,0,.72);
+
+    backdrop-filter:blur(10px);
+
+    padding:20px;
+}
+
+.modal.open{
+    display:grid;
+}
+
+.modalbox{
+    width:min(700px,100%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    padding:25px;
+
+    border-radius:23px;
+
+    border:1px solid rgba(21,216,255,.28);
+
+    background:#080d16;
+
+    box-shadow:0 25px 80px rgba(0,0,0,.6);
+
+    position:relative;
+}
+
+.close{
+    position:absolute;
+
+    right:15px;
+    top:14px;
+
+    border:1px solid var(--line);
+
+    background:#0c1420;
+
+    color:white;
+
+    border-radius:10px;
+
+    width:36px;
+    height:36px;
+
+    cursor:pointer;
+
+    font-size:20px;
+}
+
+.choices{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:9px;
+
+    margin:20px 0;
+}
+
+.choice{
+    padding:14px;
+
+    border:1px solid var(--line);
+
+    border-radius:13px;
+
+    cursor:pointer;
+}
+
+.choice:hover,
+.choice.active{
+    border-color:var(--cyan);
+
+    background:rgba(21,216,255,.07);
+}
+
+.choice b{
+    font-size:12px;
+}
+
+.choice span{
+    display:block;
+
+    font-size:10px;
+
+    color:var(--muted);
+
+    margin-top:4px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+
+    z-index:3000;
+
+    right:20px;
+    bottom:20px;
+
+    max-width:350px;
+
+    padding:14px 16px;
+
+    border-radius:14px;
+
+    background:#08111a;
+
+    border:1px solid rgba(21,216,255,.3);
+
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+
+    opacity:0;
+
+    transform:translateY(15px);
+
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:none;
+}
+
+/* ANIMATIONS */
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-12px);
+    }
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+    .navlinks{
+        display:none;
+    }
+
+    .hero-grid,
+    .founder,
+    .order-layout{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding-top:130px;
+    }
+
+    .hero-logo{
+        order:-1;
+    }
+
+    .grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .section-head{
+        display:block;
+    }
+
+    .section-head p{
+        margin-top:15px;
+    }
+
+    .store-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:560px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .row{
+        grid-template-columns:1fr;
+    }
+
+    .founder-stats{
+        grid-template-columns:1fr;
+    }
+
+    .choices{
+        grid-template-columns:1fr;
+    }
+
+    h1{
+        letter-spacing:-3px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="nav">
+
+<a class="brand" href="#home">
+
+<img
+src="alex-robotech-logo.png"
+alt="ALEX ROBOTECH Logo"
+>
+
+<span>ALEX ROBOTECH</span>
+
+</a>
+
+<div class="navlinks">
+
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#projects">Projects</a>
+<a href="#store">Store</a>
+<a href="#founder">Founder</a>
+<a href="#order">Order</a>
+<a href="#contact">Contact</a>
+
+</div>
+
+<a class="btn primary" href="#order">
+Start a Project ↗
+</a>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+<div class="container hero-grid">
+
+<div>
+
+<div class="eyebrow">
+Independent Tech & Robotics Studio
+</div>
+
+<h1>
+
+CODE.<br>
+
+<span class="gradient">
+CREATE.
+</span><br>
+
+INNOVATE.
+
+</h1>
+
+<p>
+
+ALEX ROBOTECH builds futuristic websites,
+robotics projects, Arduino systems,
+3D designs and custom technology experiences.
+
+</p>
+
+<div class="actions">
+
+<a
+class="btn primary"
+href="#order"
+>
+Build With Me ↗
+</a>
+
+<a
+class="btn"
+href="#services"
+>
+Explore Services ↓
+</a>
+
+</div>
+
+<div class="mini-stats">
+
+<div class="stat">
+<b>7+</b>
+<span>Services</span>
+</div>
+
+<div class="stat">
+<b>∞</b>
+<span>Ideas</span>
+</div>
+
+<div class="stat">
+<b>01</b>
+<span>Founder</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="hero-logo">
+
+<img
+src="alex-robotech-logo.png"
+alt="ALEX ROBOTECH"
+>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= ABOUT ================= -->
+
+<section id="about">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+01 / About
+</div>
+
+<h2>
+
+Technology with a<br>
+
+<span class="gradient">
+builder mindset.
+</span>
+
+</h2>
+
+</div>
+
+<p>
+
+ALEX ROBOTECH combines programming,
+robotics, AI, electronics, 3D design
+and modern web development into practical
+projects made to learn, experiment and create.
+
+</p>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card">
+
+<div class="icon">⚙️</div>
+
+<h3>
+Build
+</h3>
+
+<p>
+From first idea to working prototype,
+projects are planned around real features
+and clear outcomes.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="icon">🧠</div>
+
+<h3>
+Learn
+</h3>
+
+<p>
+Technology becomes easier when you learn
+through building. Explore coding, electronics,
+robotics and design.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="icon">🚀</div>
+
+<h3>
+Innovate
+</h3>
+
+<p>
+Experiment with new ideas,
+futuristic interfaces and custom
+technology solutions.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= SERVICES ================= -->
+
+<section id="services">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+02 / Services
+</div>
+
+<h2>
+
+Pick a service.<br>
+
+<span class="gradient">
+Start building.
+</span>
+
+</h2>
+
+</div>
+
+<p>
+
+Choose a service below to open the
+quick order system, or use the complete
+Order Desk for a detailed project brief.
+
+</p>
+
+</div>
+
+
+<div class="grid">
+
+
+<!-- WEBSITE -->
+
+<div
+class="card service-card"
+onclick="openOrder('Website Development')"
+>
+
+<div>
+
+<div class="icon">💻</div>
+
+<h3>
+Website Development
+</h3>
+
+<p>
+Modern responsive websites,
+landing pages, dashboards and
+interactive experiences.
+</p>
+
+<div class="tags">
+
+<span class="tag">UI/UX</span>
+<span class="tag">Responsive</span>
+<span class="tag">Animation</span>
+
+</div>
+
+</div>
+
+<div class="service-bottom">
+
+<span class="price">
+Custom quote
+</span>
+
+<button class="order-mini">
+Order ↗
+</button>
+
+</div>
+
+</div>
+
+
+<!-- PROJECT -->
+
+<div
+class="card service-card"
+onclick="openOrder('Project Building')"
+>
+
+<div>
+
+<div class="icon">🧩</div>
+
+<h3>
+Project Building
+</h3>
+
+<p>
+School, personal and prototype
+projects with structured planning
+and documentation.
+</p>
+
+<div class="tags">
+
+<span class="tag">Prototype</span>
+<span class="tag">Demo</span>
+
+</div>
+
+</div>
+
+<div class="service-bottom">
+
+<span class="price">
+Custom quote
+</span>
+
+<button class="order-mini">
+Order ↗
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ARDUINO -->
+
+<div
+class="card service-card"
+onclick="openOrder('Arduino Project')"
+>
+
+<div>
+
+<div class="icon">⚡</div>
+
+<h3>
+Arduino Project
+</h3>
+
+<p>
+Sensor, motor, automation and
+electronics projects designed
+around your idea.
+</p>
+
+<div class="tags">
+
+<span class="tag">Arduino</span>
+<span class="tag">Sensors</span>
+<span class="tag">Motors</span>
+
+</div>
+
+</div>
+
+<div class="service-bottom">
+
+<span class="price">
+Custom quote
+</span>
+
+<button class="order-mini">
+Order ↗
+</button>
+
+</div>
+
+</div>
+
+
+<!-- 3D -->
+
+<div
+class="card service-card"
+onclick="openOrder('3D Designing')"
+>
+
+<div>
+
+<div class="icon">🧊</div>
+
+<h3>
+3D Designing
+</h3>
+
+<p>
+3D concepts and models for
+prototypes, presentations and
+creative technology projects.
+</p>
+
+<div class="tags">
+
+<span class="tag">Tinkercad</span>
+<span class="tag">Onshape</span>
+
+</div>
+
+</div>
+
+<div class="service-bottom">
+
+<span class="price">
+Custom quote
+</span>
+
+<button class="order-mini">
+Order ↗
+</button>
+
+</div>
+
+</div>
+
+
+<!-- LEARNING -->
+
+<div
+class="card service-card"
+onclick="openOrder('Tech Learning')"
+>
+
+<div>
+
+<div class="icon">📚</div>
+
+<h3>
+Tech Learning
+</h3>
+
+<p>
+Beginner-friendly learning sessions
+in coding, robotics, 3D design
+and technology.
+</p>
+
+<div class="tags">
+
+<span class="tag">Coding</span>
+<span class="tag">Mentoring</span>
+
+</div>
+
+</div>
+
+<div class="service-bottom">
+
+<span class="price">
+Custom quote
+</span>
+
+<button class="order-mini">
+Order ↗
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ROBOTICS -->
+
+<div
+class="card service-card"
+onclick="openOrder('Robotics Project')"
+>
+
+<div>
+
+<div class="icon">🤖</div>
+
+<h3>
+Robotics Project
+</h3>
+
+<p>
+Robot concepts, mechanisms,
+sensors and motors for educational
+and prototype builds.
+</p>
+
+<div class="tags">
+
+<span class="tag">Robotics</span>
+<span class="tag">Automation</span>
+
+</div>
+
+</div>
+
+<div class="service-bottom">
+
+<span class="price">
+Custom quote
+</span>
+
+<button class="order-mini">
+Order ↗
+</button>
+
+</div>
+
+</div>
+
+
+<!-- CUSTOM -->
+
+<div
+class="card service-card"
+onclick="openOrder('Custom Project')"
+>
+
+<div>
+
+<div class="icon">🚀</div>
+
+<h3>
+Custom Project
+</h3>
+
+<p>
+Have a different idea?
+Send the concept and create
+a custom build plan.
+</p>
+
+<div class="tags">
+
+<span class="tag">Custom</span>
+<span class="tag">Research</span>
+<span class="tag">Build</span>
+
+</div>
+
+</div>
+
+<div class="service-bottom">
+
+<span class="price">
+Let's discuss
+</span>
+
+<button class="order-mini">
+Order ↗
+</button>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= PROJECTS ================= -->
+
+<section id="projects">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+03 / Projects
+</div>
+
+<h2>
+
+Built in the<br>
+
+<span class="gradient">
+lab.
+</span>
+
+</h2>
+
+</div>
+
+<p>
+A growing showcase of experiments,
+prototypes and digital builds.
+</p>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card">
+
+<div class="icon">🤖</div>
+
+<h3>
+Robotics Lab
+</h3>
+
+<p>
+Sensor-driven robots, automation
+concepts and interactive mechanisms.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="icon">💡</div>
+
+<h3>
+AI Experiments
+</h3>
+
+<p>
+Personal assistant concepts,
+smart interfaces and practical
+AI experiments.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="icon">🌐</div>
+
+<h3>
+Digital Builds
+</h3>
+
+<p>
+Futuristic websites and software
+interfaces designed around real
+user experiences.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= STORE ================= -->
+
+<section id="store">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+04 / Future Store
+</div>
+
+<h2>
+
+Coming soon.<br>
+
+<span class="gradient">
+Build kits & learn.
+</span>
+
+</h2>
+
+</div>
+
+<p>
+
+The ALEX ROBOTECH store is being
+prepared for future hardware kits
+and learning experiences.
+
+</p>
+
+</div>
+
+
+<div class="grid">
+
+
+<div class="card store-card">
+
+<div>
+
+<div class="icon">
+🔧
+</div>
+
+<h3>
+Robotics & Arduino Kits
+</h3>
+
+<p>
+Curated project kits designed
+around practical robotics and
+electronics builds.
+</p>
+
+</div>
+
+<span class="tag">
+COMING SOON
+</span>
+
+</div>
+
+
+<div class="card store-card">
+
+<div>
+
+<div class="icon">
+🖥️
+</div>
+
+<h3>
+Tinkercad Master Class
+</h3>
+
+<p>
+A future hands-on learning program
+for mastering circuits, 3D design
+and simulation.
+</p>
+
+</div>
+
+<span class="tag">
+COMING SOON
+</span>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= FOUNDER ================= -->
+
+<section id="founder">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+05 / Founder
+</div>
+
+<h2>
+
+Meet the mind<br>
+
+<span class="gradient">
+behind the build.
+</span>
+
+</h2>
+
+</div>
+
+<p>
+
+ALEX ROBOTECH is built around
+curiosity, engineering and learning
+through real projects.
+
+</p>
+
+</div>
+
+
+<div class="founder">
+
+
+<div class="card portrait">
+
+<div class="ring"></div>
+
+<div class="avatar">
+👨‍💻
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="role">
+
+Founder • Builder • Programmer •
+Robotics Enthusiast
+
+</div>
+
+<h3>
+Het Patel
+</h3>
+
+<p class="founder-copy">
+
+Founder of ALEX ROBOTECH, focused on
+programming, AI, robotics, electronics,
+3D design and modern digital experiences.
+
+The mission is simple:
+
+<b style="color:white">
+learn by building, create with technology,
+and keep innovating.
+</b>
+
+</p>
+
+
+<div class="pills">
+
+<span class="pill">Python</span>
+<span class="pill">C++</span>
+<span class="pill">Arduino</span>
+<span class="pill">AI</span>
+<span class="pill">Robotics</span>
+<span class="pill">3D Design</span>
+<span class="pill">Web</span>
+
+</div>
+
+
+<div class="founder-stats">
+
+<div class="founder-stat">
+<b>01</b>
+<small>Founder</small>
+</div>
+
+<div class="founder-stat">
+<b>∞</b>
+<small>Ideas</small>
+</div>
+
+<div class="founder-stat">
+<b>24/7</b>
+<small>Learning</small>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= ORDER DESK ================= -->
+
+<section id="order">
+
+<div class="container">
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+06 / Order Desk
+</div>
+
+<h2>
+
+Start your<br>
+
+<span class="gradient">
+project.
+</span>
+
+</h2>
+
+</div>
+
+<p>
+
+Send a structured project enquiry.
+Scope, pricing and timeline are
+confirmed before work starts.
+
+</p>
+
+</div>
+
+
+<div class="order-layout">
+
+
+<div class="steps">
+
+
+<div class="step">
+
+<div class="stepno">
+01
+</div>
+
+<div>
+
+<h3>
+Choose
+</h3>
+
+<p>
+Select the service you need.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="step">
+
+<div class="stepno">
+02
+</div>
+
+<div>
+
+<h3>
+Describe
+</h3>
+
+<p>
+Explain the goal, features
+and requirements.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="step">
+
+<div class="stepno">
+03
+</div>
+
+<div>
+
+<h3>
+Review
+</h3>
+
+<p>
+Discuss scope, cost and timeline.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="step">
+
+<div class="stepno">
+04
+</div>
+
+<div>
+
+<h3>
+Build
+</h3>
+
+<p>
+Begin development after confirmation.
+</p>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<div class="card">
+
+<form
+class="form"
+id="orderForm"
+>
+
+
+<div class="row">
+
+
+<div class="field">
+
+<label>
+Your name
+</label>
+
+<input
+class="input"
+id="name"
+required
+placeholder="Your name"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Email
+</label>
+
+<input
+class="input"
+id="email"
+type="email"
+required
+placeholder="you@example.com"
+>
+
+</div>
+
+
+</div>
+
+
+<div class="row">
+
+
+<div class="field">
+
+<label>
+Service
+</label>
+
+<select
+class="select"
+id="service"
+>
+
+<option>
+Website Development
+</option>
+
+<option>
+Project Building
+</option>
+
+<option>
+Arduino Project
+</option>
+
+<option>
+3D Designing
+</option>
+
+<option>
+Tech Learning
+</option>
+
+<option>
+Robotics Project
+</option>
+
+<option>
+Custom Project
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Timeline
+</label>
+
+<select
+class="select"
+id="timeline"
+>
+
+<option>
+Flexible
+</option>
+
+<option>
+1–2 weeks
+</option>
+
+<option>
+2–4 weeks
+</option>
+
+<option>
+1–2 months
+</option>
+
+<option>
+Discuss with me
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Budget range
+</label>
+
+<select
+class="select"
+id="budget"
+>
+
+<option>
+Not sure yet
+</option>
+
+<option>
+Under ₹3,000
+</option>
+
+<option>
+₹3,000–₹7,500
+</option>
+
+<option>
+₹7,500–₹15,000
+</option>
+
+<option>
+₹15,000+
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Project brief
+</label>
+
+<textarea
+class="textarea"
+id="brief"
+required
+placeholder="What do you want to build? Include features, deadline, hardware, references, etc."
+></textarea>
+
+</div>
+
+
+<div class="summary">
+
+<div class="sum">
+
+<span>
+Service
+</span>
+
+<strong id="ss">
+Website Development
+</strong>
+
+</div>
+
+
+<div class="sum">
+
+<span>
+Timeline
+</span>
+
+<strong id="st">
+Flexible
+</strong>
+
+</div>
+
+
+<div class="sum">
+
+<span>
+Budget
+</span>
+
+<strong id="sb">
+Not sure yet
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="form-actions">
+
+
+<button
+class="btn primary"
+type="submit"
+>
+Generate Order Brief ↗
+</button>
+
+
+<button
+class="btn"
+type="button"
+id="copy"
+>
+Copy Brief
+</button>
+
+
+<button
+class="btn whatsapp"
+type="button"
+id="wa"
+>
+WhatsApp ↗
+</button>
+
+
+</div>
+
+
+<p class="notice">
+
+This is an enquiry system.
+No automatic payment is taken.
+
+To enable WhatsApp ordering,
+replace YOUR_WHATSAPP_NUMBER
+in the JavaScript below.
+
+</p>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= CONTACT ================= -->
+
+<section id="contact">
+
+<div class="container">
+
+<div class="card contact-box">
+
+<div class="kicker">
+07 / Contact
+</div>
+
+<h2>
+
+Have an idea?<br>
+
+<span class="gradient">
+Let's build it.
+</span>
+
+</h2>
+
+<p>
+
+Use the Order Desk for a detailed
+project brief or reach out directly.
+
+</p>
+
+<a
+class="btn primary"
+href="#order"
+>
+Open Order Desk ↗
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+© <span id="year"></span>
+ALEX ROBOTECH
+•
+CODE. CREATE. INNOVATE.
+
+</footer>
+
+
+<!-- QUICK ORDER MODAL -->
+
+<div
+class="modal"
+id="modal"
+>
+
+<div class="modalbox">
+
+<button
+class="close"
+onclick="closeModal()"
+>
+×
+</button>
+
+<div class="kicker">
+Quick Order
+</div>
+
+<h2 style="margin-top:8px">
+
+Start
+
+<span
+class="gradient"
+id="modalTitle"
+>
+your project
+</span>
+
+</h2>
+
+<p style="color:var(--muted);margin-top:8px">
+
+Choose a service, then continue
+to the full Order Desk.
+
+</p>
+
+
+<div
+class="choices"
+id="choices"
+>
+</div>
+
+
+<a
+class="btn primary"
+href="#order"
+onclick="closeModal()"
+>
+Continue to Order Desk ↓
+</a>
+
+</div>
+
+</div>
+
+
+<div
+class="toast"
+id="toast"
+>
+</div>
+
+
+<script>
+
+/* =========================================
+   CHANGE THIS TO YOUR WHATSAPP NUMBER
+   Example:
+   919876543210
+========================================= */
+
+const WHATSAPP_NUMBER =
+"9979766643";
+
+
+const service =
+document.getElementById("service");
+
+const timeline =
+document.getElementById("timeline");
+
+const budget =
+document.getElementById("budget");
+
+const toast =
+document.getElementById("toast");
+
+
+/* UPDATE ORDER SUMMARY */
+
+function sync(){
+
+document.getElementById("ss")
+.textContent = service.value;
+
+document.getElementById("st")
+.textContent = timeline.value;
+
+document.getElementById("sb")
+.textContent = budget.value;
+
+}
+
+
+service.addEventListener("change",sync);
+timeline.addEventListener("change",sync);
+budget.addEventListener("change",sync);
+
+
+/* QUICK ORDER */
+
+function openOrder(selectedService){
+
+service.value =
+selectedService;
+
+sync();
+
+document.getElementById(
+"modalTitle"
+).textContent =
+selectedService;
+
+
+const services = [
+
+"Website Development",
+"Project Building",
+"Arduino Project",
+"3D Designing",
+"Tech Learning",
+"Robotics Project",
+"Custom Project"
+
+];
+
+
+document.getElementById(
+"choices"
+).innerHTML =
+
+services.map(
+
+item => `
+
+<div
+class="choice
+${item === selectedService ? "active" : ""}"
+onclick="chooseService('${item}')"
+>
+
+<b>
+${item}
+</b>
+
+<span>
+Select this service
+</span>
+
+</div>
+
+`
+
+).join("");
+
+
+document.getElementById(
+"modal"
+).classList.add("open");
+
+}
+
+
+/* SELECT SERVICE */
+
+function chooseService(selected){
+
+service.value =
+selected;
+
+sync();
+
+document.getElementById(
+"modalTitle"
+).textContent =
+selected;
+
+}
+
+
+/* CLOSE MODAL */
+
+function closeModal(){
+
+document.getElementById(
+"modal"
+).classList.remove("open");
+
+}
+
+
+document.getElementById(
+"modal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target.id === "modal"){
+
+closeModal();
+
+}
+
+});
+
+
+/* CREATE ORDER BRIEF */
+
+function createBrief(){
+
+const orderID =
+"AR-" +
+Date.now()
+.toString()
+.slice(-7);
+
+
+return `
+
+ALEX ROBOTECH
+PROJECT ENQUIRY
+
+Order ID:
+${orderID}
+
+Name:
+${document.getElementById("name").value}
+
+Email:
+${document.getElementById("email").value}
+
+Service:
+${service.value}
+
+Timeline:
+${timeline.value}
+
+Budget:
+${budget.value}
+
+
+PROJECT BRIEF:
+
+${document.getElementById("brief").value}
+
+`;
+
+}
+
+
+/* TOAST */
+
+function showMessage(message){
+
+toast.textContent =
+message;
+
+toast.classList.add("show");
+
+clearTimeout(
+window.toastTimer
+);
+
+window.toastTimer =
+setTimeout(
+
+() => {
+
+toast.classList.remove(
+"show"
+);
+
+},
+
+3000
+
+);
+
+}
+
+
+/* FORM */
+
+document.getElementById(
+"orderForm"
+).addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+const order =
+createBrief();
+
+
+localStorage.setItem(
+"alexRobotechOrder",
+order
+);
+
+
+navigator.clipboard
+.writeText(order)
+.then(
+() =>
+showMessage(
+"Order brief created and copied!"
+)
+)
+.catch(
+() =>
+showMessage(
+"Order brief created!"
+)
+);
+
+});
+
+
+/* COPY */
+
+document.getElementById(
+"copy"
+).addEventListener(
+"click",
+async function(){
+
+try{
+
+await navigator.clipboard
+.writeText(
+createBrief()
+);
+
+showMessage(
+"Order brief copied!"
+);
+
+}
+
+catch{
+
+showMessage(
+"Copy unavailable."
+);
+
+}
+
+});
+
+
+/* WHATSAPP */
+
+document.getElementById(
+"wa"
+).addEventListener(
+"click",
+function(){
+
+if(
+WHATSAPP_NUMBER ===
+"YOUR_WHATSAPP_NUMBER"
+){
+
+showMessage(
+"Add your WhatsApp number in the code first."
+);
+
+return;
+
+}
+
+
+const url =
+"https://wa.me/" +
+WHATSAPP_NUMBER +
+"?text=" +
+encodeURIComponent(
+createBrief()
+);
+
+
+window.open(
+url,
+"_blank"
+);
+
+});
+
+
+/* YEAR */
+
+document.getElementById(
+"year"
+).textContent =
+new Date().getFullYear();
+
+
+sync();
+
+</script>
+
+</body>
+</html>
