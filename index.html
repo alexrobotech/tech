@@ -604,7 +604,13 @@ section{padding:110px 0;}
     border-color:var(--cyan);
     transform:translateY(-1px);
 }
-.merchant-bar{display:flex;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap;}
+.merchant-bar{display:none;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap;}
+.merchant-bar.revealed{display:flex;}
+.merchant-hint-hidden{
+    font-family:var(--mono);font-size:10px;
+    color:#3d4d63;letter-spacing:.5px;margin-bottom:24px;
+    user-select:none;transition:opacity .3s;
+}
 .merchant-toggle{
     display:inline-flex;align-items:center;gap:9px;
     padding:11px 15px;border:1px solid var(--line);
@@ -1216,12 +1222,14 @@ at the top of the JavaScript.
 </div>
 <div id="recentChips" class="recent-chips"></div>
 
-<div class="merchant-bar">
-<button class="merchant-toggle" id="merchantToggle" onclick="toggleMerchant()">
+<div class="merchant-hint-hidden" id="merchantHint">· owner access: ctrl + shift + m ·</div>
+
+<div class="merchant-bar" id="merchantBar">
+<button class="merchant-toggle" id="merchantToggle" onclick="requestMerchantToggle()">
 <span class="dot"></span>
 Merchant Mode: <b id="merchantState">OFF</b>
 </button>
-<span class="merchant-hint">Owner-only view — update order statuses locally.</span>
+<span class="merchant-hint">Owner-only view — protected by PIN.</span>
 </div>
 
 <div class="orders-grid" id="ordersGrid"></div>
@@ -1281,14 +1289,19 @@ Merchant Mode: <b id="merchantState">OFF</b>
 
 <script>
 /* =====================================================================
-   DELIVERY CONFIG — YOUR KEY IS ALREADY ADDED
+   DELIVERY CONFIG
    =====================================================================
-   Orders will arrive at the email you used to sign up at web3forms.com
+   Web3Forms key is configured — orders will arrive at your email.
+   Telegram is intentionally disabled.
    ===================================================================== */
 
 const WEB3FORMS_ACCESS_KEY = "79e7cefd-0d2c-44da-b6ae-a07eb2865328";
 const TELEGRAM_BOT_TOKEN   = "";
 const TELEGRAM_CHAT_ID     = "";
+
+/* ===== MERCHANT MODE — your secret PIN ===== */
+/* Change this to any 4-digit number you want. Remember it! */
+const MERCHANT_PIN = "4821";
 
 /* ====================== CONFIG ====================== */
 
@@ -2564,14 +2577,52 @@ function removeOrder(id){
     renderOrders();
     toast("Order deleted");
 }
-function toggleMerchant(){
-    state.merchantMode = !state.merchantMode;
+
+/* ====================== MERCHANT MODE (PIN PROTECTED) ====================== */
+
+function requestMerchantToggle(){
+
+    /* Turning OFF — no PIN needed */
+    if(state.merchantMode){
+        state.merchantMode = false;
+        const t = $("merchantToggle");
+        t.classList.remove("on");
+        $("merchantState").textContent = "OFF";
+        renderOrders();
+        toast("Merchant Mode disabled");
+        return;
+    }
+
+    /* Turning ON — ask for PIN */
+    const entered = prompt("Enter merchant PIN:");
+    if(entered === null) return;  /* cancelled */
+
+    if(entered.trim() !== MERCHANT_PIN){
+        toast("❌ Incorrect PIN");
+        return;
+    }
+
+    state.merchantMode = true;
     const t = $("merchantToggle");
-    t.classList.toggle("on", state.merchantMode);
-    $("merchantState").textContent = state.merchantMode ? "ON" : "OFF";
+    t.classList.add("on");
+    $("merchantState").textContent = "ON";
     renderOrders();
-    toast(state.merchantMode ? "Merchant Mode enabled" : "Merchant Mode disabled");
+    toast("✓ Merchant Mode enabled");
 }
+
+/* Reveal the merchant bar with Ctrl+Shift+M */
+document.addEventListener("keydown", (e) => {
+    if(e.ctrlKey && e.shiftKey && (e.key === "M" || e.key === "m")){
+        e.preventDefault();
+        const bar = $("merchantBar");
+        const hint = $("merchantHint");
+        if(bar){
+            bar.classList.toggle("revealed");
+            if(hint) hint.style.opacity = bar.classList.contains("revealed") ? "0" : "1";
+        }
+    }
+});
+
 function scrollToOrders(){
     document.getElementById("orders").scrollIntoView({behavior:"smooth"});
 }
@@ -2728,6 +2779,7 @@ console.log(
     anyDeliveryReady() ? "color:#8ff0c2" : "color:#ffb547"
 );
 console.log("%cStudio: " + STUDIO.label, "color:#8ea2bd");
+console.log("%cMerchant access: Ctrl+Shift+M then enter PIN", "color:#69dcff");
 </script>
 
 </body>
