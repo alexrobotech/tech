@@ -5,798 +5,283 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ALEX ROBOTECH | Code. Create. Innovate.</title>
 <meta name="description" content="ALEX ROBOTECH — Technology, robotics, Arduino, 3D design, websites and custom projects.">
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-:root{
-    --bg:#03050a;
-    --line:rgba(100,200,255,.16);
-    --line2:rgba(100,200,255,.32);
-    --text:#eef7ff;
-    --muted:#8ea2bd;
-    --cyan:#15d8ff;
-    --blue:#397bff;
-    --purple:#9d6cff;
-    --green:#16c878;
-    --amber:#ffb547;
-    --red:#ff5f57;
-    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
-}
-body{
-    font-family:Arial,Segoe UI,sans-serif;
-    background:
-        radial-gradient(circle at 80% 0%,rgba(30,113,255,.14),transparent 30%),
-        radial-gradient(circle at 10% 30%,rgba(0,214,255,.08),transparent 25%),
-        var(--bg);
-    color:var(--text);
-    overflow-x:hidden;
-}
-body::before{
-    content:"";position:fixed;inset:0;pointer-events:none;
-    background-image:
-        linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
-    background-size:45px 45px;z-index:-1;
-}
-#fx{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.6;}
-.scanlines{
-    position:fixed;inset:0;z-index:900;pointer-events:none;
-    background:repeating-linear-gradient(to bottom,
-        rgba(255,255,255,.014) 0px,rgba(255,255,255,.014) 1px,
-        transparent 1px,transparent 3px);
-    mix-blend-mode:overlay;
-}
-a{text-decoration:none;color:inherit;}
-.container{width:min(1160px,92%);margin:auto;}
-
-.nav{
-    position:fixed;top:14px;left:50%;transform:translateX(-50%);
-    width:min(1120px,94%);z-index:1000;
-    padding:10px 14px;border:1px solid var(--line);border-radius:20px;
-    background:rgba(5,9,16,.72);backdrop-filter:blur(18px);
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;}
-.brand img{width:43px;height:43px;object-fit:contain;border-radius:12px;}
-.brand span{
-    background:linear-gradient(90deg,#fff,#6edfff);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.navlinks{display:flex;gap:4px;}
-.navlinks a{
-    font-size:12px;color:#aebed4;padding:10px 12px;
-    border-radius:11px;font-family:var(--mono);letter-spacing:.4px;
-}
-.navlinks a:hover{color:#fff;background:rgba(255,255,255,.05);}
-.nav-right{display:flex;align-items:center;gap:9px;}
-.status-chip{
-    display:none;align-items:center;gap:7px;
-    font-family:var(--mono);font-size:10px;
-    color:#7fe9c0;border:1px solid rgba(22,200,120,.25);
-    background:rgba(22,200,120,.06);padding:8px 10px;
-    border-radius:11px;letter-spacing:.6px;
-}
-@media(min-width:1100px){.status-chip{display:inline-flex;}}
-.pulse-dot{
-    width:6px;height:6px;border-radius:50%;
-    background:var(--green);box-shadow:0 0 10px var(--green);
-    animation:pulse 1.8s ease-in-out infinite;
-}
-@keyframes pulse{
-    0%,100%{opacity:1;transform:scale(1);}
-    50%{opacity:.35;transform:scale(.75);}
-}
-.cart-btn{
-    position:relative;display:inline-flex;align-items:center;gap:7px;
-    border:1px solid var(--line);background:#0b1220;color:#fff;
-    border-radius:12px;padding:11px 13px;font-size:12px;font-weight:800;
-    font-family:var(--mono);cursor:pointer;transition:.25s;
-}
-.cart-btn:hover{border-color:var(--line2);transform:translateY(-2px);}
-.cart-badge{
-    position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;
-    padding:0 5px;border-radius:999px;
-    background:linear-gradient(135deg,var(--cyan),var(--blue));
-    color:#021018;font-size:10px;font-weight:900;
-    display:grid;place-items:center;font-family:var(--mono);
-    box-shadow:0 0 14px rgba(21,216,255,.5);
-    transform:scale(0);transition:transform .3s cubic-bezier(.2,1.5,.5,1);
-}
-.cart-badge.show{transform:scale(1);}
-
-.btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    border:1px solid var(--line);background:#0b1220;color:white;
-    border-radius:13px;padding:13px 17px;font-weight:800;font-size:13px;
-    cursor:pointer;transition:.25s;font-family:var(--mono);letter-spacing:.3px;
-}
-.btn:hover{transform:translateY(-2px);border-color:rgba(21,216,255,.45);}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
-.primary{
-    border:0;background:linear-gradient(135deg,var(--cyan),var(--blue));
-    color:#021018;box-shadow:0 10px 35px rgba(21,216,255,.18);
-}
-.ghost{background:transparent;}
-
-.hero{min-height:100vh;display:grid;place-items:center;padding:140px 0 80px;position:relative;}
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:55px;align-items:center;}
-.eyebrow{
-    display:inline-flex;align-items:center;gap:8px;padding:8px 12px;
-    border:1px solid rgba(21,216,255,.22);border-radius:999px;
-    color:#8feaff;background:rgba(21,216,255,.05);
-    font-size:11px;font-weight:900;letter-spacing:1.8px;
-    text-transform:uppercase;font-family:var(--mono);margin-bottom:20px;
-}
-h1{font-size:clamp(54px,8vw,100px);line-height:.9;letter-spacing:-5px;}
-.gradient{
-    background:linear-gradient(90deg,#fff,#45dcff 48%,#6d83ff);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.hero p{max-width:650px;color:var(--muted);font-size:17px;line-height:1.8;margin:25px 0;}
-.actions{display:flex;gap:11px;flex-wrap:wrap;}
-.hero-logo{display:grid;place-items:center;position:relative;}
-.hero-logo img{
-    width:min(420px,90%);
-    filter:drop-shadow(0 0 35px rgba(21,216,255,.25));
-    animation:float 5s ease-in-out infinite;position:relative;z-index:2;
-}
-.orbit{
-    position:absolute;width:min(440px,96%);aspect-ratio:1;
-    border:1px dashed rgba(21,216,255,.18);border-radius:50%;
-    animation:spin 40s linear infinite;
-}
-.orbit::before,.orbit::after{
-    content:"";position:absolute;width:7px;height:7px;border-radius:50%;
-    background:var(--cyan);box-shadow:0 0 16px var(--cyan);
-}
-.orbit::before{top:-4px;left:50%;}
-.orbit::after{bottom:-4px;left:20%;background:var(--purple);box-shadow:0 0 16px var(--purple);}
-.mini-stats{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap;}
-.stat{
-    padding:13px 16px;border:1px solid var(--line);border-radius:14px;
-    background:rgba(255,255,255,.025);position:relative;overflow:hidden;
-}
-.stat b{display:block;font-size:18px;font-family:var(--mono);}
-.stat span{
-    font-size:10px;color:var(--muted);text-transform:uppercase;
-    letter-spacing:1px;font-family:var(--mono);
-}
-
-section{padding:110px 0;}
-.section-head{
-    display:flex;justify-content:space-between;gap:35px;
-    align-items:end;margin-bottom:35px;
-}
-.kicker{
-    color:#69dcff;font-size:11px;font-weight:900;
-    letter-spacing:2px;text-transform:uppercase;font-family:var(--mono);
-}
-.section-head h2{font-size:clamp(36px,5vw,62px);letter-spacing:-2px;margin-top:8px;}
-.section-head p{max-width:520px;color:var(--muted);line-height:1.75;}
-
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;}
-.card{
-    border:1px solid var(--line);border-radius:22px;
-    background:linear-gradient(145deg,rgba(12,20,33,.82),rgba(5,8,14,.78));
-    padding:25px;transition:.3s;position:relative;
-}
-.card::before,.card::after{
-    content:"";position:absolute;width:16px;height:16px;
-    border-color:rgba(21,216,255,.55);border-style:solid;
-    border-width:0;opacity:0;transition:.3s;pointer-events:none;
-}
-.card::before{top:9px;left:9px;border-top-width:1px;border-left-width:1px;border-radius:6px 0 0 0;}
-.card::after{bottom:9px;right:9px;border-bottom-width:1px;border-right-width:1px;border-radius:0 0 6px 0;}
-.card:hover::before,.card:hover::after{opacity:1;}
-.card:hover{
-    transform:translateY(-7px);border-color:rgba(21,216,255,.32);
-    box-shadow:0 25px 80px rgba(0,0,0,.55),0 0 35px rgba(21,216,255,.06);
-}
-.icon{font-size:30px;margin-bottom:18px;}
-.card h3{font-size:20px;margin-bottom:9px;}
-.card p{color:var(--muted);line-height:1.7;font-size:13px;}
-.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:17px;}
-.tag{
-    font-size:10px;color:#a9bfd9;border:1px solid var(--line);
-    padding:6px 8px;border-radius:999px;font-family:var(--mono);letter-spacing:.4px;
-}
-
-.product-card{display:flex;flex-direction:column;min-height:290px;overflow:hidden;}
-.product-card.coming{
-    border-color:rgba(255,181,71,.18);
-    background:linear-gradient(145deg,rgba(20,16,10,.82),rgba(10,7,4,.78));
-}
-.product-card.coming:hover{
-    border-color:rgba(255,181,71,.4);
-    box-shadow:0 25px 80px rgba(0,0,0,.55),0 0 35px rgba(255,181,71,.08);
-}
-.product-card.coming::before,.product-card.coming::after{border-color:rgba(255,181,71,.5);}
-.soon-ribbon{
-    position:absolute;top:14px;right:-40px;transform:rotate(38deg);
-    font-size:9px;font-weight:900;letter-spacing:1.5px;
-    padding:6px 48px;background:linear-gradient(90deg,var(--amber),#ff8c42);
-    color:#1a0d02;font-family:var(--mono);z-index:3;
-    box-shadow:0 4px 18px rgba(255,140,66,.35);pointer-events:none;
-}
-.p-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;}
-.p-top .icon{margin:0;}
-.p-type{
-    font-family:var(--mono);font-size:9px;letter-spacing:1.4px;
-    padding:5px 8px;border-radius:6px;border:1px solid var(--line);
-    color:#8fb8d8;background:rgba(255,255,255,.03);
-}
-.p-type[data-t="physical"]{color:#ffd9a0;border-color:rgba(255,181,71,.3);background:rgba(255,181,71,.06);}
-.p-type[data-t="digital"]{color:#c8b3ff;border-color:rgba(157,108,255,.3);background:rgba(157,108,255,.07);}
-.p-type[data-t="service"]{color:#9beaff;border-color:rgba(21,216,255,.28);background:rgba(21,216,255,.06);}
-.service-bottom{
-    margin-top:auto;padding-top:18px;
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-}
-.p-price{display:flex;flex-direction:column;gap:2px;}
-.p-price b{font-size:19px;font-family:var(--mono);letter-spacing:-.5px;}
-.p-price small{
-    font-size:9px;color:#71849e;font-family:var(--mono);
-    letter-spacing:1px;text-transform:uppercase;
-}
-.quote-tag{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.5px;}
-.order-mini{
-    border:1px solid rgba(21,216,255,.28);background:rgba(21,216,255,.06);
-    color:#bdefff;border-radius:10px;padding:9px 12px;
-    font-weight:800;font-family:var(--mono);font-size:11px;
-    letter-spacing:.4px;cursor:pointer;transition:.2s;white-space:nowrap;
-}
-.order-mini:hover{background:rgba(21,216,255,.15);border-color:var(--cyan);}
-.order-mini.added{background:rgba(22,200,120,.14);border-color:rgba(22,200,120,.5);color:#8ff0c2;}
-.order-mini.soon{border-color:rgba(255,181,71,.35);background:rgba(255,181,71,.08);color:#ffd9a0;}
-.order-mini.soon:hover{background:rgba(255,181,71,.16);border-color:var(--amber);}
-
-.store-banner{
-    display:flex;align-items:center;gap:16px;padding:16px 20px;
-    border:1px solid rgba(255,181,71,.28);
-    background:linear-gradient(135deg,rgba(255,181,71,.07),rgba(255,140,66,.02));
-    border-radius:18px;margin-bottom:22px;position:relative;overflow:hidden;
-}
-.store-banner::after{
-    content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;
-    background:linear-gradient(90deg,transparent,rgba(255,181,71,.07),transparent);
-    animation:sheen 5s ease-in-out infinite;pointer-events:none;
-}
-@keyframes sheen{0%,60%{left:-60%;}100%{left:130%;}}
-.sb-dot{
-    width:10px;height:10px;border-radius:50%;background:var(--amber);
-    box-shadow:0 0 14px var(--amber);animation:pulse 1.8s ease-in-out infinite;flex-shrink:0;
-}
-.sb-text b{
-    display:block;font-size:13px;color:#ffd9a0;margin-bottom:4px;
-    font-family:var(--mono);letter-spacing:.8px;text-transform:uppercase;
-}
-.sb-text span{font-size:12px;color:#b59a76;line-height:1.6;}
-
-.config-notice{
-    display:none;align-items:flex-start;gap:14px;
-    padding:18px 20px;border:1px solid rgba(255,181,71,.4);
-    background:linear-gradient(135deg,rgba(255,181,71,.08),rgba(255,140,66,.02));
-    border-radius:16px;margin-bottom:22px;
-}
-.config-notice.show{display:flex;}
-.config-notice .cn-icon{font-size:24px;flex-shrink:0;line-height:1;}
-.config-notice .cn-body b{
-    display:block;font-size:13px;color:#ffd9a0;
-    font-family:var(--mono);letter-spacing:.6px;margin-bottom:6px;
-    text-transform:uppercase;
-}
-.config-notice .cn-body p{font-size:12.5px;color:#d9c19a;line-height:1.7;margin:0;}
-.config-notice code{
-    background:rgba(255,181,71,.12);padding:2px 6px;border-radius:5px;
-    font-family:var(--mono);font-size:11px;color:#ffe0b0;
-}
-
-.no-delivery{
-    text-align:center;padding:48px 24px;
-    border:1px dashed rgba(21,216,255,.22);border-radius:18px;
-    background:rgba(21,216,255,.02);
-}
-.no-delivery .big{font-size:48px;margin-bottom:16px;opacity:.85;display:block;}
-.no-delivery h3{font-size:19px;margin-bottom:8px;color:#dbe9f7;}
-.no-delivery p{color:var(--muted);font-size:13px;line-height:1.75;max-width:420px;margin:0 auto;}
-
-.founder{display:grid;grid-template-columns:.8fr 1.2fr;gap:18px;}
-.portrait{min-height:430px;display:grid;place-items:center;position:relative;overflow:hidden;}
-.avatar{
-    width:180px;height:180px;border-radius:50%;
-    display:grid;place-items:center;font-size:70px;
-    background:linear-gradient(145deg,#111d35,#050912);
-    border:1px solid rgba(21,216,255,.5);
-    box-shadow:0 0 70px rgba(21,216,255,.18),0 0 0 20px rgba(21,216,255,.025);
-    z-index:2;
-}
-.ring{
-    position:absolute;width:245px;height:245px;
-    border:1px solid rgba(21,216,255,.25);border-radius:50%;
-    animation:spin 16s linear infinite;
-}
-.ring::after{
-    content:"";position:absolute;width:8px;height:8px;border-radius:50%;
-    background:var(--cyan);top:-4px;left:50%;box-shadow:0 0 18px var(--cyan);
-}
-.role{
-    font-size:11px;color:#6bdfff;font-weight:900;
-    letter-spacing:1.6px;text-transform:uppercase;font-family:var(--mono);
-}
-.founder h3{font-size:43px;margin:9px 0;}
-.founder-copy{color:var(--muted);line-height:1.8;}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0;}
-.pill{
-    padding:8px 11px;border-radius:999px;
-    background:rgba(255,255,255,.035);border:1px solid var(--line);
-    font-size:11px;font-family:var(--mono);
-}
-.founder-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
-.founder-stat{padding:15px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.025);}
-.founder-stat b{font-size:24px;display:block;font-family:var(--mono);}
-.founder-stat small{
-    color:var(--muted);font-family:var(--mono);
-    font-size:10px;letter-spacing:1px;text-transform:uppercase;
-}
-
-.console{display:grid;grid-template-columns:1.55fr .95fr;gap:16px;align-items:start;}
-.console-main{
-    border:1px solid var(--line);border-radius:22px;
-    background:linear-gradient(160deg,rgba(10,17,28,.9),rgba(5,8,14,.85));
-    overflow:hidden;
-}
-.console-bar{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:14px 18px;border-bottom:1px solid var(--line);
-    background:rgba(255,255,255,.02);
-}
-.console-bar .dots{display:flex;gap:6px;}
-.console-bar .dots i{width:9px;height:9px;border-radius:50%;background:#25334a;display:block;}
-.console-bar .dots i:nth-child(1){background:#ff5f57;}
-.console-bar .dots i:nth-child(2){background:#ffbd2e;}
-.console-bar .dots i:nth-child(3){background:#28c840;}
-.console-bar .title{font-family:var(--mono);font-size:11px;color:#7f93ad;letter-spacing:1px;}
-
-.stepper{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line);}
-.stepper-item{
-    background:transparent;border:0;border-right:1px solid var(--line);
-    color:#5f7391;font-family:var(--mono);font-size:10px;letter-spacing:1.2px;
-    padding:15px 8px;cursor:pointer;transition:.25s;
-    position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;
-}
-.stepper-item:last-child{border-right:0;}
-.stepper-item b{font-size:12px;color:#8ea2bd;}
-.stepper-item .st-num{font-size:9px;color:#4a5b74;}
-.stepper-item.active{background:rgba(21,216,255,.05);color:#bdefff;}
-.stepper-item.active b{color:#fff;}
-.stepper-item.active::after{
-    content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
-    background:linear-gradient(90deg,var(--cyan),var(--blue));
-    box-shadow:0 0 14px rgba(21,216,255,.6);
-}
-.stepper-item.done b{color:#8ff0c2;}
-
-.panel{padding:26px;display:none;animation:fadeUp .35s ease both;}
-.panel.active{display:block;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-.panel-head{margin-bottom:22px;}
-.panel-head h3{font-size:24px;margin:7px 0 6px;letter-spacing:-.5px;}
-.panel-head p{color:var(--muted);font-size:13px;line-height:1.7;max-width:560px;}
-
-.cart-line{
-    display:grid;grid-template-columns:44px 1fr auto auto;gap:14px;
-    align-items:center;padding:14px;border:1px solid var(--line);
-    border-radius:15px;background:rgba(255,255,255,.022);margin-bottom:10px;
-}
-.cart-line .ci{
-    width:44px;height:44px;display:grid;place-items:center;
-    border-radius:12px;background:rgba(21,216,255,.06);
-    border:1px solid var(--line);font-size:20px;
-}
-.cart-line .cn{font-size:14px;font-weight:800;margin-bottom:4px;}
-.cart-line .cm{font-family:var(--mono);font-size:10px;color:#71849e;letter-spacing:.6px;}
-.qty{
-    display:flex;align-items:center;gap:2px;border:1px solid var(--line);
-    border-radius:10px;overflow:hidden;background:#050a12;
-}
-.qty button{
-    width:30px;height:32px;border:0;background:transparent;
-    color:#bdefff;font-size:15px;cursor:pointer;
-    font-family:var(--mono);transition:.2s;
-}
-.qty button:hover{background:rgba(21,216,255,.12);}
-.qty span{min-width:30px;text-align:center;font-family:var(--mono);font-size:12px;}
-.line-total{font-family:var(--mono);font-size:14px;font-weight:800;min-width:70px;text-align:right;}
-.empty-cart{
-    text-align:center;padding:50px 20px;
-    border:1px dashed var(--line);border-radius:16px;color:var(--muted);
-}
-.empty-cart .big{font-size:40px;margin-bottom:14px;opacity:.6;}
-
-.loc-modes{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
-.loc-mode{
-    flex:1;min-width:150px;padding:13px;
-    border:1px solid var(--line);border-radius:13px;
-    background:rgba(255,255,255,.02);color:#9db2ca;
-    font-family:var(--mono);font-size:11px;letter-spacing:.8px;
-    cursor:pointer;transition:.25s;
-}
-.loc-mode:hover{border-color:var(--line2);color:#fff;}
-.loc-mode.active{
-    border-color:var(--cyan);background:rgba(21,216,255,.08);
-    color:#bdefff;box-shadow:0 0 0 3px rgba(21,216,255,.05);
-}
-.loc-panel{
-    border:1px solid var(--line);border-radius:16px;
-    padding:20px;background:rgba(255,255,255,.018);margin-bottom:16px;
-}
-.loc-panel.hidden{display:none;}
-.radar-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
-.radar{
-    width:96px;height:96px;position:relative;border-radius:50%;
-    border:1px solid rgba(21,216,255,.25);
-    background:radial-gradient(circle,rgba(21,216,255,.08),transparent 70%);
-    flex-shrink:0;overflow:hidden;
-}
-.radar-ring{position:absolute;inset:0;margin:auto;border-radius:50%;border:1px solid rgba(21,216,255,.15);}
-.radar-ring:nth-child(1){width:66%;height:66%;}
-.radar-ring:nth-child(2){width:34%;height:34%;}
-.radar-sweep{
-    position:absolute;inset:0;border-radius:50%;
-    background:conic-gradient(from 0deg,rgba(21,216,255,.5),transparent 25%);
-    opacity:0;transition:opacity .3s;
-}
-.radar.scanning .radar-sweep{opacity:1;animation:spin 1.1s linear infinite;}
-.radar-dot{
-    position:absolute;width:8px;height:8px;border-radius:50%;
-    background:var(--cyan);top:50%;left:50%;
-    transform:translate(-50%,-50%);box-shadow:0 0 16px var(--cyan);
-    opacity:0;transition:.4s;
-}
-.radar.locked .radar-dot{opacity:1;}
-.radar.locked{border-color:var(--green);}
-.radar.locked .radar-dot{background:var(--green);box-shadow:0 0 16px var(--green);}
-.loc-info{flex:1;min-width:220px;}
-.loc-info .lbl{
-    font-family:var(--mono);font-size:10px;color:#5f7391;
-    letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px;
-}
-.loc-info .val{font-size:14px;line-height:1.6;color:#dbe9f7;}
-.loc-info .val.dim{color:#6b7f99;font-family:var(--mono);font-size:12px;}
-.dist-readout{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
-.readout{border:1px solid var(--line);border-radius:13px;padding:13px;background:rgba(255,255,255,.025);}
-.readout b{display:block;font-family:var(--mono);font-size:17px;letter-spacing:-.5px;margin-bottom:3px;}
-.readout span{font-size:9px;color:#71849e;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;}
-
-.field label{
-    display:block;font-size:10px;color:#8297b4;
-    text-transform:uppercase;letter-spacing:1px;
-    margin-bottom:7px;font-family:var(--mono);
-}
-.input,.select,.textarea{
-    width:100%;border:1px solid var(--line);border-radius:13px;
-    background:#050a12;color:white;padding:13px 14px;outline:0;
-    font:inherit;font-size:13px;transition:.2s;
-}
-.textarea{min-height:110px;resize:vertical;}
-.input:focus,.select:focus,.textarea:focus{
-    border-color:var(--cyan);box-shadow:0 0 0 3px rgba(21,216,255,.07);
-}
-.input.err,.select.err{border-color:#ff5f57;box-shadow:0 0 0 3px rgba(255,95,87,.08);}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.field{margin-bottom:14px;}
-
-.speed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:6px;}
-.speed-opt{
-    border:1px solid var(--line);border-radius:13px;padding:14px;
-    cursor:pointer;background:rgba(255,255,255,.02);
-    transition:.25s;text-align:left;
-}
-.speed-opt:hover{border-color:var(--line2);}
-.speed-opt.active{
-    border-color:var(--cyan);background:rgba(21,216,255,.07);
-    box-shadow:0 0 0 3px rgba(21,216,255,.05);
-}
-.speed-opt b{display:block;font-size:12px;margin-bottom:4px;}
-.speed-opt span{font-size:10px;color:var(--muted);font-family:var(--mono);line-height:1.5;display:block;}
-
-.console-side{
-    position:sticky;top:100px;border:1px solid var(--line);border-radius:22px;
-    background:linear-gradient(160deg,rgba(10,17,28,.92),rgba(5,8,14,.88));
-    overflow:hidden;
-}
-.side-head{
-    padding:16px 20px;border-bottom:1px solid var(--line);
-    display:flex;align-items:center;justify-content:space-between;
-    background:rgba(21,216,255,.03);
-}
-.side-head span{font-family:var(--mono);font-size:11px;letter-spacing:1.6px;color:#8feaff;}
-.side-body{padding:20px;}
-.sum-row{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:9px 0;font-size:12px;color:#9aacc4;
-    border-bottom:1px dashed rgba(100,200,255,.09);
-}
-.sum-row:last-of-type{border-bottom:0;}
-.sum-row strong{color:#fff;font-family:var(--mono);font-size:13px;}
-.sum-row.sub{font-size:11px;color:#6b7f99;padding:5px 0 5px 12px;border-bottom:0;}
-.sum-row.sub strong{color:#8ea2bd;font-size:11px;font-weight:600;}
-.sum-total{
-    display:flex;justify-content:space-between;align-items:flex-end;
-    margin-top:16px;padding-top:16px;border-top:1px solid var(--line2);
-}
-.sum-total .lab{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:#71849e;}
-.sum-total .amt{
-    font-family:var(--mono);font-size:30px;font-weight:900;
-    letter-spacing:-1.5px;
-    background:linear-gradient(90deg,#fff,#45dcff);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.side-note{
-    margin-top:14px;padding:12px;border-radius:12px;
-    border:1px solid rgba(255,181,71,.22);
-    background:rgba(255,181,71,.05);color:#ffd9a0;
-    font-size:10.5px;line-height:1.6;font-family:var(--mono);
-}
-.side-note.ok{border-color:rgba(22,200,120,.25);background:rgba(22,200,120,.06);color:#8ff0c2;}
-.side-note + .side-note{margin-top:8px;}
-.side-actions{padding:0 20px 20px;display:grid;gap:9px;}
-.side-actions .btn{width:100%;}
-
-.review-block{
-    border:1px solid var(--line);border-radius:15px;
-    padding:16px;margin-bottom:12px;background:rgba(255,255,255,.02);
-}
-.review-block h4{
-    font-family:var(--mono);font-size:10px;letter-spacing:1.6px;
-    color:#69dcff;text-transform:uppercase;margin-bottom:12px;
-}
-.review-block .rl{
-    display:flex;justify-content:space-between;gap:12px;
-    padding:6px 0;font-size:12.5px;color:#c4d4e6;
-}
-.review-block .rl span:first-child{color:#7c90aa;}
-.review-block .rl b{font-family:var(--mono);font-weight:700;}
-
-.track-bar{display:flex;gap:9px;margin-bottom:14px;max-width:560px;}
-.track-bar input{flex:1;}
-.recent-chips{
-    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
-    margin-bottom:22px;
-}
-.recent-chips .recent-label{
-    font-family:var(--mono);font-size:10px;
-    color:#5f7391;letter-spacing:1.2px;margin-right:4px;
-}
-.recent-chips .chip{
-    font-family:var(--mono);font-size:10.5px;
-    padding:6px 10px;border-radius:8px;
-    border:1px solid var(--line);
-    background:rgba(21,216,255,.05);color:#bdefff;
-    cursor:pointer;transition:.2s;letter-spacing:.5px;
-}
-.recent-chips .chip:hover{
-    background:rgba(21,216,255,.15);
-    border-color:var(--cyan);
-    transform:translateY(-1px);
-}
-.merchant-bar{display:none;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap;}
-.merchant-bar.revealed{display:flex;}
-.merchant-hint-hidden{
-    font-family:var(--mono);font-size:10px;
-    color:#3d4d63;letter-spacing:.5px;margin-bottom:24px;
-    user-select:none;transition:opacity .3s;
-}
-.merchant-toggle{
-    display:inline-flex;align-items:center;gap:9px;
-    padding:11px 15px;border:1px solid var(--line);
-    border-radius:12px;background:rgba(255,255,255,.02);
-    color:#9db2ca;font-family:var(--mono);font-size:11px;
-    letter-spacing:.5px;cursor:pointer;transition:.25s;
-}
-.merchant-toggle:hover{border-color:var(--line2);color:#fff;}
-.merchant-toggle.on{border-color:rgba(22,200,120,.4);background:rgba(22,200,120,.06);color:#8ff0c2;}
-.merchant-toggle .dot{width:8px;height:8px;border-radius:50%;background:#4a5b74;transition:.25s;}
-.merchant-toggle.on .dot{background:var(--green);box-shadow:0 0 10px var(--green);}
-.merchant-hint{font-family:var(--mono);font-size:10px;color:#5f7391;letter-spacing:.5px;}
-
-.orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;}
-.order-card{
-    border:1px solid var(--line);border-radius:18px;
-    background:linear-gradient(160deg,rgba(12,20,33,.85),rgba(5,8,14,.8));
-    padding:20px;transition:.3s;position:relative;
-}
-.order-card:hover{border-color:var(--line2);transform:translateY(-3px);}
-.order-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:10px;}
-.order-id{font-family:var(--mono);font-size:14px;font-weight:800;letter-spacing:.5px;margin-bottom:4px;}
-.order-date{font-family:var(--mono);font-size:10px;color:#71849e;letter-spacing:.5px;}
-.order-status{
-    font-family:var(--mono);font-size:9px;letter-spacing:1.2px;
-    padding:5px 9px;border-radius:6px;border:1px solid;
-    text-transform:uppercase;white-space:nowrap;
-}
-.order-status[data-s="pending"]{color:#ffd9a0;border-color:rgba(255,181,71,.4);background:rgba(255,181,71,.08);}
-.order-status[data-s="confirmed"]{color:#9beaff;border-color:rgba(21,216,255,.4);background:rgba(21,216,255,.08);}
-.order-status[data-s="in_progress"]{color:#c8b3ff;border-color:rgba(157,108,255,.4);background:rgba(157,108,255,.08);}
-.order-status[data-s="completed"]{color:#8ff0c2;border-color:rgba(22,200,120,.4);background:rgba(22,200,120,.08);}
-.order-status[data-s="cancelled"]{color:#ff9b94;border-color:rgba(255,95,87,.4);background:rgba(255,95,87,.08);}
-
-.delivery-chip{
-    display:inline-flex;align-items:center;gap:6px;
-    font-family:var(--mono);font-size:9.5px;letter-spacing:1px;
-    padding:4px 8px;border-radius:6px;margin-top:6px;
-    border:1px solid;text-transform:uppercase;
-}
-.delivery-chip[data-s="sent"]{color:#8ff0c2;border-color:rgba(22,200,120,.4);background:rgba(22,200,120,.08);}
-.delivery-chip[data-s="queued"]{color:#ffd9a0;border-color:rgba(255,181,71,.4);background:rgba(255,181,71,.08);}
-.delivery-chip[data-s="failed"]{color:#ff9b94;border-color:rgba(255,95,87,.4);background:rgba(255,95,87,.08);}
-.delivery-chip[data-s="off"]{color:#8ea2bd;border-color:var(--line);background:rgba(255,255,255,.03);}
-.delivery-chip[data-s="cloud"]{color:#9beaff;border-color:rgba(21,216,255,.4);background:rgba(21,216,255,.06);}
-
-.order-summary{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
-    padding:12px 0;border-top:1px dashed rgba(100,200,255,.12);
-    border-bottom:1px dashed rgba(100,200,255,.12);margin-bottom:14px;
-}
-.order-summary .lbl{
-    font-family:var(--mono);font-size:9px;color:#71849e;
-    letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;
-}
-.order-summary .val{font-family:var(--mono);font-size:14px;font-weight:800;}
-
-.order-items{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
-.order-item{display:flex;justify-content:space-between;font-size:12px;color:#c4d4e6;font-family:var(--mono);}
-.order-item span:first-child{color:#8ea2bd;}
-
-.order-actions{display:flex;gap:6px;flex-wrap:wrap;}
-.order-actions button{
-    flex:1;min-width:66px;font-size:10px;
-    padding:8px 10px;border-radius:10px;
-    background:#0b1220;color:#bdefff;border:1px solid var(--line);
-    font-family:var(--mono);letter-spacing:.4px;cursor:pointer;transition:.2s;
-}
-.order-actions button:hover{background:rgba(21,216,255,.1);border-color:var(--line2);}
-.order-actions .danger{border-color:rgba(255,95,87,.3);color:#ff9b94;}
-.order-actions .danger:hover{background:rgba(255,95,87,.08);border-color:rgba(255,95,87,.5);}
-.order-actions .retry{border-color:rgba(255,181,71,.4);color:#ffd9a0;}
-.order-actions .retry:hover{background:rgba(255,181,71,.08);border-color:var(--amber);}
-
-.status-select{
-    width:100%;padding:8px 10px;font-family:var(--mono);
-    font-size:11px;background:#050a12;
-    border:1px solid rgba(22,200,120,.3);
-    border-radius:9px;color:#8ff0c2;
-    margin-top:12px;cursor:pointer;letter-spacing:.5px;
-}
-.no-orders{
-    text-align:center;padding:50px 20px;
-    border:1px dashed var(--line);border-radius:16px;
-    color:var(--muted);grid-column:1/-1;
-}
-.no-orders .big{font-size:44px;margin-bottom:14px;opacity:.6;}
-.order-highlight{animation:highlight 2.4s ease-out;}
-@keyframes highlight{
-    0%{box-shadow:0 0 0 0 rgba(21,216,255,.5);}
-    30%{box-shadow:0 0 0 6px rgba(21,216,255,.15);}
-    100%{box-shadow:0 0 0 0 rgba(21,216,255,0);}
-}
-
-.drawer-backdrop{
-    position:fixed;inset:0;z-index:1500;
-    background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
-    opacity:0;pointer-events:none;transition:.3s;
-}
-.drawer-backdrop.open{opacity:1;pointer-events:auto;}
-.drawer{
-    position:fixed;top:0;right:0;bottom:0;
-    width:min(400px,92vw);z-index:1600;
-    background:#070c14;border-left:1px solid var(--line2);
-    transform:translateX(100%);
-    transition:transform .38s cubic-bezier(.4,0,.2,1);
-    display:flex;flex-direction:column;
-}
-.drawer.open{transform:none;}
-.drawer-head{
-    padding:18px 20px;border-bottom:1px solid var(--line);
-    display:flex;align-items:center;justify-content:space-between;
-}
-.drawer-head h3{font-size:16px;font-family:var(--mono);letter-spacing:1px;}
-.drawer-body{flex:1;overflow:auto;padding:18px 20px;}
-.drawer-foot{padding:18px 20px;border-top:1px solid var(--line);background:rgba(255,255,255,.02);}
-.drawer-foot .rowline{
-    display:flex;justify-content:space-between;
-    font-family:var(--mono);font-size:12px;color:#9aacc4;margin-bottom:12px;
-}
-.drawer-foot .rowline strong{color:#fff;font-size:16px;}
-.mini-line{
-    display:grid;grid-template-columns:34px 1fr auto;gap:12px;
-    align-items:center;padding:11px 0;
-    border-bottom:1px dashed rgba(100,200,255,.1);
-}
-.mini-line .mi{
-    width:34px;height:34px;display:grid;place-items:center;
-    border-radius:10px;background:rgba(21,216,255,.06);
-    border:1px solid var(--line);font-size:16px;
-}
-.mini-line .mn{font-size:12.5px;font-weight:700;margin-bottom:3px;}
-.mini-line .mm{font-family:var(--mono);font-size:10px;color:#71849e;}
-.mini-line .mp{font-family:var(--mono);font-size:12px;font-weight:800;}
-
-.modal{
-    position:fixed;inset:0;z-index:2000;display:none;place-items:center;
-    background:rgba(0,0,0,.75);backdrop-filter:blur(12px);padding:20px;
-}
-.modal.open{display:grid;}
-.modalbox{
-    width:min(620px,100%);max-height:90vh;overflow:auto;
-    padding:28px;border-radius:23px;
-    border:1px solid rgba(21,216,255,.28);
-    background:#080d16;box-shadow:0 25px 80px rgba(0,0,0,.6);
-    position:relative;animation:fadeUp .35s ease both;
-}
-.close{
-    position:absolute;right:15px;top:14px;
-    border:1px solid var(--line);background:#0c1420;color:white;
-    border-radius:10px;width:36px;height:36px;
-    cursor:pointer;font-size:20px;transition:.2s;
-}
-.close:hover{border-color:var(--line2);}
-
-.toast{
-    position:fixed;z-index:3000;right:20px;bottom:20px;
-    max-width:380px;padding:14px 16px;border-radius:14px;
-    background:#08111a;border:1px solid rgba(21,216,255,.3);
-    box-shadow:0 20px 60px rgba(0,0,0,.5);
-    opacity:0;transform:translateY(15px);transition:.3s;
-    font-size:13px;line-height:1.5;
-}
-.toast.show{opacity:1;transform:none;}
-
-.contact-box{text-align:center;padding:55px 25px;}
-.contact-box p{color:var(--muted);max-width:650px;margin:15px auto 25px;line-height:1.7;}
-
-footer{
-    padding:35px 0;border-top:1px solid var(--line);
-    color:#63758f;font-size:11px;text-align:center;
-    font-family:var(--mono);letter-spacing:.5px;
-}
-
-@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-@media(max-width:980px){
-    .console{grid-template-columns:1fr;}
-    .console-side{position:static;}
-}
-@media(max-width:850px){
-    .navlinks{display:none;}
-    .hero-grid,.founder{grid-template-columns:1fr;}
-    .hero{padding-top:130px;}
-    .hero-logo{order:-1;}
-    .grid{grid-template-columns:1fr 1fr;}
-    .section-head{display:block;}
-    .section-head p{margin-top:15px;}
-}
-@media(max-width:560px){
-    .grid{grid-template-columns:1fr;}
-    .row{grid-template-columns:1fr;}
-    .founder-stats{grid-template-columns:1fr;}
-    .speed-grid{grid-template-columns:1fr;}
-    .stepper-item b{font-size:10px;}
-    .stepper-item .st-num{display:none;}
-    .dist-readout{grid-template-columns:1fr;}
-    h1{letter-spacing:-3px;}
-    .cart-line{grid-template-columns:38px 1fr;row-gap:10px;}
-    .cart-line .line-total{grid-column:2;text-align:left;}
-    .panel{padding:20px;}
-    .store-banner{flex-direction:column;align-items:flex-start;gap:10px;}
-    .order-summary{grid-template-columns:1fr;}
-    .orders-grid{grid-template-columns:1fr;}
-}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{--bg:#03050a;--line:rgba(100,200,255,.16);--line2:rgba(100,200,255,.32);--muted:#8ea2bd;--cyan:#15d8ff;--blue:#397bff;--purple:#9d6cff;--green:#16c878;--amber:#ffb547;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+body{font-family:Arial,Segoe UI,sans-serif;background:radial-gradient(circle at 80% 0%,rgba(30,113,255,.14),transparent 30%),radial-gradient(circle at 10% 30%,rgba(0,214,255,.08),transparent 25%),var(--bg);color:#eef7ff;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:45px 45px;z-index:-1}
+#fx{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.6}
+.scanlines{position:fixed;inset:0;z-index:900;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.014) 0,rgba(255,255,255,.014) 1px,transparent 1px,transparent 3px);mix-blend-mode:overlay}
+a{text-decoration:none;color:inherit}
+.container{width:min(1160px,92%);margin:auto}
+.nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(1120px,94%);z-index:1000;padding:10px 14px;border:1px solid var(--line);border-radius:20px;background:rgba(5,9,16,.72);backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900}
+.brand img{width:43px;height:43px;object-fit:contain;border-radius:12px}
+.brand span{background:linear-gradient(90deg,#fff,#6edfff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.navlinks{display:flex;gap:4px}
+.navlinks a{font-size:12px;color:#aebed4;padding:10px 12px;border-radius:11px;font-family:var(--mono)}
+.navlinks a:hover{color:#fff;background:rgba(255,255,255,.05)}
+.nav-right{display:flex;align-items:center;gap:9px}
+.status-chip{display:none;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:#7fe9c0;border:1px solid rgba(22,200,120,.25);background:rgba(22,200,120,.06);padding:8px 10px;border-radius:11px}
+@media(min-width:1100px){.status-chip{display:inline-flex}}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.8s ease-in-out infinite;display:inline-block}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
+.cart-btn{position:relative;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#0b1220;color:#fff;border-radius:12px;padding:11px 13px;font-size:12px;font-weight:800;font-family:var(--mono);cursor:pointer;transition:.25s}
+.cart-btn:hover{border-color:var(--line2);transform:translateY(-2px)}
+.cart-badge{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#021018;font-size:10px;font-weight:900;display:grid;place-items:center;font-family:var(--mono);transform:scale(0);transition:transform .3s cubic-bezier(.2,1.5,.5,1)}
+.cart-badge.show{transform:scale(1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:#0b1220;color:#fff;border-radius:13px;padding:13px 17px;font-weight:800;font-size:13px;cursor:pointer;transition:.25s;font-family:var(--mono)}
+.btn:hover{transform:translateY(-2px);border-color:rgba(21,216,255,.45)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.primary{border:0;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#021018;box-shadow:0 10px 35px rgba(21,216,255,.18)}
+.ghost{background:transparent}
+.hero{min-height:100vh;display:grid;place-items:center;padding:140px 0 80px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:55px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(21,216,255,.22);border-radius:999px;color:#8feaff;background:rgba(21,216,255,.05);font-size:11px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;font-family:var(--mono);margin-bottom:20px}
+h1{font-size:clamp(54px,8vw,100px);line-height:.9;letter-spacing:-5px}
+.gradient{background:linear-gradient(90deg,#fff,#45dcff 48%,#6d83ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:650px;color:var(--muted);font-size:17px;line-height:1.8;margin:25px 0}
+.actions{display:flex;gap:11px;flex-wrap:wrap}
+.hero-logo{display:grid;place-items:center;position:relative}
+.hero-logo img{width:min(420px,90%);filter:drop-shadow(0 0 35px rgba(21,216,255,.25));animation:float 5s ease-in-out infinite;position:relative;z-index:2}
+.orbit{position:absolute;width:min(440px,96%);aspect-ratio:1;border:1px dashed rgba(21,216,255,.18);border-radius:50%;animation:spin 40s linear infinite}
+.orbit::before,.orbit::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px var(--cyan)}
+.orbit::before{top:-4px;left:50%}.orbit::after{bottom:-4px;left:20%;background:var(--purple);box-shadow:0 0 16px var(--purple)}
+.mini-stats{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
+.stat{padding:13px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.stat b{display:block;font-size:18px;font-family:var(--mono)}
+.stat span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono)}
+section{padding:110px 0}
+.section-head{display:flex;justify-content:space-between;gap:35px;align-items:end;margin-bottom:35px}
+.kicker{color:#69dcff;font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;font-family:var(--mono)}
+.section-head h2{font-size:clamp(36px,5vw,62px);letter-spacing:-2px;margin-top:8px}
+.section-head p{max-width:520px;color:var(--muted);line-height:1.75}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.card{border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(12,20,33,.82),rgba(5,8,14,.78));padding:25px;transition:.3s;position:relative}
+.card:hover{transform:translateY(-7px);border-color:rgba(21,216,255,.32);box-shadow:0 25px 80px rgba(0,0,0,.55),0 0 35px rgba(21,216,255,.06)}
+.icon{font-size:30px;margin-bottom:18px}
+.card h3{font-size:20px;margin-bottom:9px}
+.card p{color:var(--muted);line-height:1.7;font-size:13px}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:17px}
+.tag{font-size:10px;color:#a9bfd9;border:1px solid var(--line);padding:6px 8px;border-radius:999px;font-family:var(--mono)}
+.product-card{display:flex;flex-direction:column;min-height:290px;overflow:hidden}
+.product-card.coming{border-color:rgba(255,181,71,.18);background:linear-gradient(145deg,rgba(20,16,10,.82),rgba(10,7,4,.78))}
+.product-card.coming:hover{border-color:rgba(255,181,71,.4);box-shadow:0 25px 80px rgba(0,0,0,.55),0 0 35px rgba(255,181,71,.08)}
+.soon-ribbon{position:absolute;top:14px;right:-40px;transform:rotate(38deg);font-size:9px;font-weight:900;letter-spacing:1.5px;padding:6px 48px;background:linear-gradient(90deg,var(--amber),#ff8c42);color:#1a0d02;font-family:var(--mono);z-index:3;box-shadow:0 4px 18px rgba(255,140,66,.35);pointer-events:none}
+.p-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px}
+.p-top .icon{margin:0}
+.p-type{font-family:var(--mono);font-size:9px;letter-spacing:1.4px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);color:#8fb8d8;background:rgba(255,255,255,.03)}
+.p-type[data-t="physical"]{color:#ffd9a0;border-color:rgba(255,181,71,.3);background:rgba(255,181,71,.06)}
+.p-type[data-t="digital"]{color:#c8b3ff;border-color:rgba(157,108,255,.3);background:rgba(157,108,255,.07)}
+.p-type[data-t="service"]{color:#9beaff;border-color:rgba(21,216,255,.28);background:rgba(21,216,255,.06)}
+.service-bottom{margin-top:auto;padding-top:18px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.p-price{display:flex;flex-direction:column;gap:2px}
+.p-price b{font-size:19px;font-family:var(--mono)}
+.p-price small{font-size:9px;color:#71849e;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase}
+.quote-tag{font-family:var(--mono);font-size:12px;color:var(--amber)}
+.order-mini{border:1px solid rgba(21,216,255,.28);background:rgba(21,216,255,.06);color:#bdefff;border-radius:10px;padding:9px 12px;font-weight:800;font-family:var(--mono);font-size:11px;cursor:pointer;transition:.2s;white-space:nowrap}
+.order-mini:hover{background:rgba(21,216,255,.15);border-color:var(--cyan)}
+.order-mini.added{background:rgba(22,200,120,.14);border-color:rgba(22,200,120,.5);color:#8ff0c2}
+.order-mini.soon{border-color:rgba(255,181,71,.35);background:rgba(255,181,71,.08);color:#ffd9a0}
+.order-mini.soon:hover{background:rgba(255,181,71,.16);border-color:var(--amber)}
+.store-banner{display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid rgba(255,181,71,.28);background:linear-gradient(135deg,rgba(255,181,71,.07),rgba(255,140,66,.02));border-radius:18px;margin-bottom:22px}
+.sb-dot{width:10px;height:10px;border-radius:50%;background:var(--amber);box-shadow:0 0 14px var(--amber);flex-shrink:0}
+.sb-text b{display:block;font-size:13px;color:#ffd9a0;margin-bottom:4px;font-family:var(--mono);text-transform:uppercase}
+.sb-text span{font-size:12px;color:#b59a76;line-height:1.6}
+.no-delivery{text-align:center;padding:48px 24px;border:1px dashed rgba(21,216,255,.22);border-radius:18px;background:rgba(21,216,255,.02)}
+.no-delivery .big{font-size:48px;margin-bottom:16px;display:block}
+.no-delivery h3{font-size:19px;margin-bottom:8px;color:#dbe9f7}
+.no-delivery p{color:var(--muted);font-size:13px;line-height:1.75;max-width:420px;margin:0 auto}
+.founder{display:grid;grid-template-columns:.8fr 1.2fr;gap:18px}
+.portrait{min-height:430px;display:grid;place-items:center;position:relative;overflow:hidden}
+.avatar{width:180px;height:180px;border-radius:50%;display:grid;place-items:center;font-size:70px;background:linear-gradient(145deg,#111d35,#050912);border:1px solid rgba(21,216,255,.5);box-shadow:0 0 70px rgba(21,216,255,.18),0 0 0 20px rgba(21,216,255,.025);z-index:2}
+.ring{position:absolute;width:245px;height:245px;border:1px solid rgba(21,216,255,.25);border-radius:50%;animation:spin 16s linear infinite}
+.ring::after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);top:-4px;left:50%;box-shadow:0 0 18px var(--cyan)}
+.role{font-size:11px;color:#6bdfff;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;font-family:var(--mono)}
+.founder h3{font-size:43px;margin:9px 0}
+.founder-copy{color:var(--muted);line-height:1.8}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.pill{padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid var(--line);font-size:11px;font-family:var(--mono)}
+.founder-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.founder-stat{padding:15px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.025)}
+.founder-stat b{font-size:24px;display:block;font-family:var(--mono)}
+.founder-stat small{color:var(--muted);font-family:var(--mono);font-size:10px;text-transform:uppercase}
+.console{display:grid;grid-template-columns:1.55fr .95fr;gap:16px;align-items:start}
+.console-main{border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,rgba(10,17,28,.9),rgba(5,8,14,.85));overflow:hidden}
+.console-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.console-bar .dots{display:flex;gap:6px}
+.console-bar .dots i{width:9px;height:9px;border-radius:50%;background:#25334a;display:block}
+.console-bar .dots i:nth-child(1){background:#ff5f57}
+.console-bar .dots i:nth-child(2){background:#ffbd2e}
+.console-bar .dots i:nth-child(3){background:#28c840}
+.console-bar .title{font-family:var(--mono);font-size:11px;color:#7f93ad;letter-spacing:1px}
+.stepper{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.stepper-item{background:transparent;border:0;border-right:1px solid var(--line);color:#5f7391;font-family:var(--mono);font-size:10px;padding:15px 8px;cursor:pointer;transition:.25s;position:relative;display:flex;flex-direction:column;align-items:center;gap:5px}
+.stepper-item:last-child{border-right:0}
+.stepper-item b{font-size:12px;color:#8ea2bd}
+.stepper-item .st-num{font-size:9px;color:#4a5b74}
+.stepper-item.active{background:rgba(21,216,255,.05);color:#bdefff}
+.stepper-item.active b{color:#fff}
+.stepper-item.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--cyan),var(--blue));box-shadow:0 0 14px rgba(21,216,255,.6)}
+.stepper-item.done b{color:#8ff0c2}
+.panel{padding:26px;display:none;animation:fadeUp .35s ease both}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.panel-head{margin-bottom:22px}
+.panel-head h3{font-size:24px;margin:7px 0 6px}
+.panel-head p{color:var(--muted);font-size:13px;line-height:1.7;max-width:560px}
+.cart-line{display:grid;grid-template-columns:44px 1fr auto auto;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.022);margin-bottom:10px}
+.cart-line .ci{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:rgba(21,216,255,.06);border:1px solid var(--line);font-size:20px}
+.cart-line .cn{font-size:14px;font-weight:800;margin-bottom:4px}
+.cart-line .cm{font-family:var(--mono);font-size:10px;color:#71849e}
+.qty{display:flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#050a12}
+.qty button{width:30px;height:32px;border:0;background:transparent;color:#bdefff;font-size:15px;cursor:pointer;font-family:var(--mono)}
+.qty button:hover{background:rgba(21,216,255,.12)}
+.qty span{min-width:30px;text-align:center;font-family:var(--mono);font-size:12px}
+.line-total{font-family:var(--mono);font-size:14px;font-weight:800;min-width:70px;text-align:right}
+.empty-cart{text-align:center;padding:50px 20px;border:1px dashed var(--line);border-radius:16px;color:var(--muted)}
+.empty-cart .big{font-size:40px;margin-bottom:14px;opacity:.6}
+.loc-modes{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.loc-mode{flex:1;min-width:150px;padding:13px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.02);color:#9db2ca;font-family:var(--mono);font-size:11px;cursor:pointer;transition:.25s}
+.loc-mode:hover{border-color:var(--line2);color:#fff}
+.loc-mode.active{border-color:var(--cyan);background:rgba(21,216,255,.08);color:#bdefff;box-shadow:0 0 0 3px rgba(21,216,255,.05)}
+.loc-panel{border:1px solid var(--line);border-radius:16px;padding:20px;background:rgba(255,255,255,.018);margin-bottom:16px}
+.loc-panel.hidden{display:none}
+.radar-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.radar{width:96px;height:96px;position:relative;border-radius:50%;border:1px solid rgba(21,216,255,.25);background:radial-gradient(circle,rgba(21,216,255,.08),transparent 70%);flex-shrink:0;overflow:hidden}
+.radar-ring{position:absolute;inset:0;margin:auto;border-radius:50%;border:1px solid rgba(21,216,255,.15)}
+.radar-ring:nth-child(1){width:66%;height:66%}
+.radar-ring:nth-child(2){width:34%;height:34%}
+.radar-sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(21,216,255,.5),transparent 25%);opacity:0;transition:opacity .3s}
+.radar.scanning .radar-sweep{opacity:1;animation:spin 1.1s linear infinite}
+.radar-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 16px var(--cyan);opacity:0;transition:.4s}
+.radar.locked .radar-dot{opacity:1}
+.radar.locked{border-color:var(--green)}
+.radar.locked .radar-dot{background:var(--green);box-shadow:0 0 16px var(--green)}
+.loc-info{flex:1;min-width:220px}
+.loc-info .lbl{font-family:var(--mono);font-size:10px;color:#5f7391;text-transform:uppercase;margin-bottom:6px}
+.loc-info .val{font-size:14px;line-height:1.6;color:#dbe9f7}
+.loc-info .val.dim{color:#6b7f99;font-family:var(--mono);font-size:12px}
+.dist-readout{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.readout{border:1px solid var(--line);border-radius:13px;padding:13px;background:rgba(255,255,255,.025)}
+.readout b{display:block;font-family:var(--mono);font-size:17px;margin-bottom:3px}
+.readout span{font-size:9px;color:#71849e;font-family:var(--mono);text-transform:uppercase}
+.field label{display:block;font-size:10px;color:#8297b4;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;font-family:var(--mono)}
+.input,.select,.textarea{width:100%;border:1px solid var(--line);border-radius:13px;background:#050a12;color:white;padding:13px 14px;outline:0;font:inherit;font-size:13px;transition:.2s}
+.textarea{min-height:110px;resize:vertical}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(21,216,255,.07)}
+.input.err,.select.err{border-color:#ff5f57;box-shadow:0 0 0 3px rgba(255,95,87,.08)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:14px}
+.speed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:6px}
+.speed-opt{border:1px solid var(--line);border-radius:13px;padding:14px;cursor:pointer;background:rgba(255,255,255,.02);transition:.25s;text-align:left}
+.speed-opt:hover{border-color:var(--line2)}
+.speed-opt.active{border-color:var(--cyan);background:rgba(21,216,255,.07);box-shadow:0 0 0 3px rgba(21,216,255,.05)}
+.speed-opt b{display:block;font-size:12px;margin-bottom:4px}
+.speed-opt span{font-size:10px;color:var(--muted);font-family:var(--mono);line-height:1.5;display:block}
+.console-side{position:sticky;top:100px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,rgba(10,17,28,.92),rgba(5,8,14,.88));overflow:hidden}
+.side-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:rgba(21,216,255,.03)}
+.side-head span{font-family:var(--mono);font-size:11px;letter-spacing:1.6px;color:#8feaff}
+.side-body{padding:20px}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:12px;color:#9aacc4;border-bottom:1px dashed rgba(100,200,255,.09)}
+.sum-row:last-of-type{border-bottom:0}
+.sum-row strong{color:#fff;font-family:var(--mono);font-size:13px}
+.sum-row.sub{font-size:11px;color:#6b7f99;padding:5px 0 5px 12px;border-bottom:0}
+.sum-row.sub strong{color:#8ea2bd;font-size:11px;font-weight:600}
+.sum-total{display:flex;justify-content:space-between;align-items:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--line2)}
+.sum-total .lab{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:#71849e}
+.sum-total .amt{font-family:var(--mono);font-size:30px;font-weight:900;letter-spacing:-1.5px;background:linear-gradient(90deg,#fff,#45dcff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.side-note{margin-top:14px;padding:12px;border-radius:12px;border:1px solid rgba(255,181,71,.22);background:rgba(255,181,71,.05);color:#ffd9a0;font-size:10.5px;line-height:1.6;font-family:var(--mono)}
+.side-note.ok{border-color:rgba(22,200,120,.25);background:rgba(22,200,120,.06);color:#8ff0c2}
+.side-note + .side-note{margin-top:8px}
+.side-actions{padding:0 20px 20px;display:grid;gap:9px}
+.side-actions .btn{width:100%}
+.review-block{border:1px solid var(--line);border-radius:15px;padding:16px;margin-bottom:12px;background:rgba(255,255,255,.02)}
+.review-block h4{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:#69dcff;text-transform:uppercase;margin-bottom:12px}
+.review-block .rl{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:12.5px;color:#c4d4e6}
+.review-block .rl span:first-child{color:#7c90aa}
+.review-block .rl b{font-family:var(--mono);font-weight:700}
+.track-bar{display:flex;gap:9px;margin-bottom:14px;max-width:560px}
+.track-bar input{flex:1}
+.recent-chips{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.recent-chips .recent-label{font-family:var(--mono);font-size:10px;color:#5f7391;margin-right:4px}
+.recent-chips .chip{font-family:var(--mono);font-size:10.5px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:rgba(21,216,255,.05);color:#bdefff;cursor:pointer;transition:.2s}
+.recent-chips .chip:hover{background:rgba(21,216,255,.15);border-color:var(--cyan);transform:translateY(-1px)}
+.merchant-bar{display:none;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.merchant-bar.revealed{display:flex}
+.merchant-hint-hidden{font-family:var(--mono);font-size:10px;color:#3d4d63;margin-bottom:24px;user-select:none;transition:opacity .3s}
+.merchant-toggle{display:inline-flex;align-items:center;gap:9px;padding:11px 15px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02);color:#9db2ca;font-family:var(--mono);font-size:11px;cursor:pointer;transition:.25s}
+.merchant-toggle:hover{border-color:var(--line2);color:#fff}
+.merchant-toggle.on{border-color:rgba(22,200,120,.4);background:rgba(22,200,120,.06);color:#8ff0c2}
+.merchant-toggle .dot{width:8px;height:8px;border-radius:50%;background:#4a5b74;transition:.25s}
+.merchant-toggle.on .dot{background:var(--green);box-shadow:0 0 10px var(--green)}
+.merchant-hint{font-family:var(--mono);font-size:10px;color:#5f7391}
+.orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.order-card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(160deg,rgba(12,20,33,.85),rgba(5,8,14,.8));padding:20px;transition:.3s;position:relative}
+.order-card:hover{border-color:var(--line2);transform:translateY(-3px)}
+.order-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:10px}
+.order-id{font-family:var(--mono);font-size:14px;font-weight:800;margin-bottom:4px}
+.order-date{font-family:var(--mono);font-size:10px;color:#71849e}
+.order-status{font-family:var(--mono);font-size:9px;padding:5px 9px;border-radius:6px;border:1px solid;text-transform:uppercase;white-space:nowrap}
+.order-status[data-s="pending"]{color:#ffd9a0;border-color:rgba(255,181,71,.4);background:rgba(255,181,71,.08)}
+.order-status[data-s="confirmed"]{color:#9beaff;border-color:rgba(21,216,255,.4);background:rgba(21,216,255,.08)}
+.order-status[data-s="in_progress"]{color:#c8b3ff;border-color:rgba(157,108,255,.4);background:rgba(157,108,255,.08)}
+.order-status[data-s="completed"]{color:#8ff0c2;border-color:rgba(22,200,120,.4);background:rgba(22,200,120,.08)}
+.order-status[data-s="cancelled"]{color:#ff9b94;border-color:rgba(255,95,87,.4);background:rgba(255,95,87,.08)}
+.delivery-chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;padding:4px 8px;border-radius:6px;margin-top:6px;border:1px solid;text-transform:uppercase}
+.delivery-chip[data-s="sent"]{color:#8ff0c2;border-color:rgba(22,200,120,.4);background:rgba(22,200,120,.08)}
+.delivery-chip[data-s="failed"]{color:#ff9b94;border-color:rgba(255,95,87,.4);background:rgba(255,95,87,.08)}
+.delivery-chip[data-s="off"]{color:#8ea2bd;border-color:var(--line);background:rgba(255,255,255,.03)}
+.delivery-chip[data-s="cloud"]{color:#9beaff;border-color:rgba(21,216,255,.4);background:rgba(21,216,255,.06)}
+.order-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px 0;border-top:1px dashed rgba(100,200,255,.12);border-bottom:1px dashed rgba(100,200,255,.12);margin-bottom:14px}
+.order-summary .lbl{font-family:var(--mono);font-size:9px;color:#71849e;text-transform:uppercase;margin-bottom:3px}
+.order-summary .val{font-family:var(--mono);font-size:14px;font-weight:800}
+.order-items{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.order-item{display:flex;justify-content:space-between;font-size:12px;color:#c4d4e6;font-family:var(--mono)}
+.order-item span:first-child{color:#8ea2bd}
+.order-actions{display:flex;gap:6px;flex-wrap:wrap}
+.order-actions button{flex:1;min-width:66px;font-size:10px;padding:8px 10px;border-radius:10px;background:#0b1220;color:#bdefff;border:1px solid var(--line);font-family:var(--mono);cursor:pointer;transition:.2s}
+.order-actions button:hover{background:rgba(21,216,255,.1);border-color:var(--line2)}
+.order-actions .danger{border-color:rgba(255,95,87,.3);color:#ff9b94}
+.order-actions .danger:hover{background:rgba(255,95,87,.08);border-color:rgba(255,95,87,.5)}
+.status-select{width:100%;padding:8px 10px;font-family:var(--mono);font-size:11px;background:#050a12;border:1px solid rgba(22,200,120,.3);border-radius:9px;color:#8ff0c2;margin-top:12px;cursor:pointer}
+.no-orders{text-align:center;padding:50px 20px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);grid-column:1/-1}
+.no-orders .big{font-size:44px;margin-bottom:14px;opacity:.6}
+.order-highlight{animation:highlight 2.4s ease-out}
+@keyframes highlight{0%{box-shadow:0 0 0 0 rgba(21,216,255,.5)}30%{box-shadow:0 0 0 6px rgba(21,216,255,.15)}100%{box-shadow:0 0 0 0 rgba(21,216,255,0)}}
+.drawer-backdrop{position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:.3s}
+.drawer-backdrop.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,92vw);z-index:1600;background:#070c14;border-left:1px solid var(--line2);transform:translateX(100%);transition:transform .38s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.drawer-head h3{font-size:16px;font-family:var(--mono)}
+.drawer-body{flex:1;overflow:auto;padding:18px 20px}
+.drawer-foot{padding:18px 20px;border-top:1px solid var(--line);background:rgba(255,255,255,.02)}
+.drawer-foot .rowline{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:#9aacc4;margin-bottom:12px}
+.drawer-foot .rowline strong{color:#fff;font-size:16px}
+.mini-line{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px dashed rgba(100,200,255,.1)}
+.mini-line .mi{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(21,216,255,.06);border:1px solid var(--line);font-size:16px}
+.mini-line .mn{font-size:12.5px;font-weight:700;margin-bottom:3px}
+.mini-line .mm{font-family:var(--mono);font-size:10px;color:#71849e}
+.mini-line .mp{font-family:var(--mono);font-size:12px;font-weight:800}
+.modal{position:fixed;inset:0;z-index:2000;display:none;place-items:center;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);padding:20px}
+.modal.open{display:grid}
+.modalbox{width:min(620px,100%);max-height:90vh;overflow:auto;padding:28px;border-radius:23px;border:1px solid rgba(21,216,255,.28);background:#080d16;box-shadow:0 25px 80px rgba(0,0,0,.6);position:relative;animation:fadeUp .35s ease both}
+.close{position:absolute;right:15px;top:14px;border:1px solid var(--line);background:#0c1420;color:#fff;border-radius:10px;width:36px;height:36px;cursor:pointer;font-size:20px}
+.close:hover{border-color:var(--line2)}
+.toast{position:fixed;z-index:3000;right:20px;bottom:20px;max-width:380px;padding:14px 16px;border-radius:14px;background:#08111a;border:1px solid rgba(21,216,255,.3);box-shadow:0 20px 60px rgba(0,0,0,.5);opacity:0;transform:translateY(15px);transition:.3s;font-size:13px}
+.toast.show{opacity:1;transform:none}
+.contact-box{text-align:center;padding:55px 25px}
+.contact-box p{color:var(--muted);max-width:650px;margin:15px auto 25px;line-height:1.7}
+footer{padding:35px 0;border-top:1px solid var(--line);color:#63758f;font-size:11px;text-align:center;font-family:var(--mono)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:980px){.console{grid-template-columns:1fr}.console-side{position:static}}
+@media(max-width:850px){.navlinks{display:none}.hero-grid,.founder{grid-template-columns:1fr}.hero{padding-top:130px}.hero-logo{order:-1}.grid{grid-template-columns:1fr 1fr}.section-head{display:block}.section-head p{margin-top:15px}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}.founder-stats{grid-template-columns:1fr}.speed-grid{grid-template-columns:1fr}.stepper-item .st-num{display:none}.dist-readout{grid-template-columns:1fr}h1{letter-spacing:-3px}.cart-line{grid-template-columns:38px 1fr;row-gap:10px}.cart-line .line-total{grid-column:2;text-align:left}.panel{padding:20px}.store-banner{flex-direction:column;align-items:flex-start;gap:10px}.order-summary{grid-template-columns:1fr}.orders-grid{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 
 <canvas id="fx"></canvas>
@@ -804,26 +289,15 @@ footer{
 
 <nav class="nav">
 <a class="brand" href="#home">
-<img src="alex-robotech-logo.png" alt="ALEX ROBOTECH Logo">
+<img src="alex-robotech-logo.png" alt="ALEX ROBOTECH">
 <span>ALEX ROBOTECH</span>
 </a>
 <div class="navlinks">
-<a href="#about">/about</a>
-<a href="#services">/services</a>
-<a href="#store">/store</a>
-<a href="#founder">/founder</a>
-<a href="#order">/console</a>
-<a href="#orders">/orders</a>
+<a href="#about">/about</a><a href="#services">/services</a><a href="#store">/store</a><a href="#founder">/founder</a><a href="#order">/console</a><a href="#orders">/orders</a>
 </div>
 <div class="nav-right">
-<div class="status-chip">
-<i class="pulse-dot"></i>
-<span id="navClock">SYSTEM ONLINE</span>
-</div>
-<button class="cart-btn" onclick="openDrawer()">
-🛒 CART
-<span class="cart-badge" id="cartBadge">0</span>
-</button>
+<div class="status-chip"><i class="pulse-dot"></i><span id="navClock">SYSTEM ONLINE</span></div>
+<button class="cart-btn" onclick="openDrawer()">🛒 CART<span class="cart-badge" id="cartBadge">0</span></button>
 <a class="btn primary" href="#order">Console ↗</a>
 </div>
 </nav>
@@ -833,11 +307,7 @@ footer{
 <div>
 <div class="eyebrow"><i class="pulse-dot"></i>Independent Tech &amp; Robotics Studio</div>
 <h1>CODE.<br><span class="gradient">CREATE.</span><br>INNOVATE.</h1>
-<p>
-ALEX ROBOTECH builds futuristic websites, robotics projects,
-Arduino systems, 3D designs and custom technology experiences.
-Orders are sent directly to the studio — no chat apps required.
-</p>
+<p>ALEX ROBOTECH builds futuristic websites, robotics projects, Arduino systems, 3D designs and custom technology experiences. Orders are sent directly to the studio — no chat apps required.</p>
 <div class="actions">
 <a class="btn primary" href="#order">Open Order Console ↗</a>
 <a class="btn" href="#orders">My Orders ↓</a>
@@ -848,34 +318,20 @@ Orders are sent directly to the studio — no chat apps required.
 <div class="stat"><b>24/7</b><span>Uptime</span></div>
 </div>
 </div>
-<div class="hero-logo">
-<div class="orbit"></div>
-<img src="alex-robotech-logo.png" alt="ALEX ROBOTECH">
-</div>
+<div class="hero-logo"><div class="orbit"></div><img src="alex-robotech-logo.png" alt="ALEX ROBOTECH"></div>
 </div>
 </section>
 
 <section id="about">
 <div class="container">
 <div class="section-head">
-<div>
-<div class="kicker">01 / About</div>
-<h2>Technology with a<br><span class="gradient">builder mindset.</span></h2>
+<div><div class="kicker">01 / About</div><h2>Technology with a<br><span class="gradient">builder mindset.</span></h2></div>
+<p>ALEX ROBOTECH combines programming, robotics, AI, electronics, 3D design and modern web development into practical projects made to learn, experiment and create.</p>
 </div>
-<p>
-ALEX ROBOTECH combines programming, robotics, AI, electronics,
-3D design and modern web development into practical projects
-made to learn, experiment and create.
-</p>
-</div>
-
 <div class="grid">
-<div class="card"><div class="icon">⚙️</div><h3>Build</h3>
-<p>From first idea to working prototype, projects are planned around real features and clear outcomes.</p></div>
-<div class="card"><div class="icon">🧠</div><h3>Learn</h3>
-<p>Technology becomes easier when you learn through building. Explore coding, electronics, robotics and design.</p></div>
-<div class="card"><div class="icon">🚀</div><h3>Innovate</h3>
-<p>Experiment with new ideas, futuristic interfaces and custom technology solutions.</p></div>
+<div class="card"><div class="icon">⚙️</div><h3>Build</h3><p>From first idea to working prototype, projects are planned around real features and clear outcomes.</p></div>
+<div class="card"><div class="icon">🧠</div><h3>Learn</h3><p>Technology becomes easier when you learn through building. Explore coding, electronics, robotics and design.</p></div>
+<div class="card"><div class="icon">🚀</div><h3>Innovate</h3><p>Experiment with new ideas, futuristic interfaces and custom technology solutions.</p></div>
 </div>
 </div>
 </section>
@@ -883,14 +339,8 @@ made to learn, experiment and create.
 <section id="services">
 <div class="container">
 <div class="section-head">
-<div>
-<div class="kicker">02 / Build Services</div>
-<h2>Pick a service.<br><span class="gradient">Start building.</span></h2>
-</div>
-<p>
-Fixed-scope packages with transparent starting prices.
-Add one to the console and it is calculated instantly with your cart.
-</p>
+<div><div class="kicker">02 / Build Services</div><h2>Pick a service.<br><span class="gradient">Start building.</span></h2></div>
+<p>Fixed-scope packages with transparent starting prices. Add one to the console and it is calculated instantly with your cart.</p>
 </div>
 <div class="grid" id="servicesGrid"></div>
 </div>
@@ -899,25 +349,13 @@ Add one to the console and it is calculated instantly with your cart.
 <section id="store">
 <div class="container">
 <div class="section-head">
-<div>
-<div class="kicker">03 / Build Store</div>
-<h2>Kits, courses &amp;<br><span class="gradient">components.</span></h2>
+<div><div class="kicker">03 / Build Store</div><h2>Kits, courses &amp;<br><span class="gradient">components.</span></h2></div>
+<p>The full ALEX ROBOTECH store is being prepared — hardware kits, components, live workshops and digital courses all launch soon. Preview the catalog below.</p>
 </div>
-<p>
-The full ALEX ROBOTECH store is being prepared — hardware kits,
-components, live workshops and digital courses all launch soon.
-Preview the catalog below.
-</p>
-</div>
-
 <div class="store-banner">
 <div class="sb-dot"></div>
-<div class="sb-text">
-<b>Store Launching Soon</b>
-<span>Arduino kits, sensors, motors, 3D-printed parts, live workshops and digital courses are all in the pipeline. Tap "Notify Me" on any item and we'll alert you the moment it goes live.</span>
+<div class="sb-text"><b>Store Launching Soon</b><span>Arduino kits, sensors, motors, 3D-printed parts, live workshops and digital courses are all in the pipeline. Tap "Notify Me" on any item and we'll alert you the moment it goes live.</span></div>
 </div>
-</div>
-
 <div class="grid" id="storeGrid"></div>
 </div>
 </section>
@@ -925,34 +363,16 @@ Preview the catalog below.
 <section id="founder">
 <div class="container">
 <div class="section-head">
-<div>
-<div class="kicker">04 / Founder</div>
-<h2>Meet the mind<br><span class="gradient">behind the build.</span></h2>
-</div>
+<div><div class="kicker">04 / Founder</div><h2>Meet the mind<br><span class="gradient">behind the build.</span></h2></div>
 <p>ALEX ROBOTECH is built around curiosity, engineering and learning through real projects.</p>
 </div>
-
 <div class="founder">
-<div class="card portrait">
-<div class="ring"></div>
-<div class="avatar">👨‍💻</div>
-</div>
-
+<div class="card portrait"><div class="ring"></div><div class="avatar">👨‍💻</div></div>
 <div class="card">
 <div class="role">Founder • Builder • Programmer • Robotics Enthusiast</div>
 <h3>Het Patel</h3>
-<p class="founder-copy">
-Founder of ALEX ROBOTECH, focused on programming, AI, robotics,
-electronics, 3D design and modern digital experiences.
-The mission is simple:
-<b style="color:white">learn by building, create with technology, and keep innovating.</b>
-</p>
-<div class="pills">
-<span class="pill">Python</span><span class="pill">C++</span>
-<span class="pill">Arduino</span><span class="pill">ESP32</span>
-<span class="pill">AI</span><span class="pill">Robotics</span>
-<span class="pill">3D Design</span><span class="pill">Web</span>
-</div>
+<p class="founder-copy">Founder of ALEX ROBOTECH, focused on programming, AI, robotics, electronics, 3D design and modern digital experiences. The mission is simple: <b style="color:white">learn by building, create with technology, and keep innovating.</b></p>
+<div class="pills"><span class="pill">Python</span><span class="pill">C++</span><span class="pill">Arduino</span><span class="pill">ESP32</span><span class="pill">AI</span><span class="pill">Robotics</span><span class="pill">3D Design</span><span class="pill">Web</span></div>
 <div class="founder-stats">
 <div class="founder-stat"><b>01</b><small>Founder</small></div>
 <div class="founder-stat"><b>∞</b><small>Ideas</small></div>
@@ -966,16 +386,9 @@ The mission is simple:
 <section id="order">
 <div class="container">
 <div class="section-head">
-<div>
-<div class="kicker">05 / Order Console</div>
-<h2>Build your order.<br><span class="gradient">See live pricing.</span></h2>
+<div><div class="kicker">05 / Order Console</div><h2>Build your order.<br><span class="gradient">See live pricing.</span></h2></div>
+<p>A fully self-contained ordering console. Place an order and it is sent straight to the ALEX ROBOTECH studio — no chat apps, no third-party services.</p>
 </div>
-<p>
-A fully self-contained ordering console. Place an order and it is
-sent straight to the ALEX ROBOTECH studio — no chat apps, no third-party services.
-</p>
-</div>
-
 <div class="console">
 <div class="console-main">
 <div class="console-bar">
@@ -983,7 +396,6 @@ sent straight to the ALEX ROBOTECH studio — no chat apps, no third-party servi
 <div class="title">alex_robotech://order_console</div>
 <div class="title" id="consoleClock">--:--:--</div>
 </div>
-
 <div class="stepper">
 <button class="stepper-item active" data-step="1" onclick="goStep(1)"><span class="st-num">STEP 01</span><b>CART</b></button>
 <button class="stepper-item" data-step="2" onclick="goStep(2)"><span class="st-num">STEP 02</span><b>DELIVERY</b></button>
@@ -992,61 +404,32 @@ sent straight to the ALEX ROBOTECH studio — no chat apps, no third-party servi
 </div>
 
 <div class="panel active" id="panel1">
-<div class="panel-head">
-<div class="kicker">Step 01</div>
-<h3>Your Build Cart</h3>
-<p>Adjust quantities or remove items. Prices update instantly in the summary panel.</p>
-</div>
+<div class="panel-head"><div class="kicker">Step 01</div><h3>Your Build Cart</h3><p>Adjust quantities or remove items. Prices update instantly in the summary panel.</p></div>
 <div id="cartLines"></div>
 </div>
 
 <div class="panel" id="panel2">
-<div class="panel-head">
-<div class="kicker">Step 02</div>
-<h3>Delivery &amp; Logistics</h3>
-<p id="deliveryIntro">
-Shipping is calculated by road distance from our studio
-(<span style="color:#9beaff" id="studioLabel">Ahmedabad, Gujarat</span>)
-using market transport slabs. Digital items and services ship free.
-</p>
-</div>
-
+<div class="panel-head"><div class="kicker">Step 02</div><h3>Delivery &amp; Logistics</h3><p id="deliveryIntro">Shipping is calculated by road distance from our studio (<span style="color:#9beaff" id="studioLabel">Ahmedabad, Gujarat</span>) using market transport slabs.</p></div>
 <div id="deliveryNotNeeded">
-<div class="no-delivery">
-<span class="big">📦</span>
-<h3>No delivery required</h3>
-<p>Your cart contains no physical items. Build services are delivered remotely — no shipping charge applies.</p>
-<button class="btn primary" style="margin-top:20px" onclick="goStep(3)">Continue to Details →</button>
+<div class="no-delivery"><span class="big">📦</span><h3>No delivery required</h3><p>Your cart contains no physical items. Build services are delivered remotely — no shipping charge applies.</p><button class="btn primary" style="margin-top:20px" onclick="goStep(3)">Continue to Details →</button></div>
 </div>
-</div>
-
 <div id="deliveryNeeded" style="display:none">
 <div class="loc-modes">
 <button class="loc-mode active" data-mode="auto" onclick="setLocMode('auto')">◎ Auto-Detect Location</button>
 <button class="loc-mode" data-mode="manual" onclick="setLocMode('manual')">✎ Enter Address</button>
 </div>
-
 <div class="loc-panel" id="autoPanel">
 <div class="radar-wrap">
-<div class="radar" id="radar">
-<div class="radar-ring"></div><div class="radar-ring"></div>
-<div class="radar-sweep"></div><div class="radar-dot"></div>
+<div class="radar" id="radar"><div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-sweep"></div><div class="radar-dot"></div></div>
+<div class="loc-info"><div class="lbl">Detected Position</div><div class="val dim" id="locText">No location detected. Press detect to begin.</div></div>
 </div>
-<div class="loc-info">
-<div class="lbl">Detected Position</div>
-<div class="val dim" id="locText">No location detected. Press detect to begin.</div>
-</div>
-</div>
-<div style="margin-top:16px">
-<button class="btn primary" id="detectBtn" onclick="detectLocation()">Detect My Location ↗</button>
-</div>
+<div style="margin-top:16px"><button class="btn primary" id="detectBtn" onclick="detectLocation()">Detect My Location ↗</button></div>
 <div class="dist-readout">
 <div class="readout"><b id="roDist">—</b><span>Distance</span></div>
 <div class="readout"><b id="roZone">—</b><span>Zone</span></div>
 <div class="readout"><b id="roShip">—</b><span>Shipping</span></div>
 </div>
 </div>
-
 <div class="loc-panel hidden" id="manualPanel">
 <div class="row">
 <div class="field"><label>Address line</label><input class="input" id="addrLine" placeholder="House / street / area"></div>
@@ -1056,8 +439,7 @@ using market transport slabs. Digital items and services ship free.
 <div class="field"><label>State</label><input class="input" id="addrState" placeholder="State"></div>
 <div class="field"><label>PIN code</label><input class="input" id="addrPin" placeholder="380001" inputmode="numeric"></div>
 </div>
-<div class="field">
-<label>Delivery zone</label>
+<div class="field"><label>Delivery zone</label>
 <select class="select" id="zoneSelect" onchange="onZoneChange()">
 <option value="local">Local — same city (~8 km)</option>
 <option value="city" selected>City + suburbs (~25 km)</option>
@@ -1068,73 +450,44 @@ using market transport slabs. Digital items and services ship free.
 </select>
 </div>
 </div>
-
 <div style="margin-top:6px">
 <div class="kicker" style="margin-bottom:10px">Shipping Speed</div>
 <div class="speed-grid">
-<div class="speed-opt active" data-speed="standard" onclick="setSpeed('standard')"><b>Standard</b><span>4–7 business days<br>Base rate</span></div>
-<div class="speed-opt" data-speed="express" onclick="setSpeed('express')"><b>Express</b><span>1–3 business days<br>×1.7 rate</span></div>
-<div class="speed-opt" data-speed="pickup" onclick="setSpeed('pickup')"><b>Self Pickup</b><span>Collect from studio<br>₹0 shipping</span></div>
+<div class="speed-opt active" data-speed="standard" onclick="setSpeed('standard')"><b>Standard</b><span>4–7 days<br>Base rate</span></div>
+<div class="speed-opt" data-speed="express" onclick="setSpeed('express')"><b>Express</b><span>1–3 days<br>×1.7 rate</span></div>
+<div class="speed-opt" data-speed="pickup" onclick="setSpeed('pickup')"><b>Self Pickup</b><span>From studio<br>₹0</span></div>
 </div>
 </div>
-
-<div class="field" style="margin-top:18px">
-<label>Contact phone for delivery</label>
-<input class="input" id="addrPhone" placeholder="+91 98765 43210" inputmode="tel">
-</div>
+<div class="field" style="margin-top:18px"><label>Contact phone for delivery</label><input class="input" id="addrPhone" placeholder="+91 98765 43210" inputmode="tel"></div>
 </div>
 </div>
 
 <div class="panel" id="panel3">
-<div class="panel-head">
-<div class="kicker">Step 03</div>
-<h3>Your Details</h3>
-<p>We use this only to send your order confirmation and project updates.</p>
-</div>
-
+<div class="panel-head"><div class="kicker">Step 03</div><h3>Your Details</h3><p>We use this only to send your order confirmation and project updates.</p></div>
 <div class="row">
 <div class="field"><label>Full name *</label><input class="input" id="fName" placeholder="Your name"></div>
 <div class="field"><label>Email *</label><input class="input" id="fEmail" type="email" placeholder="you@example.com"></div>
 </div>
-
 <div class="row">
 <div class="field"><label>Phone</label><input class="input" id="fPhone" placeholder="+91 98765 43210" inputmode="tel"></div>
 <div class="field"><label>Organisation (optional)</label><input class="input" id="fOrg" placeholder="School / college / company"></div>
 </div>
-
-<div class="field">
-<label>Project notes / requirements</label>
-<textarea class="textarea" id="fNotes" placeholder="Deadlines, customisation, hardware specifics, references..."></textarea>
-</div>
+<div class="field"><label>Project notes / requirements</label><textarea class="textarea" id="fNotes" placeholder="Deadlines, customisation, hardware specifics, references..."></textarea></div>
 </div>
 
 <div class="panel" id="panel4">
-<div class="panel-head">
-<div class="kicker">Step 04</div>
-<h3>Review &amp; Confirm</h3>
-<p>Check everything below. Placing the order sends it directly to the studio and saves a copy locally.</p>
-</div>
-
+<div class="panel-head"><div class="kicker">Step 04</div><h3>Review &amp; Confirm</h3><p>Check everything below. Placing the order sends it directly to the studio.</p></div>
 <div id="reviewBox"></div>
-
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:6px">
 <button class="btn primary" onclick="submitOrder()">Place Order ↗</button>
 <button class="btn" onclick="previewOrder()">Preview / Print</button>
 <button class="btn" onclick="copyOrder()">Copy</button>
 </div>
-
-<p style="font-size:10px;color:#667995;margin-top:14px;line-height:1.7;font-family:var(--mono)">
-Your order is transmitted instantly to the ALEX ROBOTECH studio and stored
-in the cloud so the studio sees it instantly. No chat apps needed.
-</p>
 </div>
 </div>
 
 <aside class="console-side">
-<div class="side-head">
-<span>◈ LIVE COST ENGINE</span>
-<span id="engineState" style="color:#8ff0c2;font-size:10px">READY</span>
-</div>
+<div class="side-head"><span>◈ LIVE COST ENGINE</span><span id="engineState" style="color:#8ff0c2;font-size:10px">READY</span></div>
 <div class="side-body">
 <div class="sum-row"><span>Items</span><strong id="sItems">0</strong></div>
 <div class="sum-row"><span>Subtotal</span><strong id="sSubtotal">₹0</strong></div>
@@ -1142,10 +495,7 @@ in the cloud so the studio sees it instantly. No chat apps needed.
 <div class="sum-row"><span>Delivery</span><strong id="sDelivery">₹0</strong></div>
 <div id="deliveryBreakdown"></div>
 <div class="sum-row"><span>Handling &amp; platform</span><strong id="sHandling">₹0</strong></div>
-<div class="sum-total">
-<div class="lab">TOTAL PAYABLE</div>
-<div class="amt" id="sTotal">₹0</div>
-</div>
+<div class="sum-total"><div class="lab">TOTAL PAYABLE</div><div class="amt" id="sTotal">₹0</div></div>
 <div id="sideNote"></div>
 </div>
 <div class="side-actions">
@@ -1160,45 +510,26 @@ in the cloud so the studio sees it instantly. No chat apps needed.
 <section id="orders">
 <div class="container">
 <div class="section-head">
-<div>
-<div class="kicker">06 / My Orders</div>
-<h2>Your order<br><span class="gradient">history.</span></h2>
+<div><div class="kicker">06 / My Orders</div><h2>Your order<br><span class="gradient">history.</span></h2></div>
+<p>Orders are sent to the studio and stored in the cloud so you can track them from any device.</p>
 </div>
-<p>
-Orders are sent to the studio and stored in the cloud so you can track
-them from any device. Save your Order ID to look it up later.
-</p>
+<div id="configNotice" style="display:none;align-items:flex-start;gap:14px;padding:18px 20px;border:1px solid rgba(255,181,71,.4);background:rgba(255,181,71,.05);border-radius:16px;margin-bottom:22px">
+<div style="font-size:24px">⚠️</div>
+<div style="font-size:12.5px;color:#d9c19a;line-height:1.7"><b style="display:block;font-size:13px;color:#ffd9a0;font-family:var(--mono);margin-bottom:6px">CLOUD NOT CONFIGURED</b>Add your Firebase config in <code style="background:rgba(255,181,71,.12);padding:2px 6px;border-radius:5px;font-family:var(--mono);font-size:11px;color:#ffe0b0">FIREBASE_CONFIG</code> at the top of the JavaScript to sync orders across devices.</div>
 </div>
-
-<div id="configNotice" class="config-notice">
-<div class="cn-icon">⚠️</div>
-<div class="cn-body">
-<b>Cloud Not Configured</b>
-<p>
-Right now, orders are only saved in this browser. To sync to the cloud
-across all devices, add your Firebase config in the <code>FIREBASE_CONFIG</code>
-section at the top of the JavaScript.
-</p>
-</div>
-</div>
-
 <div class="track-bar">
 <input class="input" id="trackInput" list="orderIds" placeholder="Track by Order ID · AR-251003-4821">
 <datalist id="orderIds"></datalist>
 <button class="btn primary" onclick="trackOrder()">Track ↗</button>
 </div>
 <div id="recentChips" class="recent-chips"></div>
-
 <div class="merchant-hint-hidden" id="merchantHint">· owner access: ctrl + shift + m ·</div>
-
 <div class="merchant-bar" id="merchantBar">
 <button class="merchant-toggle" id="merchantToggle" onclick="requestMerchantToggle()">
-<span class="dot"></span>
-Merchant Mode: <b id="merchantState">OFF</b>
+<span class="dot"></span>Merchant Mode: <b id="merchantState">OFF</b>
 </button>
 <span class="merchant-hint">Owner-only view — protected by PIN.</span>
 </div>
-
 <div class="orders-grid" id="ordersGrid"></div>
 </div>
 </section>
@@ -1209,27 +540,20 @@ Merchant Mode: <b id="merchantState">OFF</b>
 <div class="kicker">07 / Contact</div>
 <h2>Have an idea?<br><span class="gradient">Let's build it.</span></h2>
 <p>Use the Order Console for a self-contained order, or reach out directly.</p>
-
 <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:22px 0">
 <a class="btn primary" href="tel:+919979766643">📞 +91 99797 66643</a>
-<a class="btn" href="mailto:hello@alexrobotech.com">✉️ hello@alexrobotech.com</a>
+<a class="btn" href="mailto:alexrobotech2@gmail.com">✉️ alexrobotech2@gmail.com</a>
 </div>
-
 <a class="btn primary" href="#order">Open Order Console ↗</a>
 </div>
 </div>
 </section>
 
-<footer>
-© <span id="year"></span> ALEX ROBOTECH • CODE. CREATE. INNOVATE. • ALL SYSTEMS NOMINAL
-</footer>
+<footer>© <span id="year"></span> ALEX ROBOTECH • CODE. CREATE. INNOVATE. • ALL SYSTEMS NOMINAL</footer>
 
 <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
 <aside class="drawer" id="drawer">
-<div class="drawer-head">
-<h3>◈ CART</h3>
-<button class="close" style="position:static" onclick="closeDrawer()">×</button>
-</div>
+<div class="drawer-head"><h3>◈ CART</h3><button class="close" style="position:static" onclick="closeDrawer()">×</button></div>
 <div class="drawer-body" id="drawerBody"></div>
 <div class="drawer-foot">
 <div class="rowline"><span>Subtotal</span><strong id="drawerTotal">₹0</strong></div>
@@ -1241,9 +565,7 @@ Merchant Mode: <b id="merchantState">OFF</b>
 <div class="modalbox">
 <button class="close" onclick="closeModal()">×</button>
 <div class="kicker" id="modalKicker">Order Confirmed</div>
-<h2 style="margin-top:8px;font-size:28px">
-<span class="gradient" id="modalTitle">Order placed</span>
-</h2>
+<h2 style="margin-top:8px;font-size:28px"><span class="gradient" id="modalTitle">Order placed</span></h2>
 <div id="modalBody" style="margin-top:16px;color:var(--muted);line-height:1.8;font-size:13px"></div>
 <div id="modalActions" style="display:flex;gap:9px;flex-wrap:wrap;margin-top:20px"></div>
 </div>
@@ -1251,1066 +573,488 @@ Merchant Mode: <b id="merchantState">OFF</b>
 
 <div class="toast" id="toast"></div>
 
-<!-- ============ FIREBASE SDK ============ -->
 <script src="https://www.gstatic.com/firebasejs/12.17.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore-compat.js"></script>
-
 <script>
-/* =====================================================================
-   CONFIG — REPLACE FIREBASE_CONFIG WITH YOUR VALUES
-   =====================================================================
-
-   1. WEB3FORMS — already set (email delivery)
-   2. FIREBASE_CONFIG — replace with your Firebase project values
-   3. MERCHANT_PIN — change if you want a different 4-digit PIN
-
-   ===================================================================== */
-
+/* ═══════════════════════════════════════════════════════════════════
+   CONFIG — REPLACE THE 6 VALUES IN FIREBASE_CONFIG WITH YOUR OWN
+   Get them from: Firebase Console → ⚙️ Project Settings → Your apps
+   ═══════════════════════════════════════════════════════════════════ */
 const WEB3FORMS_ACCESS_KEY = "79e7cefd-0d2c-44da-b6ae-a07eb2865328";
 
-/* ===== REPLACE THIS ENTIRE OBJECT WITH YOUR FIREBASE CONFIG =====
-   Get it from: Firebase Console → Project Settings → Your apps
-   ================================================================ */
 const FIREBASE_CONFIG = {
-    apiKey:            "AIzaSyA2-83ofZn0ElkF_lImdRlToaootMkilWM",
-    authDomain:        "alerobotech.firebaseapp.com",
-    projectId:         "alerobotech",
-    storageBucket:     "alerobotech.firebasestorage.app",
-    messagingSenderId: "117921238393",
-    appId:             "1:117921238393:web:29eeb95545583a65ce73a8"
+   apiKey: "AIzaSyA2-83ofZn0ElkF_lImdRlToaootMkilWM",
+  authDomain: "alerobotech.firebaseapp.com",
+  projectId: "alerobotech",
+  storageBucket: "alerobotech.firebasestorage.app",
+  messagingSenderId: "117921238393",
+  appId: "1:117921238393:web:29eeb95545583a65ce73a8"
 };
 
 const MERCHANT_PIN = "2012";
 
-/* ====================== STUDIO / SHIPPING CONFIG ====================== */
-
+/* ═══════════════ STUDIO / SHIPPING ═══════════════ */
 const STUDIO = { lat: 23.0225, lng: 72.5714, label: "Ahmedabad, Gujarat, India" };
-
 const SLABS = [
-    { max: 5, fee: 39, zone: "Hyperlocal" },
-    { max: 15, fee: 59, zone: "City" },
-    { max: 30, fee: 89, zone: "City +" },
-    { max: 60, fee: 139, zone: "Suburban" },
-    { max: 150, fee: 199, zone: "Intercity" },
-    { max: 400, fee: 279, zone: "State" },
-    { max: 1000, fee: 379, zone: "Regional" },
-    { max: 2000, fee: 499, zone: "National" },
-    { max: Infinity, fee: 649, zone: "Long Haul" }
+    {max:5,fee:39,zone:"Hyperlocal"},{max:15,fee:59,zone:"City"},
+    {max:30,fee:89,zone:"City +"},{max:60,fee:139,zone:"Suburban"},
+    {max:150,fee:199,zone:"Intercity"},{max:400,fee:279,zone:"State"},
+    {max:1000,fee:379,zone:"Regional"},{max:2000,fee:499,zone:"National"},
+    {max:Infinity,fee:649,zone:"Long Haul"}
 ];
+const INTL_FLAT=1499, EXPRESS_MULT=1.7, WEIGHT_INCLUDED=2, WEIGHT_PER_KG=70;
+const FREE_SHIP_OVER=5000, HANDLING_RATE=0.02, HANDLING_MIN=19;
+const ZONE_KM={local:8,city:25,state:250,region:700,national:1400,intl:4500};
+const STORAGE_KEY="alex_robotech_orders";
 
-const INTL_FLAT = 1499;
-const EXPRESS_MULT = 1.7;
-const WEIGHT_INCLUDED = 2;
-const WEIGHT_PER_KG = 70;
-const FREE_SHIP_OVER = 5000;
-const HANDLING_RATE = 0.02;
-const HANDLING_MIN = 19;
-const ZONE_KM = { local:8, city:25, state:250, region:700, national:1400, intl:4500 };
-const STORAGE_KEY = "alex_robotech_orders";
-
-/* ====================== READY CHECKS ====================== */
-
-function isConfigured(key){ return key && !key.startsWith("YOUR_") && key.length > 6; }
+function isConfigured(k){return k && !k.startsWith("YOUR_") && k.length>6;}
 const web3formsReady = () => isConfigured(WEB3FORMS_ACCESS_KEY);
-
 function firebaseConfigured(){
-    return FIREBASE_CONFIG.apiKey &&
-           !FIREBASE_CONFIG.apiKey.startsWith("PASTE_") &&
-           FIREBASE_CONFIG.projectId &&
-           !FIREBASE_CONFIG.projectId.startsWith("PASTE_");
+    return FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith("PASTE_") &&
+           FIREBASE_CONFIG.projectId && !FIREBASE_CONFIG.projectId.startsWith("PASTE_");
 }
 
-/* ====================== FIREBASE ====================== */
-
+/* ═══════════════ FIREBASE ═══════════════ */
 let firebaseDB = null;
 
 function initFirebase(){
-    if(!firebaseConfigured()){
-        console.warn("Firebase not configured — running in local-only mode");
-        return false;
-    }
+    if(!firebaseConfigured()){ console.warn("Firebase not configured"); return false; }
     try{
-        if(typeof firebase === "undefined"){
-            console.warn("Firebase SDK not loaded");
-            return false;
-        }
-        if(!firebase.apps.length){
-            firebase.initializeApp(FIREBASE_CONFIG);
-        }
+        if(typeof firebase === "undefined"){ console.warn("Firebase SDK not loaded"); return false; }
+        if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
         firebaseDB = firebase.firestore();
-        console.log("%c✓ Firebase connected — orders sync to cloud", "color:#8ff0c2");
+        console.log("%c✓ Firebase connected — orders sync to cloud","color:#8ff0c2");
         return true;
-    }catch(e){
-        console.error("Firebase init failed:", e);
-        return false;
-    }
+    }catch(e){ console.error("Firebase init failed:",e); return false; }
 }
 
 async function saveOrderToCloud(order){
     if(!firebaseDB) return false;
     try{
         await firebaseDB.collection("orders").doc(order.id).set(order);
-        console.log("%c✓ Order " + order.id + " saved to cloud", "color:#8ff0c2");
+        console.log("%c✓ Order "+order.id+" saved to cloud","color:#8ff0c2");
         return true;
-    }catch(e){
-        console.error("Cloud save failed:", e);
-        return false;
-    }
+    }catch(e){ console.error("Cloud save failed:",e); return false; }
 }
-
-async function updateOrderInCloud(id, patch){
+async function updateOrderInCloud(id,patch){
     if(!firebaseDB) return false;
-    try{
-        await firebaseDB.collection("orders").doc(id).update(patch);
-        return true;
-    }catch(e){
-        console.error("Cloud update failed:", e);
-        return false;
-    }
+    try{ await firebaseDB.collection("orders").doc(id).update(patch); return true; }
+    catch(e){ console.error("Cloud update failed:",e); return false; }
 }
-
 function watchCloudOrders(){
     if(!firebaseDB) return;
-    firebaseDB.collection("orders")
-        .orderBy("createdAt", "desc")
-        .limit(100)
-        .onSnapshot(snapshot => {
-            const list = [];
-            snapshot.forEach(doc => list.push(doc.data()));
-            if(list.length > 0){
-                setOrders(list);
-                renderOrders();
-                console.log("%c☁ " + list.length + " orders synced from cloud", "color:#69dcff");
-            }
-        }, err => {
-            console.error("Cloud listener error:", err);
-        });
+    firebaseDB.collection("orders").orderBy("createdAt","desc").limit(100)
+    .onSnapshot(snap=>{
+        const list=[];
+        snap.forEach(d=>list.push(d.data()));
+        if(list.length>0){
+            setOrders(list);
+            renderOrders();
+            console.log("%c☁ "+list.length+" orders synced from cloud","color:#69dcff");
+        }
+    },err=>console.error("Cloud listener error:",err));
 }
 
-/* ====================== CATALOG ====================== */
-
+/* ═══════════════ CATALOG ═══════════════ */
 const CATALOG = [
-    { id:"svc-web", name:"Website Development", price:4999, type:"service", icon:"💻",
-      tags:["UI/UX","Responsive","Animation"],
-      desc:"Modern responsive websites, landing pages, dashboards and interactive experiences." },
-    { id:"svc-proj", name:"Project Building", price:3499, type:"service", icon:"🧩",
-      tags:["Prototype","Docs"],
-      desc:"School, personal and prototype projects with structured planning and documentation." },
-    { id:"svc-ard", name:"Arduino Automation Build", price:6499, type:"service", icon:"⚡",
-      tags:["Arduino","Sensors","Motors"],
-      desc:"Sensor, motor, automation and electronics projects designed around your idea." },
-    { id:"svc-3d", name:"3D Design Package", price:2499, type:"service", icon:"🧊",
-      tags:["Tinkercad","Onshape"],
-      desc:"3D concepts and models for prototypes, presentations and creative technology projects." },
-    { id:"svc-learn", name:"Tech Learning Session", price:1199, type:"service", icon:"📚",
-      tags:["Coding","Mentoring"],
-      desc:"Beginner-friendly learning sessions in coding, robotics, 3D design and technology." },
-    { id:"svc-robot", name:"Robotics Project", price:5499, type:"service", icon:"🤖",
-      tags:["Robotics","Automation"],
-      desc:"Robot concepts, mechanisms, sensors and motors for educational and prototype builds." },
-    { id:"svc-custom", name:"Custom Project", price:0, type:"service", icon:"🚀", quote:true,
-      tags:["Custom","Research","Build"],
-      desc:"Have a different idea? Send the concept and we create a custom build plan." },
-
-    { id:"hw-ard", name:"Arduino Uno Starter Kit", price:1499, weight:0.75, type:"physical", icon:"🔌",
-      comingSoon:true, tags:["Uno R3","Breadboard","Guide"],
-      desc:"Uno R3 board, breadboard, jumper wires, LEDs, resistors and a starter guide." },
-    { id:"hw-esp", name:"ESP32 IoT Dev Kit", price:1299, weight:0.35, type:"physical", icon:"📡",
-      comingSoon:true, tags:["WiFi","BLE","Sensors"],
-      desc:"ESP32 board with sensor set for IoT experiments and connected builds." },
-    { id:"hw-sen", name:"Robotics Sensor Pack", price:999, weight:0.5, type:"physical", icon:"🎛️",
-      comingSoon:true, tags:["12 Sensors","Ultrasonic"],
-      desc:"Ultrasonic, IR, LDR, temperature, humidity and motion sensors bundle." },
-    { id:"hw-motor", name:"Servo + Motor Driver Pack", price:749, weight:0.6, type:"physical", icon:"⚙️",
-      comingSoon:true, tags:["Servo","L298N"],
-      desc:"Servos, gear motors and an L298N driver for motion and drive builds." },
-    { id:"hw-bb", name:"Jumper & Breadboard Combo", price:299, weight:0.25, type:"physical", icon:"🧵",
-      comingSoon:true, tags:["M2M","M2F","F2F"],
-      desc:"830-point breadboard with 120 mixed jumper wires for fast prototyping." },
-    { id:"hw-3dp", name:"3D Printed Custom Part", price:399, weight:0.15, type:"physical", icon:"🖨️",
-      comingSoon:true, tags:["PLA","Custom"],
-      desc:"One custom-designed 3D printed part in PLA, up to 100 g." },
-
-    { id:"dg-tink", name:"Tinkercad Master Class", price:699, type:"digital", icon:"🖥️",
-      comingSoon:true, tags:["Circuits","3D","Simulation"],
-      desc:"Hands-on program for mastering circuits, 3D design and simulation." },
-    { id:"dg-3d", name:"3D Design Crash Course", price:899, type:"digital", icon:"🧊",
-      comingSoon:true, tags:["Modeling","Export"],
-      desc:"From sketch to printable model — recorded course with project files." },
-    { id:"dg-ws", name:"Robotics Workshop (Live)", price:1199, type:"digital", icon:"🎓",
-      comingSoon:true, tags:["Live","Q&A","Certificate"],
-      desc:"Live online workshop with build-along session and doubt clearing." }
+    {id:"svc-web",name:"Website Development",price:4999,type:"service",icon:"💻",tags:["UI/UX","Responsive","Animation"],desc:"Modern responsive websites, landing pages, dashboards and interactive experiences."},
+    {id:"svc-proj",name:"Project Building",price:3499,type:"service",icon:"🧩",tags:["Prototype","Docs"],desc:"School, personal and prototype projects with structured planning and documentation."},
+    {id:"svc-ard",name:"Arduino Automation Build",price:6499,type:"service",icon:"⚡",tags:["Arduino","Sensors","Motors"],desc:"Sensor, motor, automation and electronics projects designed around your idea."},
+    {id:"svc-3d",name:"3D Design Package",price:2499,type:"service",icon:"🧊",tags:["Tinkercad","Onshape"],desc:"3D concepts and models for prototypes, presentations and creative technology projects."},
+    {id:"svc-learn",name:"Tech Learning Session",price:1199,type:"service",icon:"📚",tags:["Coding","Mentoring"],desc:"Beginner-friendly learning sessions in coding, robotics, 3D design and technology."},
+    {id:"svc-robot",name:"Robotics Project",price:5499,type:"service",icon:"🤖",tags:["Robotics","Automation"],desc:"Robot concepts, mechanisms, sensors and motors for educational and prototype builds."},
+    {id:"svc-custom",name:"Custom Project",price:0,type:"service",icon:"🚀",quote:true,tags:["Custom","Research","Build"],desc:"Have a different idea? Send the concept and we create a custom build plan."},
+    {id:"hw-ard",name:"Arduino Uno Starter Kit",price:1499,weight:0.75,type:"physical",icon:"🔌",comingSoon:true,tags:["Uno R3","Breadboard","Guide"],desc:"Uno R3 board, breadboard, jumper wires, LEDs, resistors and a starter guide."},
+    {id:"hw-esp",name:"ESP32 IoT Dev Kit",price:1299,weight:0.35,type:"physical",icon:"📡",comingSoon:true,tags:["WiFi","BLE","Sensors"],desc:"ESP32 board with sensor set for IoT experiments and connected builds."},
+    {id:"hw-sen",name:"Robotics Sensor Pack",price:999,weight:0.5,type:"physical",icon:"🎛️",comingSoon:true,tags:["12 Sensors","Ultrasonic"],desc:"Ultrasonic, IR, LDR, temperature, humidity and motion sensors bundle."},
+    {id:"hw-motor",name:"Servo + Motor Driver Pack",price:749,weight:0.6,type:"physical",icon:"⚙️",comingSoon:true,tags:["Servo","L298N"],desc:"Servos, gear motors and an L298N driver for motion and drive builds."},
+    {id:"hw-bb",name:"Jumper & Breadboard Combo",price:299,weight:0.25,type:"physical",icon:"🧵",comingSoon:true,tags:["M2M","M2F","F2F"],desc:"830-point breadboard with 120 mixed jumper wires for fast prototyping."},
+    {id:"hw-3dp",name:"3D Printed Custom Part",price:399,weight:0.15,type:"physical",icon:"🖨️",comingSoon:true,tags:["PLA","Custom"],desc:"One custom-designed 3D printed part in PLA, up to 100 g."},
+    {id:"dg-tink",name:"Tinkercad Master Class",price:699,type:"digital",icon:"🖥️",comingSoon:true,tags:["Circuits","3D","Simulation"],desc:"Hands-on program for mastering circuits, 3D design and simulation."},
+    {id:"dg-3d",name:"3D Design Crash Course",price:899,type:"digital",icon:"🧊",comingSoon:true,tags:["Modeling","Export"],desc:"From sketch to printable model — recorded course with project files."},
+    {id:"dg-ws",name:"Robotics Workshop (Live)",price:1199,type:"digital",icon:"🎓",comingSoon:true,tags:["Live","Q&A","Certificate"],desc:"Live online workshop with build-along session and doubt clearing."}
 ];
 
-/* ====================== STATE ====================== */
-
-const state = {
-    cart: {},
-    step: 1,
-    locMode: "auto",
-    speed: "standard",
-    detected: null,
-    manualZone: "city",
-    merchantMode: false,
-    lastOrder: null
-};
-
-/* ====================== HELPERS ====================== */
+const state = { cart:{}, step:1, locMode:"auto", speed:"standard", detected:null, manualZone:"city", merchantMode:false, lastOrder:null };
 
 const $ = id => document.getElementById(id);
-const inr = n => "₹" + Math.round(Number(n) || 0).toLocaleString("en-IN");
+const inr = n => "₹" + Math.round(Number(n)||0).toLocaleString("en-IN");
 const getProduct = id => CATALOG.find(p => p.id === id);
+const typeLabel = t => t==="physical"?"HARDWARE":t==="digital"?"DIGITAL":"SERVICE";
+const statusLabel = s => ({pending:"Pending Review",confirmed:"Confirmed",in_progress:"In Progress",completed:"Completed",cancelled:"Cancelled"}[s]||"Pending Review");
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function haversine(lat1,lon1,lat2,lon2){const R=6371,tR=d=>d*Math.PI/180;const dLat=tR(lat2-lat1),dLon=tR(lon2-lon1);const a=Math.sin(dLat/2)**2+Math.cos(tR(lat1))*Math.cos(tR(lat2))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(a));}
 
-function typeLabel(t){
-    return t === "physical" ? "HARDWARE" : t === "digital" ? "DIGITAL" : "SERVICE";
-}
-function statusLabel(s){
-    return {
-        pending:"Pending Review", confirmed:"Confirmed",
-        in_progress:"In Progress", completed:"Completed", cancelled:"Cancelled"
-    }[s] || "Pending Review";
-}
-function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, c => (
-        {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]
-    ));
-}
-function haversine(lat1, lon1, lat2, lon2){
-    const R = 6371;
-    const toRad = d => d * Math.PI / 180;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a = Math.sin(dLat/2)**2 +
-              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2)**2;
-    return 2 * R * Math.asin(Math.sqrt(a));
-}
+/* ═══════════════ STORAGE ═══════════════ */
+function getOrders(){try{const raw=localStorage.getItem(STORAGE_KEY);return raw?JSON.parse(raw):[];}catch(e){return [];}}
+function setOrders(list){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(list));}catch(e){toast("Storage unavailable");}}
+function saveOrderToList(order){const list=getOrders();const idx=list.findIndex(o=>o.id===order.id);if(idx===-1)list.unshift(order);else list[idx]=order;setOrders(list);}
+function updateOrderInList(id,patch){const list=getOrders();const idx=list.findIndex(o=>o.id===id);if(idx===-1)return;list[idx]={...list[idx],...patch};setOrders(list);}
+function deleteOrderFromList(id){setOrders(getOrders().filter(o=>o.id!==id));}
+function generateOrderId(){const d=new Date();const yy=String(d.getFullYear()).slice(-2);const mm=String(d.getMonth()+1).padStart(2,"0");const dd=String(d.getDate()).padStart(2,"0");const rand=Math.floor(1000+Math.random()*9000);return `AR-${yy}${mm}${dd}-${rand}`;}
 
-/* ====================== STORAGE ====================== */
-
-function getOrders(){
-    try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : [];
-    }catch(e){ return []; }
-}
-function setOrders(list){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }
-    catch(e){ toast("Storage unavailable in this browser"); }
-}
-function saveOrderToList(order){
-    const list = getOrders();
-    const idx = list.findIndex(o => o.id === order.id);
-    if(idx === -1) list.unshift(order);
-    else list[idx] = order;
-    setOrders(list);
-}
-function updateOrderInList(id, patch){
-    const list = getOrders();
-    const idx = list.findIndex(o => o.id === id);
-    if(idx === -1) return;
-    list[idx] = { ...list[idx], ...patch };
-    setOrders(list);
-}
-function deleteOrderFromList(id){
-    setOrders(getOrders().filter(o => o.id !== id));
-}
-function generateOrderId(){
-    const d = new Date();
-    const yy = String(d.getFullYear()).slice(-2);
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const rand = Math.floor(1000 + Math.random() * 9000);
-    return `AR-${yy}${mm}${dd}-${rand}`;
-}
-
-/* ====================== RENDER CATALOG ====================== */
-
+/* ═══════════════ RENDER ═══════════════ */
 function productCard(p){
-    const qty = state.cart[p.id] || 0;
-    const isComing = !!p.comingSoon;
-
-    const priceHtml = p.quote
-        ? `<span class="quote-tag">Quote on request</span>`
-        : isComing
-        ? `<span class="quote-tag">Expected ${inr(p.price)}</span>`
-        : `<b>${inr(p.price)}</b><small>${p.type === "service" ? "starting from" : "incl. taxes"}</small>`;
-
+    const qty=state.cart[p.id]||0, isComing=!!p.comingSoon;
+    const priceHtml = p.quote ? `<span class="quote-tag">Quote on request</span>`
+        : isComing ? `<span class="quote-tag">Expected ${inr(p.price)}</span>`
+        : `<b>${inr(p.price)}</b><small>${p.type==="service"?"starting from":"incl. taxes"}</small>`;
     const btnHtml = isComing
         ? `<button class="order-mini soon" onclick="notifyMe('${p.id}')">Notify Me 🔔</button>`
-        : `<button class="order-mini ${qty ? "added" : ""}" onclick="addToCart('${p.id}')">
-             ${qty ? `In cart · ${qty}` : "Add ↗"}
-           </button>`;
-
-    return `
-    <article class="card product-card ${isComing ? "coming" : ""}">
-        ${isComing ? `<span class="soon-ribbon">COMING SOON</span>` : ""}
-        <div class="p-top">
-            <div class="icon">${p.icon}</div>
-            <span class="p-type" data-t="${p.type}">${typeLabel(p.type)}</span>
-        </div>
-        <h3>${escapeHtml(p.name)}</h3>
-        <p>${escapeHtml(p.desc)}</p>
-        <div class="tags">
-            ${p.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}
-            ${p.weight ? `<span class="tag">${p.weight} kg</span>` : ""}
-        </div>
-        <div class="service-bottom">
-            <div class="p-price">${priceHtml}</div>
-            ${btnHtml}
-        </div>
+        : `<button class="order-mini ${qty?"added":""}" onclick="addToCart('${p.id}')">${qty?`In cart · ${qty}`:"Add ↗"}</button>`;
+    return `<article class="card product-card ${isComing?"coming":""}">
+        ${isComing?'<span class="soon-ribbon">COMING SOON</span>':""}
+        <div class="p-top"><div class="icon">${p.icon}</div><span class="p-type" data-t="${p.type}">${typeLabel(p.type)}</span></div>
+        <h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.desc)}</p>
+        <div class="tags">${p.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join("")}${p.weight?`<span class="tag">${p.weight} kg</span>`:""}</div>
+        <div class="service-bottom"><div class="p-price">${priceHtml}</div>${btnHtml}</div>
     </article>`;
 }
-
 function renderCatalog(){
-    $("servicesGrid").innerHTML =
-        CATALOG.filter(p => p.type === "service").map(productCard).join("");
-    $("storeGrid").innerHTML =
-        CATALOG.filter(p => p.type !== "service").map(productCard).join("");
+    $("servicesGrid").innerHTML = CATALOG.filter(p=>p.type==="service").map(productCard).join("");
+    $("storeGrid").innerHTML = CATALOG.filter(p=>p.type!=="service").map(productCard).join("");
 }
 
-/* ====================== CART ====================== */
+/* ═══════════════ CART ═══════════════ */
+function addToCart(id){const p=getProduct(id);if(!p)return;if(p.comingSoon){notifyMe(id);return;}state.cart[id]=(state.cart[id]||0)+1;afterCartChange(`Added · ${p.name}`);}
+function notifyMe(id){const p=getProduct(id);if(!p)return;toast(`🔔 We'll notify you when "${p.name}" launches.`);}
+function changeQty(id,delta){const next=(state.cart[id]||0)+delta;if(next<=0)delete state.cart[id];else state.cart[id]=next;afterCartChange();}
+function removeItem(id){delete state.cart[id];afterCartChange("Item removed");}
+function afterCartChange(msg){renderCatalog();renderCart();renderDrawer();renderSummary();renderReview();updateBadge();updateDeliveryPanel();if(msg)toast(msg);}
+function updateBadge(){const n=Object.values(state.cart).reduce((a,b)=>a+b,0);const b=$("cartBadge");b.textContent=n;b.classList.toggle("show",n>0);}
 
-function addToCart(id){
-    const p = getProduct(id);
-    if(!p) return;
-    if(p.comingSoon){ notifyMe(id); return; }
-    state.cart[id] = (state.cart[id] || 0) + 1;
-    afterCartChange(`Added · ${p.name}`);
-}
-function notifyMe(id){
-    const p = getProduct(id);
-    if(!p) return;
-    toast(`🔔 We'll notify you when "${p.name}" launches.`);
-}
-function changeQty(id, delta){
-    const next = (state.cart[id] || 0) + delta;
-    if(next <= 0) delete state.cart[id];
-    else state.cart[id] = next;
-    afterCartChange();
-}
-function removeItem(id){
-    delete state.cart[id];
-    afterCartChange("Item removed");
-}
-function afterCartChange(msg){
-    renderCatalog();
-    renderCart();
-    renderDrawer();
-    renderSummary();
-    renderReview();
-    updateBadge();
-    updateDeliveryPanel();
-    if(msg) toast(msg);
-}
-function updateBadge(){
-    const n = Object.values(state.cart).reduce((a,b) => a+b, 0);
-    const b = $("cartBadge");
-    b.textContent = n;
-    b.classList.toggle("show", n > 0);
-}
-
-/* ====================== COST ENGINE ====================== */
-
-function getDistanceKm(){
-    if(state.speed === "pickup") return 0;
-    if(state.locMode === "auto" && state.detected) return state.detected.distance;
-    return ZONE_KM[state.manualZone] ?? 25;
-}
-function slabFor(km){
-    return SLABS.find(s => km <= s.max) || SLABS[SLABS.length - 1];
-}
+/* ═══════════════ COST ENGINE ═══════════════ */
+function getDistanceKm(){if(state.speed==="pickup")return 0;if(state.locMode==="auto"&&state.detected)return state.detected.distance;return ZONE_KM[state.manualZone]??25;}
+function slabFor(km){return SLABS.find(s=>km<=s.max)||SLABS[SLABS.length-1];}
 function computeTotals(){
-    let count = 0, subtotal = 0, physicalSubtotal = 0,
-        physicalWeight = 0, digitalSubtotal = 0,
-        serviceSubtotal = 0, hasQuote = false;
-
-    for(const [id, qty] of Object.entries(state.cart)){
-        const p = getProduct(id);
-        if(!p || qty <= 0 || p.comingSoon) continue;
-        count += qty;
-        if(p.quote){ hasQuote = true; continue; }
-        const line = p.price * qty;
-        subtotal += line;
-        if(p.type === "physical"){
-            physicalSubtotal += line;
-            physicalWeight += (p.weight || 0) * qty;
-        }
-        else if(p.type === "digital") digitalSubtotal += line;
-        else serviceSubtotal += line;
+    let count=0,subtotal=0,physicalSubtotal=0,physicalWeight=0,digitalSubtotal=0,serviceSubtotal=0,hasQuote=false;
+    for(const [id,qty] of Object.entries(state.cart)){
+        const p=getProduct(id);if(!p||qty<=0||p.comingSoon)continue;
+        count+=qty;if(p.quote){hasQuote=true;continue;}
+        const line=p.price*qty;subtotal+=line;
+        if(p.type==="physical"){physicalSubtotal+=line;physicalWeight+=(p.weight||0)*qty;}
+        else if(p.type==="digital")digitalSubtotal+=line;else serviceSubtotal+=line;
     }
-
-    const needsShipping = physicalSubtotal > 0;
-    let delivery = 0;
-    let breakdown = {
-        applicable: false, distance: 0, zone: "—",
-        base: 0, weightFee: 0, speedFee: 0,
-        free: false, intl: false, pickup: false
-    };
-
-    if(needsShipping && state.speed !== "pickup"){
-        const km = getDistanceKm();
-        const isIntl = (state.locMode === "manual" && state.manualZone === "intl");
-        const slab = slabFor(km);
-        const base = isIntl ? INTL_FLAT : slab.fee;
-        const extraKg = Math.max(0, Math.ceil(physicalWeight - WEIGHT_INCLUDED));
-        const weightFee = extraKg * WEIGHT_PER_KG;
-        let sub = base + weightFee;
-        let speedFee = 0;
-        if(state.speed === "express"){
-            const before = sub;
-            sub = Math.round(sub * EXPRESS_MULT);
-            speedFee = sub - before;
-        }
-        let free = false;
-        if(!isIntl && state.speed === "standard" && physicalSubtotal >= FREE_SHIP_OVER){
-            free = true; speedFee = sub; sub = 0;
-        }
-        delivery = sub;
-        breakdown = {
-            applicable: true, distance: km,
-            zone: isIntl ? "International" : slab.zone,
-            base, weightFee, speedFee, free, intl: isIntl, pickup: false
-        };
+    const needsShipping=physicalSubtotal>0;
+    let delivery=0;
+    let breakdown={applicable:false,distance:0,zone:"—",base:0,weightFee:0,speedFee:0,free:false,intl:false,pickup:false};
+    if(needsShipping && state.speed!=="pickup"){
+        const km=getDistanceKm();
+        const isIntl=(state.locMode==="manual"&&state.manualZone==="intl");
+        const slab=slabFor(km);
+        const base=isIntl?INTL_FLAT:slab.fee;
+        const extraKg=Math.max(0,Math.ceil(physicalWeight-WEIGHT_INCLUDED));
+        const weightFee=extraKg*WEIGHT_PER_KG;
+        let sub=base+weightFee,speedFee=0;
+        if(state.speed==="express"){const before=sub;sub=Math.round(sub*EXPRESS_MULT);speedFee=sub-before;}
+        let free=false;
+        if(!isIntl&&state.speed==="standard"&&physicalSubtotal>=FREE_SHIP_OVER){free=true;speedFee=sub;sub=0;}
+        delivery=sub;
+        breakdown={applicable:true,distance:km,zone:isIntl?"International":slab.zone,base,weightFee,speedFee,free,intl:isIntl,pickup:false};
     }
-
-    if(needsShipping && state.speed === "pickup"){
-        breakdown = {
-            applicable: true, distance: 0, zone: "Self Pickup",
-            base: 0, weightFee: 0, speedFee: 0,
-            free: true, intl: false, pickup: true
-        };
+    if(needsShipping && state.speed==="pickup"){
+        breakdown={applicable:true,distance:0,zone:"Self Pickup",base:0,weightFee:0,speedFee:0,free:true,intl:false,pickup:true};
     }
-
-    const handling = subtotal > 0
-        ? Math.max(HANDLING_MIN, Math.round(subtotal * HANDLING_RATE)) : 0;
-    const total = subtotal + delivery + handling;
-
-    return {
-        count, subtotal, physicalSubtotal, physicalWeight,
-        digitalSubtotal, serviceSubtotal,
-        delivery, breakdown, handling, total,
-        needsShipping, hasQuote
-    };
+    const handling=subtotal>0?Math.max(HANDLING_MIN,Math.round(subtotal*HANDLING_RATE)):0;
+    const total=subtotal+delivery+handling;
+    return {count,subtotal,physicalSubtotal,physicalWeight,digitalSubtotal,serviceSubtotal,delivery,breakdown,handling,total,needsShipping,hasQuote};
 }
-
-/* ====================== DELIVERY PANEL ====================== */
 
 function updateDeliveryPanel(){
-    const t = computeTotals();
-    const needed = t.needsShipping;
-    $("deliveryNeeded").style.display = needed ? "" : "none";
-    $("deliveryNotNeeded").style.display = needed ? "none" : "";
-    if(needed){
-        $("deliveryIntro").innerHTML =
-            `Shipping is calculated by road distance from our studio
-             (<span style="color:#9beaff">${STUDIO.label}</span>)
-             using market transport slabs.`;
-    }
+    const t=computeTotals();const needed=t.needsShipping;
+    $("deliveryNeeded").style.display=needed?"":"none";
+    $("deliveryNotNeeded").style.display=needed?"none":"";
 }
-
-/* ====================== SUMMARY ====================== */
-
 function renderSummary(){
-    const t = computeTotals();
-
-    $("sItems").textContent    = t.count;
-    $("sSubtotal").textContent = inr(t.subtotal);
-    $("sWeight").textContent   = t.physicalWeight.toFixed(2) + " kg";
-    $("sDelivery").textContent = t.needsShipping ? inr(t.delivery) : "—";
-    $("sHandling").textContent = inr(t.handling);
-    $("sTotal").textContent    = inr(t.total);
-
-    const km = getDistanceKm();
-    $("roDist").textContent = t.needsShipping ? (km ? km.toFixed(0) + " km" : "0 km") : "—";
-    $("roZone").textContent = t.needsShipping ? t.breakdown.zone : "—";
-    $("roShip").textContent = t.needsShipping ? inr(t.delivery) : "—";
-
-    let bd = "";
-    const b = t.breakdown;
-    if(t.needsShipping && b.applicable){
-        if(b.pickup){
-            bd += `<div class="sum-row sub"><span>Self pickup at studio</span><strong>₹0</strong></div>`;
-        } else {
-            bd += `<div class="sum-row sub"><span>Base slab · ${b.zone}</span><strong>${inr(b.base)}</strong></div>`;
-            if(b.weightFee > 0)
-                bd += `<div class="sum-row sub"><span>Weight surcharge</span><strong>+${inr(b.weightFee)}</strong></div>`;
-            if(b.speedFee > 0)
-                bd += `<div class="sum-row sub"><span>${b.free ? "Free shipping credit" : "Express surcharge"}</span><strong>${b.free ? "−" : "+"}${inr(b.speedFee)}</strong></div>`;
-            if(b.intl)
-                bd += `<div class="sum-row sub"><span>Customs not included</span><strong>—</strong></div>`;
+    const t=computeTotals();
+    $("sItems").textContent=t.count;$("sSubtotal").textContent=inr(t.subtotal);
+    $("sWeight").textContent=t.physicalWeight.toFixed(2)+" kg";
+    $("sDelivery").textContent=t.needsShipping?inr(t.delivery):"—";
+    $("sHandling").textContent=inr(t.handling);$("sTotal").textContent=inr(t.total);
+    const km=getDistanceKm();
+    $("roDist").textContent=t.needsShipping?(km?km.toFixed(0)+" km":"0 km"):"—";
+    $("roZone").textContent=t.needsShipping?t.breakdown.zone:"—";
+    $("roShip").textContent=t.needsShipping?inr(t.delivery):"—";
+    let bd="";const b=t.breakdown;
+    if(t.needsShipping&&b.applicable){
+        if(b.pickup)bd+=`<div class="sum-row sub"><span>Self pickup at studio</span><strong>₹0</strong></div>`;
+        else{
+            bd+=`<div class="sum-row sub"><span>Base slab · ${b.zone}</span><strong>${inr(b.base)}</strong></div>`;
+            if(b.weightFee>0)bd+=`<div class="sum-row sub"><span>Weight surcharge</span><strong>+${inr(b.weightFee)}</strong></div>`;
+            if(b.speedFee>0)bd+=`<div class="sum-row sub"><span>${b.free?"Free shipping credit":"Express surcharge"}</span><strong>${b.free?"−":"+"}${inr(b.speedFee)}</strong></div>`;
         }
     }
-    $("deliveryBreakdown").innerHTML = bd;
-
-    const note = $("sideNote");
-    let html = "";
-
-    if(t.count === 0){
-        html = `<div class="side-note">Cart is empty. Add a build service to begin.</div>`;
-        $("engineState").textContent = "IDLE";
-        $("engineState").style.color = "#71849e";
-    } else {
-        $("engineState").textContent = "LIVE";
-        $("engineState").style.color = "#8ff0c2";
-
-        if(!t.needsShipping)              html = `<div class="side-note ok">No physical items — delivery not applicable.</div>`;
-        else if(state.speed === "pickup") html = `<div class="side-note ok">Self pickup selected — no shipping charge.</div>`;
-        else if(b.free)                   html = `<div class="side-note ok">Free standard shipping unlocked on this order.</div>`;
-        else                              html = `<div class="side-note">Delivery estimated at ${b.distance.toFixed(0)} km from ${STUDIO.label}.</div>`;
-
-        if(t.hasQuote)
-            html += `<div class="side-note">Custom project item is quote-based and excluded from the total.</div>`;
-
-        if(firebaseDB)
-            html += `<div class="side-note ok">☁ Cloud sync active</div>`;
+    $("deliveryBreakdown").innerHTML=bd;
+    const note=$("sideNote");let html="";
+    if(t.count===0){html=`<div class="side-note">Cart is empty. Add a build service to begin.</div>`;$("engineState").textContent="IDLE";$("engineState").style.color="#71849e";}
+    else{
+        $("engineState").textContent="LIVE";$("engineState").style.color="#8ff0c2";
+        if(!t.needsShipping)html=`<div class="side-note ok">No physical items — delivery not applicable.</div>`;
+        else if(state.speed==="pickup")html=`<div class="side-note ok">Self pickup selected — no shipping charge.</div>`;
+        else if(b.free)html=`<div class="side-note ok">Free standard shipping unlocked on this order.</div>`;
+        else html=`<div class="side-note">Delivery estimated at ${b.distance.toFixed(0)} km from ${STUDIO.label}.</div>`;
+        if(t.hasQuote)html+=`<div class="side-note">Custom project item is quote-based and excluded from the total.</div>`;
+        if(firebaseDB)html+=`<div class="side-note ok">☁ Cloud sync active</div>`;
     }
-
-    note.innerHTML = html;
-
-    const btn = $("nextBtn");
-    if(state.step === 4)      btn.textContent = "Place Order ↗";
-    else if(state.step === 1) btn.textContent = t.count ? "Continue to Details →" : "Browse Services ↓";
-    else                      btn.textContent = "Continue →";
+    note.innerHTML=html;
+    const btn=$("nextBtn");
+    if(state.step===4)btn.textContent="Place Order ↗";
+    else if(state.step===1)btn.textContent=t.count?"Continue to Details →":"Browse Services ↓";
+    else btn.textContent="Continue →";
 }
-
-/* ====================== CART VIEW ====================== */
 
 function renderCart(){
-    const wrap = $("cartLines");
-    const ids = Object.keys(state.cart);
-
-    if(ids.length === 0){
-        wrap.innerHTML = `
-            <div class="empty-cart">
-                <div class="big">🛒</div>
-                <div style="font-family:var(--mono);font-size:12px;letter-spacing:1px">CART IS EMPTY</div>
-                <p style="margin-top:10px;font-size:12px">Add a build service to get started. Store items launch soon.</p>
-                <a class="btn primary" href="#services" style="margin-top:18px">Browse Services ↗</a>
-            </div>`;
-        return;
-    }
-
-    wrap.innerHTML = ids.map(id => {
-        const p = getProduct(id);
-        const qty = state.cart[id];
-        const line = p.quote ? 0 : p.price * qty;
-        return `
-        <div class="cart-line">
+    const wrap=$("cartLines");const ids=Object.keys(state.cart);
+    if(ids.length===0){wrap.innerHTML=`<div class="empty-cart"><div class="big">🛒</div><div style="font-family:var(--mono);font-size:12px">CART IS EMPTY</div><p style="margin-top:10px;font-size:12px">Add a build service to get started. Store items launch soon.</p><a class="btn primary" href="#services" style="margin-top:18px">Browse Services ↗</a></div>`;return;}
+    wrap.innerHTML=ids.map(id=>{
+        const p=getProduct(id);const qty=state.cart[id];const line=p.quote?0:p.price*qty;
+        return `<div class="cart-line">
             <div class="ci">${p.icon}</div>
-            <div>
-                <div class="cn">${escapeHtml(p.name)}</div>
-                <div class="cm">
-                    ${typeLabel(p.type)}
-                    ${p.quote ? " · QUOTE BASED" : " · " + inr(p.price) + " each"}
-                    ${p.weight ? " · " + (p.weight * qty).toFixed(2) + " kg" : ""}
-                </div>
-            </div>
-            <div class="qty">
-                <button onclick="changeQty('${id}',-1)">−</button>
-                <span>${qty}</span>
-                <button onclick="changeQty('${id}',1)">+</button>
-            </div>
-            <div class="line-total">
-                ${p.quote ? "TBD" : inr(line)}
-                <button onclick="removeItem('${id}')"
-                    style="display:block;margin-top:4px;background:none;border:0;color:#ff7b73;font-size:10px;cursor:pointer;font-family:var(--mono);letter-spacing:.5px">
-                    remove
-                </button>
-            </div>
+            <div><div class="cn">${escapeHtml(p.name)}</div><div class="cm">${typeLabel(p.type)}${p.quote?" · QUOTE BASED":" · "+inr(p.price)+" each"}${p.weight?" · "+(p.weight*qty).toFixed(2)+" kg":""}</div></div>
+            <div class="qty"><button onclick="changeQty('${id}',-1)">−</button><span>${qty}</span><button onclick="changeQty('${id}',1)">+</button></div>
+            <div class="line-total">${p.quote?"TBD":inr(line)}<button onclick="removeItem('${id}')" style="display:block;margin-top:4px;background:none;border:0;color:#ff7b73;font-size:10px;cursor:pointer;font-family:var(--mono)">remove</button></div>
         </div>`;
     }).join("");
 }
-
 function renderDrawer(){
-    const ids = Object.keys(state.cart);
-    const body = $("drawerBody");
-    const t = computeTotals();
-    $("drawerTotal").textContent = inr(t.subtotal);
-
-    if(ids.length === 0){
-        body.innerHTML = `<div class="empty-cart" style="padding:40px 16px"><div class="big">◌</div><p style="font-size:12px">Nothing in the cart yet.</p></div>`;
-        return;
-    }
-
-    body.innerHTML = ids.map(id => {
-        const p = getProduct(id);
-        const qty = state.cart[id];
-        return `
-        <div class="mini-line">
-            <div class="mi">${p.icon}</div>
-            <div>
-                <div class="mn">${escapeHtml(p.name)}</div>
-                <div class="mm">QTY ${qty} · ${typeLabel(p.type)}</div>
-            </div>
-            <div class="mp">${p.quote ? "TBD" : inr(p.price * qty)}</div>
-        </div>`;
+    const ids=Object.keys(state.cart);const body=$("drawerBody");const t=computeTotals();
+    $("drawerTotal").textContent=inr(t.subtotal);
+    if(ids.length===0){body.innerHTML=`<div class="empty-cart" style="padding:40px 16px"><div class="big">◌</div><p style="font-size:12px">Nothing in the cart yet.</p></div>`;return;}
+    body.innerHTML=ids.map(id=>{const p=getProduct(id);const qty=state.cart[id];
+        return `<div class="mini-line"><div class="mi">${p.icon}</div><div><div class="mn">${escapeHtml(p.name)}</div><div class="mm">QTY ${qty} · ${typeLabel(p.type)}</div></div><div class="mp">${p.quote?"TBD":inr(p.price*qty)}</div></div>`;
     }).join("");
 }
-
-/* ====================== REVIEW ====================== */
-
 function renderReview(){
-    const box = $("reviewBox");
-    const t = computeTotals();
-    const ids = Object.keys(state.cart);
-
-    if(ids.length === 0){
-        box.innerHTML = `<div class="empty-cart"><p style="font-size:12px">Add items to review your order.</p></div>`;
-        return;
-    }
-
-    const itemsHtml = ids.map(id => {
-        const p = getProduct(id);
-        const qty = state.cart[id];
-        return `<div class="rl">
-            <span>${escapeHtml(p.name)} × ${qty}</span>
-            <b>${p.quote ? "TBD" : inr(p.price * qty)}</b>
-        </div>`;
-    }).join("");
-
-    const d = state.detected;
-    let locHtml = "";
-
-    if(!t.needsShipping){
-        locHtml = `<div class="rl"><span>Method</span><b>Remote delivery · no shipping</b></div>`;
-    }
-    else if(state.speed === "pickup"){
-        locHtml = `<div class="rl"><span>Method</span><b>Self Pickup — ${STUDIO.label}</b></div>`;
-    }
-    else if(state.locMode === "auto" && d){
-        locHtml = `
-            <div class="rl"><span>Coordinates</span><b>${d.lat.toFixed(4)}, ${d.lng.toFixed(4)}</b></div>
-            <div class="rl"><span>Distance</span><b>${d.distance.toFixed(0)} km</b></div>`;
-    }
-    else {
-        locHtml = `
-            <div class="rl"><span>Address</span><b>${escapeHtml($("addrLine").value || "—")}</b></div>
-            <div class="rl"><span>City / State</span><b>${escapeHtml($("addrCity").value || "—")}${$("addrState").value ? ", " + escapeHtml($("addrState").value) : ""}</b></div>
-            <div class="rl"><span>PIN</span><b>${escapeHtml($("addrPin").value || "—")}</b></div>
-            <div class="rl"><span>Zone</span><b>${t.breakdown.zone}</b></div>`;
-    }
-
-    let deliverLine = "";
-    if(firebaseDB){
-        deliverLine = `<div class="rl"><span>Cloud sync</span><b style="color:#8ff0c2">Active · visible to studio</b></div>`;
-    } else {
-        deliverLine = `<div class="rl"><span>Transmission</span><b style="color:#8ff0c2">Email to studio</b></div>`;
-    }
-
-    box.innerHTML = `
+    const box=$("reviewBox");const t=computeTotals();const ids=Object.keys(state.cart);
+    if(ids.length===0){box.innerHTML=`<div class="empty-cart"><p style="font-size:12px">Add items to review your order.</p></div>`;return;}
+    const itemsHtml=ids.map(id=>{const p=getProduct(id);const qty=state.cart[id];return `<div class="rl"><span>${escapeHtml(p.name)} × ${qty}</span><b>${p.quote?"TBD":inr(p.price*qty)}</b></div>`;}).join("");
+    const d=state.detected;let locHtml="";
+    if(!t.needsShipping)locHtml=`<div class="rl"><span>Method</span><b>Remote delivery · no shipping</b></div>`;
+    else if(state.speed==="pickup")locHtml=`<div class="rl"><span>Method</span><b>Self Pickup — ${STUDIO.label}</b></div>`;
+    else if(state.locMode==="auto"&&d)locHtml=`<div class="rl"><span>Coordinates</span><b>${d.lat.toFixed(4)}, ${d.lng.toFixed(4)}</b></div><div class="rl"><span>Distance</span><b>${d.distance.toFixed(0)} km</b></div>`;
+    else locHtml=`<div class="rl"><span>Address</span><b>${escapeHtml($("addrLine").value||"—")}</b></div><div class="rl"><span>City / State</span><b>${escapeHtml($("addrCity").value||"—")}${$("addrState").value?", "+escapeHtml($("addrState").value):""}</b></div><div class="rl"><span>PIN</span><b>${escapeHtml($("addrPin").value||"—")}</b></div><div class="rl"><span>Zone</span><b>${t.breakdown.zone}</b></div>`;
+    const deliverLine = firebaseDB ? `<div class="rl"><span>Cloud sync</span><b style="color:#8ff0c2">Active · visible to studio</b></div>` : `<div class="rl"><span>Transmission</span><b style="color:#8ff0c2">Email to studio</b></div>`;
+    box.innerHTML=`
         <div class="review-block"><h4>◈ Items</h4>${itemsHtml}</div>
-        <div class="review-block">
-            <h4>◈ Delivery</h4>
-            ${locHtml}
-            <div class="rl"><span>Speed</span><b>${t.needsShipping ? state.speed.toUpperCase() : "N/A"}</b></div>
-        </div>
-        <div class="review-block">
-            <h4>◈ Contact</h4>
-            <div class="rl"><span>Name</span><b>${escapeHtml($("fName").value || "—")}</b></div>
-            <div class="rl"><span>Email</span><b>${escapeHtml($("fEmail").value || "—")}</b></div>
-            <div class="rl"><span>Phone</span><b>${escapeHtml($("fPhone").value || $("addrPhone").value || "—")}</b></div>
+        <div class="review-block"><h4>◈ Delivery</h4>${locHtml}<div class="rl"><span>Speed</span><b>${t.needsShipping?state.speed.toUpperCase():"N/A"}</b></div></div>
+        <div class="review-block"><h4>◈ Contact</h4>
+            <div class="rl"><span>Name</span><b>${escapeHtml($("fName").value||"—")}</b></div>
+            <div class="rl"><span>Email</span><b>${escapeHtml($("fEmail").value||"—")}</b></div>
+            <div class="rl"><span>Phone</span><b>${escapeHtml($("fPhone").value||$("addrPhone").value||"—")}</b></div>
             ${deliverLine}
         </div>
-        <div class="review-block">
-            <h4>◈ Cost Breakdown</h4>
+        <div class="review-block"><h4>◈ Cost Breakdown</h4>
             <div class="rl"><span>Subtotal</span><b>${inr(t.subtotal)}</b></div>
-            <div class="rl"><span>Delivery</span><b>${t.needsShipping ? inr(t.delivery) : "—"}</b></div>
+            <div class="rl"><span>Delivery</span><b>${t.needsShipping?inr(t.delivery):"—"}</b></div>
             <div class="rl"><span>Handling &amp; platform</span><b>${inr(t.handling)}</b></div>
-            <div class="rl" style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px">
-                <span style="color:#fff;font-weight:800">TOTAL</span>
-                <b style="color:#45dcff;font-size:16px">${inr(t.total)}</b>
-            </div>
+            <div class="rl" style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px"><span style="color:#fff;font-weight:800">TOTAL</span><b style="color:#45dcff;font-size:16px">${inr(t.total)}</b></div>
         </div>`;
 }
 
-/* ====================== STEP NAV ====================== */
-
+/* ═══════════════ STEP NAV ═══════════════ */
 function goStep(n){
-    if(n > state.step){ if(!validateStep(state.step, n)) return; }
-    state.step = n;
-    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-    $("panel" + n).classList.add("active");
-    document.querySelectorAll(".stepper-item").forEach(el => {
-        const s = Number(el.dataset.step);
-        el.classList.toggle("active", s === n);
-        el.classList.toggle("done", s < n);
-    });
+    if(n>state.step && !validateStep(state.step,n))return;
+    state.step=n;
+    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+    $("panel"+n).classList.add("active");
+    document.querySelectorAll(".stepper-item").forEach(el=>{const s=Number(el.dataset.step);el.classList.toggle("active",s===n);el.classList.toggle("done",s<n);});
     updateDeliveryPanel();
-    if(n === 4) renderReview();
+    if(n===4)renderReview();
     renderSummary();
-    document.getElementById("order").scrollIntoView({behavior:"smooth", block:"start"});
+    document.getElementById("order").scrollIntoView({behavior:"smooth",block:"start"});
 }
-
 function nextStep(){
-    if(state.step === 4){ submitOrder(); return; }
-    if(state.step === 1 && computeTotals().count === 0){
-        document.getElementById("services").scrollIntoView({behavior:"smooth"});
-        toast("Add a build service to the cart first");
-        return;
-    }
-    goStep(state.step + 1);
+    if(state.step===4){submitOrder();return;}
+    if(state.step===1 && computeTotals().count===0){document.getElementById("services").scrollIntoView({behavior:"smooth"});toast("Add a build service first");return;}
+    goStep(state.step+1);
 }
-
-function validateStep(from, to){
-    const t = computeTotals();
-    if(from === 1 && t.count === 0){ toast("Your cart is empty"); return false; }
-
-    if(from === 2 && t.needsShipping && state.speed !== "pickup"){
-        if(state.locMode === "auto" && !state.detected){
-            toast("Detect your location or switch to manual address");
-            setLocMode("manual");
-            return false;
-        }
-        if(state.locMode === "manual"){
-            const need = ["addrLine","addrCity","addrPin"];
-            let bad = false;
-            need.forEach(id => {
-                const el = $(id);
-                const ok = el.value.trim().length > 0;
-                el.classList.toggle("err", !ok);
-                if(!ok) bad = true;
-            });
-            if(bad){ toast("Please complete the address fields"); return false; }
+function validateStep(from,to){
+    const t=computeTotals();
+    if(from===1 && t.count===0){toast("Your cart is empty");return false;}
+    if(from===2 && t.needsShipping && state.speed!=="pickup"){
+        if(state.locMode==="auto" && !state.detected){toast("Detect location or enter address");setLocMode("manual");return false;}
+        if(state.locMode==="manual"){
+            const need=["addrLine","addrCity","addrPin"];let bad=false;
+            need.forEach(id=>{const el=$(id);const ok=el.value.trim().length>0;el.classList.toggle("err",!ok);if(!ok)bad=true;});
+            if(bad){toast("Please complete the address fields");return false;}
         }
     }
-
-    if(from === 3){
-        const name = $("fName"), email = $("fEmail");
-        let bad = false;
-        if(!name.value.trim()){ name.classList.add("err"); bad = true; }
-        else name.classList.remove("err");
-        if(!/^\S+@\S+\.\S+$/.test(email.value.trim())){ email.classList.add("err"); bad = true; }
-        else email.classList.remove("err");
-        if(bad){ toast("Name and a valid email are required"); return false; }
+    if(from===3){
+        const name=$("fName"),email=$("fEmail");let bad=false;
+        if(!name.value.trim()){name.classList.add("err");bad=true;}else name.classList.remove("err");
+        if(!/^\S+@\S+\.\S+$/.test(email.value.trim())){email.classList.add("err");bad=true;}else email.classList.remove("err");
+        if(bad){toast("Name and a valid email are required");return false;}
     }
     return true;
 }
 
-/* ====================== LOCATION ====================== */
-
+/* ═══════════════ LOCATION ═══════════════ */
 function setLocMode(mode){
-    state.locMode = mode;
-    document.querySelectorAll(".loc-mode").forEach(el => {
-        el.classList.toggle("active", el.dataset.mode === mode);
-    });
-    $("autoPanel").classList.toggle("hidden", mode !== "auto");
-    $("manualPanel").classList.toggle("hidden", mode !== "manual");
-    renderSummary(); renderReview();
+    state.locMode=mode;
+    document.querySelectorAll(".loc-mode").forEach(el=>el.classList.toggle("active",el.dataset.mode===mode));
+    $("autoPanel").classList.toggle("hidden",mode!=="auto");
+    $("manualPanel").classList.toggle("hidden",mode!=="manual");
+    renderSummary();renderReview();
 }
-function onZoneChange(){
-    state.manualZone = $("zoneSelect").value;
-    renderSummary(); renderReview();
-}
+function onZoneChange(){state.manualZone=$("zoneSelect").value;renderSummary();renderReview();}
 function setSpeed(speed){
-    state.speed = speed;
-    document.querySelectorAll(".speed-opt").forEach(el => {
-        el.classList.toggle("active", el.dataset.speed === speed);
-    });
-    renderSummary(); renderReview();
+    state.speed=speed;
+    document.querySelectorAll(".speed-opt").forEach(el=>el.classList.toggle("active",el.dataset.speed===speed));
+    renderSummary();renderReview();
 }
 function detectLocation(){
-    const radar = $("radar"), text = $("locText"), btn = $("detectBtn");
-    if(!navigator.geolocation){
-        text.textContent = "Geolocation is not supported by this browser. Please enter your address manually.";
-        setLocMode("manual"); return;
-    }
-    radar.classList.add("scanning");
-    radar.classList.remove("locked");
-    text.textContent = "Acquiring satellites… resolving position.";
-    btn.disabled = true; btn.textContent = "Scanning…";
-
+    const radar=$("radar"),text=$("locText"),btn=$("detectBtn");
+    if(!navigator.geolocation){text.textContent="Geolocation not supported. Enter address manually.";setLocMode("manual");return;}
+    radar.classList.add("scanning");radar.classList.remove("locked");
+    text.textContent="Acquiring satellites…";btn.disabled=true;btn.textContent="Scanning…";
     navigator.geolocation.getCurrentPosition(
-        (pos) => {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
-            const distance = haversine(STUDIO.lat, STUDIO.lng, lat, lng);
-            state.detected = { lat, lng, distance };
-            radar.classList.remove("scanning");
-            radar.classList.add("locked");
-            text.textContent = `${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E  ·  ${distance.toFixed(0)} km from studio`;
-            text.classList.remove("dim");
-            btn.disabled = false; btn.textContent = "Re-Detect Location ↗";
-            renderSummary(); renderReview();
-            const t = computeTotals();
-            toast(`Location locked · delivery ${inr(t.delivery)}`);
+        pos=>{
+            const lat=pos.coords.latitude,lng=pos.coords.longitude;
+            const distance=haversine(STUDIO.lat,STUDIO.lng,lat,lng);
+            state.detected={lat,lng,distance};
+            radar.classList.remove("scanning");radar.classList.add("locked");
+            text.textContent=`${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E · ${distance.toFixed(0)} km from studio`;
+            text.classList.remove("dim");btn.disabled=false;btn.textContent="Re-Detect Location ↗";
+            renderSummary();renderReview();
+            toast(`Location locked · delivery ${inr(computeTotals().delivery)}`);
         },
-        (err) => {
-            radar.classList.remove("scanning");
-            btn.disabled = false; btn.textContent = "Retry Detection ↗";
-            let msg = "Location unavailable.";
-            if(err.code === 1) msg = "Permission denied. Please enter your address manually.";
-            if(err.code === 2) msg = "Position unavailable. Try again or enter manually.";
-            if(err.code === 3) msg = "Detection timed out. Try again or enter manually.";
-            text.textContent = msg; text.classList.add("dim");
-            if(err.code === 1) setLocMode("manual");
+        err=>{
+            radar.classList.remove("scanning");btn.disabled=false;btn.textContent="Retry Detection ↗";
+            let msg="Location unavailable.";
+            if(err.code===1)msg="Permission denied. Enter address manually.";
+            if(err.code===2)msg="Position unavailable.";
+            if(err.code===3)msg="Detection timed out.";
+            text.textContent=msg;text.classList.add("dim");
+            if(err.code===1)setLocMode("manual");
         },
-        { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+        {enableHighAccuracy:true,timeout:12000,maximumAge:60000}
     );
 }
 
-/* ====================== DRAWER ====================== */
+/* ═══════════════ DRAWER ═══════════════ */
+function openDrawer(){$("drawer").classList.add("open");$("drawerBackdrop").classList.add("open");renderDrawer();}
+function closeDrawer(){$("drawer").classList.remove("open");$("drawerBackdrop").classList.remove("open");}
 
-function openDrawer(){
-    $("drawer").classList.add("open");
-    $("drawerBackdrop").classList.add("open");
-    renderDrawer();
-}
-function closeDrawer(){
-    $("drawer").classList.remove("open");
-    $("drawerBackdrop").classList.remove("open");
-}
-
-/* ====================== ORDER OBJECT ====================== */
-
+/* ═══════════════ ORDER OBJECT ═══════════════ */
 function buildOrderObject(){
-    const t = computeTotals();
-    const ids = Object.keys(state.cart);
-
-    const items = ids.map(id => {
-        const p = getProduct(id);
-        const qty = state.cart[id];
-        return {
-            id, name: p.name, type: p.type, icon: p.icon,
-            price: p.price, quote: !!p.quote,
-            weight: p.weight || 0, qty,
-            line: p.quote ? 0 : p.price * qty
-        };
-    });
-
-    const d = state.detected;
-    const delivery = {
-        needed: t.needsShipping,
-        method: t.needsShipping ? state.speed : "none",
-        distance: t.needsShipping ? t.breakdown.distance : 0,
-        zone: t.needsShipping ? t.breakdown.zone : "—",
-        address: state.locMode === "manual" ? {
-            line: $("addrLine").value, city: $("addrCity").value,
-            state: $("addrState").value, pin: $("addrPin").value,
-            phone: $("addrPhone").value
-        } : null,
-        coords: (state.locMode === "auto" && d) ? { lat: d.lat, lng: d.lng } : null
+    const t=computeTotals();const ids=Object.keys(state.cart);
+    const items=ids.map(id=>{const p=getProduct(id);const qty=state.cart[id];return {id,name:p.name,type:p.type,icon:p.icon,price:p.price,quote:!!p.quote,weight:p.weight||0,qty,line:p.quote?0:p.price*qty};});
+    const d=state.detected;
+    const delivery={
+        needed:t.needsShipping,method:t.needsShipping?state.speed:"none",
+        distance:t.needsShipping?t.breakdown.distance:0,
+        zone:t.needsShipping?t.breakdown.zone:"—",
+        address:state.locMode==="manual"?{line:$("addrLine").value,city:$("addrCity").value,state:$("addrState").value,pin:$("addrPin").value,phone:$("addrPhone").value}:null,
+        coords:(state.locMode==="auto"&&d)?{lat:d.lat,lng:d.lng}:null
     };
-
     return {
-        id: generateOrderId(),
-        createdAt: Date.now(),
-        status: "pending",
-        customer: {
-            name: $("fName").value.trim(),
-            email: $("fEmail").value.trim(),
-            phone: $("fPhone").value.trim() || $("addrPhone").value.trim(),
-            org: $("fOrg").value.trim(),
-            notes: $("fNotes").value.trim()
-        },
-        items, delivery,
-        totals: {
-            subtotal: t.subtotal, delivery: t.delivery,
-            handling: t.handling, total: t.total, weight: t.physicalWeight
-        },
-        hasQuote: t.hasQuote,
-        deliveryStatus: null
+        id:generateOrderId(),createdAt:Date.now(),status:"pending",
+        customer:{name:$("fName").value.trim(),email:$("fEmail").value.trim(),phone:$("fPhone").value.trim()||$("addrPhone").value.trim(),org:$("fOrg").value.trim(),notes:$("fNotes").value.trim()},
+        items,delivery,
+        totals:{subtotal:t.subtotal,delivery:t.delivery,handling:t.handling,total:t.total,weight:t.physicalWeight},
+        hasQuote:t.hasQuote,deliveryStatus:null
     };
 }
-
-function buildOrderTextFromObject(order){
-    const o = order;
-    const dateStr = new Date(o.createdAt).toLocaleString("en-IN");
-    const items = o.items.map(it =>
-        `  • ${it.name} × ${it.qty}  →  ${it.quote ? "QUOTE" : inr(it.line)}`
-    ).join("\n");
-
-    let deliveryInfo = "  Not required (service only)";
+function buildOrderTextFromObject(o){
+    const dateStr=new Date(o.createdAt).toLocaleString("en-IN");
+    const items=o.items.map(it=>`  • ${it.name} × ${it.qty}  →  ${it.quote?"QUOTE":inr(it.line)}`).join("\n");
+    let deliveryInfo="  Not required (service only)";
     if(o.delivery.needed){
-        if(o.delivery.method === "pickup"){
-            deliveryInfo = "  Self pickup at studio — " + STUDIO.label;
-        } else if(o.delivery.coords){
-            deliveryInfo =
-`  Method   : ${o.delivery.method.toUpperCase()}
-  Coords   : ${o.delivery.coords.lat.toFixed(5)}, ${o.delivery.coords.lng.toFixed(5)}
-  Distance : ${o.delivery.distance.toFixed(1)} km from studio
-  Zone     : ${o.delivery.zone}`;
-        } else if(o.delivery.address){
-            const a = o.delivery.address;
-            deliveryInfo =
-`  Method   : ${o.delivery.method.toUpperCase()}
-  Address  : ${a.line}
-  City     : ${a.city}
-  State    : ${a.state}
-  PIN      : ${a.pin}
-  Phone    : ${a.phone || "—"}
-  Zone     : ${o.delivery.zone}`;
-        }
+        if(o.delivery.method==="pickup")deliveryInfo="  Self pickup at studio — "+STUDIO.label;
+        else if(o.delivery.coords)deliveryInfo=`  Method   : ${o.delivery.method.toUpperCase()}\n  Coords   : ${o.delivery.coords.lat.toFixed(5)}, ${o.delivery.coords.lng.toFixed(5)}\n  Distance : ${o.delivery.distance.toFixed(1)} km\n  Zone     : ${o.delivery.zone}`;
+        else if(o.delivery.address){const a=o.delivery.address;deliveryInfo=`  Method   : ${o.delivery.method.toUpperCase()}\n  Address  : ${a.line}\n  City     : ${a.city}\n  State    : ${a.state}\n  PIN      : ${a.pin}\n  Phone    : ${a.phone||"—"}\n  Zone     : ${o.delivery.zone}`;}
     }
-
-    return `ALEX ROBOTECH — ORDER
-================================
-Order ID : ${o.id}
-Date     : ${dateStr}
-Status   : ${statusLabel(o.status).toUpperCase()}
-
-CUSTOMER
---------
-Name     : ${o.customer.name || "—"}
-Email    : ${o.customer.email || "—"}
-Phone    : ${o.customer.phone || "—"}
-Org      : ${o.customer.org || "—"}
-
-ITEMS
------
-${items || "  (none)"}
-
-DELIVERY
---------
-${deliveryInfo}
-
-COST BREAKDOWN
---------------
-Subtotal        : ${inr(o.totals.subtotal)}
-Delivery        : ${o.delivery.needed ? inr(o.totals.delivery) : "—"}
-Handling        : ${inr(o.totals.handling)}
---------------------------------
-TOTAL           : ${inr(o.totals.total)}
-${o.hasQuote ? "\n* Custom project item is quote-based and not included in the total." : ""}
-
-NOTES
------
-${o.customer.notes || "—"}
-
-================================
-ALEX ROBOTECH`;
+    return `ALEX ROBOTECH — ORDER\n================================\nOrder ID : ${o.id}\nDate     : ${dateStr}\nStatus   : ${statusLabel(o.status).toUpperCase()}\n\nCUSTOMER\n--------\nName     : ${o.customer.name||"—"}\nEmail    : ${o.customer.email||"—"}\nPhone    : ${o.customer.phone||"—"}\nOrg      : ${o.customer.org||"—"}\n\nITEMS\n-----\n${items||"  (none)"}\n\nDELIVERY\n--------\n${deliveryInfo}\n\nCOST BREAKDOWN\n--------------\nSubtotal        : ${inr(o.totals.subtotal)}\nDelivery        : ${o.delivery.needed?inr(o.totals.delivery):"—"}\nHandling        : ${inr(o.totals.handling)}\n--------------------------------\nTOTAL           : ${inr(o.totals.total)}\n${o.hasQuote?"\n* Custom project item is quote-based and not included in the total.":""}\n\nNOTES\n-----\n${o.customer.notes||"—"}\n\n================================\nALEX ROBOTECH`;
 }
+function buildOrderTextFromState(){return buildOrderTextFromObject(buildOrderObject());}
 
-function buildOrderTextFromState(){
-    return buildOrderTextFromObject(buildOrderObject());
-}
-
-/* ====================== DELIVERY (Web3Forms email) ====================== */
-
+/* ═══════════════ EMAIL ═══════════════ */
 async function deliverToWeb3Forms(order){
-    if(!web3formsReady()) return "skipped";
-    const text = buildOrderTextFromObject(order);
-    const itemsList = order.items.map(i => `${i.name} × ${i.qty}`).join("\n");
-
+    if(!web3formsReady())return "skipped";
+    const text=buildOrderTextFromObject(order);
+    const itemsList=order.items.map(i=>`${i.name} × ${i.qty}`).join("\n");
     try{
-        const res = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify({
-                access_key: WEB3FORMS_ACCESS_KEY,
-                subject: `🛒 New Order ${order.id} — ${inr(order.totals.total)}`,
-                from_name: "ALEX ROBOTECH Order Console",
-                replyto: order.customer.email || "",
-                "Order ID": order.id,
-                "Customer": order.customer.name,
-                "Email": order.customer.email,
-                "Phone": order.customer.phone || "—",
-                "Organisation": order.customer.org || "—",
-                "Total": inr(order.totals.total),
-                "Subtotal": inr(order.totals.subtotal),
-                "Delivery": order.delivery.needed ? inr(order.totals.delivery) : "—",
-                "Handling": inr(order.totals.handling),
-                "Items": itemsList,
-                "Notes": order.customer.notes || "—",
-                "Full Order": text
+        const res=await fetch("https://api.web3forms.com/submit",{
+            method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},
+            body:JSON.stringify({
+                access_key:WEB3FORMS_ACCESS_KEY,
+                subject:`🛒 New Order ${order.id} — ${inr(order.totals.total)}`,
+                from_name:"ALEX ROBOTECH Order Console",
+                replyto:order.customer.email||"",
+                "Order ID":order.id,"Customer":order.customer.name,"Email":order.customer.email,
+                "Phone":order.customer.phone||"—","Organisation":order.customer.org||"—",
+                "Total":inr(order.totals.total),"Subtotal":inr(order.totals.subtotal),
+                "Delivery":order.delivery.needed?inr(order.totals.delivery):"—",
+                "Handling":inr(order.totals.handling),"Items":itemsList,
+                "Notes":order.customer.notes||"—","Full Order":text
             })
         });
-        const data = await res.json();
-        return data.success ? "sent" : "failed";
-    }catch(e){
-        console.warn("Web3Forms delivery failed:", e);
-        return "failed";
-    }
+        const data=await res.json();
+        return data.success?"sent":"failed";
+    }catch(e){console.warn("Web3Forms failed:",e);return "failed";}
 }
-
 async function deliverOrder(order){
-    const web3 = await deliverToWeb3Forms(order);
-    return {
-        attempted: web3formsReady(),
-        sent: web3 === "sent",
-        results: { web3forms: web3 },
-        at: Date.now()
-    };
+    const web3=await deliverToWeb3Forms(order);
+    return {attempted:web3formsReady(),sent:web3==="sent",results:{web3forms:web3},at:Date.now()};
 }
 
-/* ====================== SUBMIT ====================== */
-
+/* ═══════════════ SUBMIT ═══════════════ */
 async function submitOrder(){
-    if(!validateStep(3, 4)) return;
-    const t = computeTotals();
-    if(t.count === 0){ toast("Cart is empty"); return; }
+    if(!validateStep(3,4))return;
+    const t=computeTotals();
+    if(t.count===0){toast("Cart is empty");return;}
 
-    const order = buildOrderObject();
-    saveOrderToList(order);
-    state.lastOrder = order;
+    const order=buildOrderObject();
+    saveOrderToList(order);state.lastOrder=order;
 
-    const cloudOk = await saveOrderToCloud(order);
-    if(cloudOk){
-        console.log("Order saved to cloud — visible in Merchant Mode instantly");
-    }
-
+    const cloudOk=await saveOrderToCloud(order);
     showOrderSending(order);
 
     let delivery;
-    try{
-        delivery = await deliverOrder(order);
-    }catch(e){
-        delivery = { attempted:true, sent:false, results:{ web3forms:"failed" }, at: Date.now() };
-    }
+    try{delivery=await deliverOrder(order);}
+    catch(e){delivery={attempted:true,sent:false,results:{web3forms:"failed"},at:Date.now()};}
 
-    order.deliveryStatus = delivery;
-    updateOrderInList(order.id, { deliveryStatus: delivery });
-    await updateOrderInCloud(order.id, { deliveryStatus: delivery });
+    order.deliveryStatus=delivery;
+    updateOrderInList(order.id,{deliveryStatus:delivery});
+    await updateOrderInCloud(order.id,{deliveryStatus:delivery});
 
-    state.cart = {};
+    state.cart={};
     afterCartChange();
     renderOrders();
-
     showOrderSuccess(order);
 }
-
 function showOrderSending(order){
-    $("modalKicker").textContent = "Transmitting";
-    $("modalTitle").textContent  = "Sending your order…";
-    $("modalBody").innerHTML = `
+    $("modalKicker").textContent="Transmitting";
+    $("modalTitle").textContent="Sending your order…";
+    $("modalBody").innerHTML=`
         <p>Contacting the ALEX ROBOTECH studio and saving your order.</p>
         <div style="margin-top:16px;padding:16px;border:1px solid rgba(21,216,255,.3);border-radius:14px;background:rgba(21,216,255,.04);text-align:center">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:#69dcff;text-transform:uppercase;margin-bottom:8px">Order ID</div>
             <div style="font-family:var(--mono);font-size:22px;font-weight:900;letter-spacing:1px;color:#fff">${order.id}</div>
-            <div style="font-family:var(--mono);font-size:10px;color:#71849e;margin-top:6px">${new Date(order.createdAt).toLocaleString("en-IN")}</div>
         </div>
-        <div style="margin-top:18px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:#8ea2bd">
-            <i class="pulse-dot"></i>
-            <span>Transmitting to studio…</span>
-        </div>`;
-    $("modalActions").innerHTML = "";
+        <div style="margin-top:18px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:#8ea2bd"><i class="pulse-dot"></i><span>Transmitting…</span></div>`;
+    $("modalActions").innerHTML="";
     $("modal").classList.add("open");
 }
-
 function showOrderSuccess(order){
-    const ds = order.deliveryStatus;
-    const t = order.totals;
-    const cloudOk = !!firebaseDB;
-
-    let headline, subline, statusChip;
-
+    const ds=order.deliveryStatus;const t=order.totals;const cloudOk=!!firebaseDB;
+    let headline,subline,statusChip;
     if(cloudOk){
-        headline = "Order received by studio";
-        subline = "Your order is saved to the cloud and visible to ALEX ROBOTECH in real time. An email copy has also been sent.";
-        statusChip = `<div class="delivery-chip" data-s="cloud" style="margin-top:14px;font-size:11px;padding:7px 11px">☁ Synced to studio</div>`;
+        headline="Order received by studio";
+        subline="Your order is saved to the cloud and visible to ALEX ROBOTECH in real time. An email copy has also been sent.";
+        statusChip=`<div class="delivery-chip" data-s="cloud" style="margin-top:14px;font-size:11px;padding:7px 11px">☁ Synced to studio</div>`;
     } else if(ds && ds.sent){
-        headline = "Order received by studio";
-        subline = "Your order has been transmitted to ALEX ROBOTECH via email. A copy is saved locally too.";
-        statusChip = `<div class="delivery-chip" data-s="sent" style="margin-top:14px;font-size:11px;padding:7px 11px">✓ Sent to studio</div>`;
+        headline="Order received by studio";
+        subline="Your order has been transmitted via email. A copy is saved locally too.";
+        statusChip=`<div class="delivery-chip" data-s="sent" style="margin-top:14px;font-size:11px;padding:7px 11px">✓ Sent to studio</div>`;
     } else {
-        headline = "Order saved locally";
-        subline = "The studio has NOT received this order automatically. Download or copy it and send it to us directly.";
-        statusChip = `<div class="delivery-chip" data-s="off" style="margin-top:14px;font-size:11px;padding:7px 11px">⚠️ Delivery not configured</div>`;
+        headline="Order saved locally";
+        subline="The studio has NOT received this order automatically. Download or copy it and send it to us.";
+        statusChip=`<div class="delivery-chip" data-s="off" style="margin-top:14px;font-size:11px;padding:7px 11px">⚠️ Delivery not configured</div>`;
     }
-
-    $("modalKicker").textContent = (cloudOk || (ds && ds.sent)) ? "Order Confirmed" : "Order Saved";
-    $("modalTitle").textContent  = headline;
-
-    $("modalBody").innerHTML = `
+    $("modalKicker").textContent=(cloudOk||(ds&&ds.sent))?"Order Confirmed":"Order Saved";
+    $("modalTitle").textContent=headline;
+    $("modalBody").innerHTML=`
         <p>${subline}</p>
         <div style="margin-top:16px;padding:16px;border:1px solid rgba(21,216,255,.3);border-radius:14px;background:rgba(21,216,255,.04);text-align:center">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:#69dcff;text-transform:uppercase;margin-bottom:8px">Order ID</div>
@@ -2319,465 +1063,218 @@ function showOrderSuccess(order){
             ${statusChip}
         </div>
         <div style="margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02)">
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:#9aacc4;padding:5px 0">
-                <span>Items</span><strong style="color:#fff">${order.items.reduce((a,i)=>a+i.qty,0)}</strong>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:#9aacc4;padding:5px 0">
-                <span>Subtotal</span><strong style="color:#fff">${inr(t.subtotal)}</strong>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;padding:12px 0 0;margin-top:8px;border-top:1px solid var(--line)">
-                <span style="color:#fff;font-weight:800">TOTAL</span>
-                <strong style="color:#45dcff">${inr(t.total)}</strong>
-            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:#9aacc4;padding:5px 0"><span>Items</span><strong style="color:#fff">${order.items.reduce((a,i)=>a+i.qty,0)}</strong></div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:#9aacc4;padding:5px 0"><span>Subtotal</span><strong style="color:#fff">${inr(t.subtotal)}</strong></div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;padding:12px 0 0;margin-top:8px;border-top:1px solid var(--line)"><span style="color:#fff;font-weight:800">TOTAL</span><strong style="color:#45dcff">${inr(t.total)}</strong></div>
         </div>`;
-
-    $("modalActions").innerHTML = `
+    $("modalActions").innerHTML=`
         <button class="btn primary" onclick="downloadOrderById('${order.id}')">Download .txt</button>
         <button class="btn" onclick="printOrderById('${order.id}')">Print Invoice</button>
         <button class="btn" onclick="copyOrderById('${order.id}')">Copy</button>
         <button class="btn ghost" onclick="closeModal();scrollToOrders()">View My Orders</button>`;
-
     $("modal").classList.add("open");
     renderOrders();
 }
 
-/* ====================== COPY / DOWNLOAD / PRINT ====================== */
-
-function previewOrder(){
-    const t = computeTotals();
-    if(t.count === 0){ toast("Cart is empty"); return; }
-    const order = buildOrderObject();
-    order.id = "(preview)";
-    printOrderObject(order);
-}
-function copyOrder(){
-    const text = buildOrderTextFromState();
-    navigator.clipboard?.writeText(text)
-        .then(() => toast("Order copied to clipboard"))
-        .catch(() => toast("Copy unavailable in this browser"));
-}
-function downloadOrderById(id){
-    const order = getOrders().find(o => o.id === id);
-    if(!order){ toast("Order not found"); return; }
-    downloadOrderObject(order);
-}
-function printOrderById(id){
-    const order = getOrders().find(o => o.id === id);
-    if(!order){ toast("Order not found"); return; }
-    printOrderObject(order);
-}
-function copyOrderById(id){
-    const order = getOrders().find(o => o.id === id);
-    if(!order){ toast("Order not found"); return; }
-    const text = buildOrderTextFromObject(order);
-    navigator.clipboard?.writeText(text)
-        .then(() => toast("Order copied to clipboard"))
-        .catch(() => toast("Copy unavailable"));
-}
+/* ═══════════════ COPY / DOWNLOAD / PRINT ═══════════════ */
+function previewOrder(){const t=computeTotals();if(t.count===0){toast("Cart is empty");return;}const order=buildOrderObject();order.id="(preview)";printOrderObject(order);}
+function copyOrder(){const text=buildOrderTextFromState();navigator.clipboard?.writeText(text).then(()=>toast("Order copied")).catch(()=>toast("Copy unavailable"));}
+function downloadOrderById(id){const order=getOrders().find(o=>o.id===id);if(!order){toast("Order not found");return;}downloadOrderObject(order);}
+function printOrderById(id){const order=getOrders().find(o=>o.id===id);if(!order){toast("Order not found");return;}printOrderObject(order);}
+function copyOrderById(id){const order=getOrders().find(o=>o.id===id);if(!order){toast("Order not found");return;}const text=buildOrderTextFromObject(order);navigator.clipboard?.writeText(text).then(()=>toast("Order copied")).catch(()=>toast("Copy unavailable"));}
 function downloadOrderObject(order){
-    const text = buildOrderTextFromObject(order);
-    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `alex-robotech-${order.id}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast("Order downloaded");
+    const text=buildOrderTextFromObject(order);
+    const blob=new Blob([text],{type:"text/plain;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;a.download=`alex-robotech-${order.id}.txt`;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url),1000);toast("Order downloaded");
 }
 function printOrderObject(order){
-    const text = buildOrderTextFromObject(order);
-    const w = window.open("", "_blank", "width=720,height=900");
-    if(!w){ toast("Please allow pop-ups to print"); return; }
-    w.document.write(
-        '<!DOCTYPE html><html><head><title>Order ' + order.id + '</title>' +
-        '<style>body{font-family:ui-monospace,Menlo,Consolas,monospace;padding:40px;color:#111;font-size:13px;line-height:1.6;}' +
-        'pre{white-space:pre-wrap;word-wrap:break-word;margin:0;}@media print{body{padding:20px;}}</style></head>' +
-        '<body><pre>' + escapeHtml(text) + '</pre>' +
-        '<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script>' +
-        '</body></html>'
-    );
+    const text=buildOrderTextFromObject(order);
+    const w=window.open("","_blank","width=720,height=900");
+    if(!w){toast("Please allow pop-ups to print");return;}
+    w.document.write('<!DOCTYPE html><html><head><title>Order '+order.id+'</title><style>body{font-family:ui-monospace,Menlo,Consolas,monospace;padding:40px;color:#111;font-size:13px;line-height:1.6}pre{white-space:pre-wrap;word-wrap:break-word;margin:0}@media print{body{padding:20px}}</style></head><body><pre>'+escapeHtml(text)+'</pre><script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>');
     w.document.close();
 }
 
-/* ====================== MY ORDERS ====================== */
-
+/* ═══════════════ MY ORDERS ═══════════════ */
 function renderOrders(){
-    const grid = $("ordersGrid");
-    const orders = getOrders();
-
-    $("configNotice").classList.toggle("show", !firebaseConfigured());
-
-    if(orders.length === 0){
-        grid.innerHTML = `
-            <div class="no-orders">
-                <div class="big">◌</div>
-                <div style="font-family:var(--mono);font-size:12px;letter-spacing:1px;margin-bottom:8px">NO ORDERS YET</div>
-                <p style="font-size:12px;max-width:340px;margin:0 auto 18px">
-                    Place your first order from the console and it will appear here.
-                </p>
-                <a class="btn primary" href="#order">Open Order Console ↗</a>
-            </div>`;
-        updateOrderHelpers(orders);
-        return;
+    const grid=$("ordersGrid");const orders=getOrders();
+    $("configNotice").style.display=firebaseConfigured()?"none":"flex";
+    if(orders.length===0){
+        grid.innerHTML=`<div class="no-orders"><div class="big">◌</div><div style="font-family:var(--mono);font-size:12px;margin-bottom:8px">NO ORDERS YET</div><p style="font-size:12px;max-width:340px;margin:0 auto 18px">Place your first order from the console and it will appear here.</p><a class="btn primary" href="#order">Open Order Console ↗</a></div>`;
+        updateOrderHelpers(orders);return;
     }
-
-    grid.innerHTML = orders.map(o => {
-        const ds = o.deliveryStatus;
-        let chip = "";
-        if(firebaseDB){
-            chip = `<div class="delivery-chip" data-s="cloud">☁ Cloud synced</div>`;
-        } else if(ds && ds.sent){
-            chip = `<div class="delivery-chip" data-s="sent">✓ Sent to studio</div>`;
-        } else {
-            chip = `<div class="delivery-chip" data-s="off">◌ Local only</div>`;
-        }
-
-        const itemLines = o.items.slice(0, 3).map(it =>
-            `<div class="order-item">
-                <span>${escapeHtml(it.name)} × ${it.qty}</span>
-                <span>${it.quote ? "TBD" : inr(it.line)}</span>
-            </div>`
-        ).join("");
-
-        const moreLine = o.items.length > 3
-            ? `<div class="order-item" style="justify-content:flex-end;color:#71849e">
-                + ${o.items.length - 3} more item${o.items.length - 3 > 1 ? "s" : ""}
-               </div>`
-            : "";
-
-        const statusSelect = state.merchantMode
-            ? `<select class="status-select" onchange="changeStatus('${o.id}', this.value)">
-                ${["pending","confirmed","in_progress","completed","cancelled"].map(s =>
-                    `<option value="${s}" ${o.status === s ? "selected" : ""}>${statusLabel(s)}</option>`
-                ).join("")}
-               </select>`
-            : "";
-
-        return `
-        <div class="order-card" id="card-${o.id}">
+    grid.innerHTML=orders.map(o=>{
+        const ds=o.deliveryStatus;let chip="";
+        if(firebaseDB)chip=`<div class="delivery-chip" data-s="cloud">☁ Cloud synced</div>`;
+        else if(ds&&ds.sent)chip=`<div class="delivery-chip" data-s="sent">✓ Sent to studio</div>`;
+        else chip=`<div class="delivery-chip" data-s="off">◌ Local only</div>`;
+        const itemLines=o.items.slice(0,3).map(it=>`<div class="order-item"><span>${escapeHtml(it.name)} × ${it.qty}</span><span>${it.quote?"TBD":inr(it.line)}</span></div>`).join("");
+        const moreLine=o.items.length>3?`<div class="order-item" style="justify-content:flex-end;color:#71849e">+ ${o.items.length-3} more</div>`:"";
+        const statusSelect=state.merchantMode?`<select class="status-select" onchange="changeStatus('${o.id}',this.value)">${["pending","confirmed","in_progress","completed","cancelled"].map(s=>`<option value="${s}" ${o.status===s?"selected":""}>${statusLabel(s)}</option>`).join("")}</select>`:"";
+        return `<div class="order-card" id="card-${o.id}">
             <div class="order-card-head">
-                <div>
-                    <div class="order-id">${o.id}</div>
-                    <div class="order-date">${new Date(o.createdAt).toLocaleString("en-IN")}</div>
-                    ${chip}
-                </div>
+                <div><div class="order-id">${o.id}</div><div class="order-date">${new Date(o.createdAt).toLocaleString("en-IN")}</div>${chip}</div>
                 <span class="order-status" data-s="${o.status}">${statusLabel(o.status)}</span>
             </div>
             <div class="order-summary">
                 <div><div class="lbl">Items</div><div class="val">${o.items.reduce((a,i)=>a+i.qty,0)}</div></div>
-                <div><div class="lbl">Delivery</div><div class="val">${o.delivery.needed ? (o.delivery.method === "pickup" ? "Pickup" : "Ship") : "—"}</div></div>
+                <div><div class="lbl">Delivery</div><div class="val">${o.delivery.needed?(o.delivery.method==="pickup"?"Pickup":"Ship"):"—"}</div></div>
                 <div><div class="lbl">Total</div><div class="val">${inr(o.totals.total)}</div></div>
             </div>
-            <div class="order-items">
-                ${itemLines}
-                ${moreLine}
-            </div>
+            <div class="order-items">${itemLines}${moreLine}</div>
             <div class="order-actions">
                 <button onclick="copyOrderById('${o.id}')">Copy</button>
                 <button onclick="downloadOrderById('${o.id}')">Download</button>
                 <button onclick="printOrderById('${o.id}')">Print</button>
                 <button onclick="viewOrder('${o.id}')">View</button>
-                ${state.merchantMode ? `<button class="danger" onclick="removeOrder('${o.id}')">Delete</button>` : ""}
+                ${state.merchantMode?`<button class="danger" onclick="removeOrder('${o.id}')">Delete</button>`:""}
             </div>
             ${statusSelect}
         </div>`;
     }).join("");
-
     updateOrderHelpers(orders);
 }
-
 function updateOrderHelpers(orders){
-    const dl = $("orderIds");
-    if(dl) dl.innerHTML = orders.map(o => `<option value="${o.id}"></option>`).join("");
+    const dl=$("orderIds");if(dl)dl.innerHTML=orders.map(o=>`<option value="${o.id}"></option>`).join("");
     renderRecentChips();
 }
-
 function renderRecentChips(){
-    const wrap = $("recentChips");
-    if(!wrap) return;
-
-    const orders = getOrders().slice(0, 5);
-
-    if(orders.length === 0){
-        wrap.innerHTML = "";
-        return;
-    }
-
-    wrap.innerHTML =
-        '<span class="recent-label">RECENT:</span>' +
-        orders.map(o =>
-            `<button class="chip" onclick="quickTrack('${o.id}')">${o.id}</button>`
-        ).join("");
+    const wrap=$("recentChips");if(!wrap)return;
+    const orders=getOrders().slice(0,5);
+    if(orders.length===0){wrap.innerHTML="";return;}
+    wrap.innerHTML='<span class="recent-label">RECENT:</span>'+orders.map(o=>`<button class="chip" onclick="quickTrack('${o.id}')">${o.id}</button>`).join("");
 }
-
-function quickTrack(id){
-    $("trackInput").value = id;
-    trackOrder();
-}
-
+function quickTrack(id){$("trackInput").value=id;trackOrder();}
 function trackOrder(){
-    const raw   = $("trackInput").value.trim();
-    const input = raw.toUpperCase().replace(/\s+/g, "");
-
-    if(!input){
-        toast("Enter an Order ID");
-        $("trackInput").focus();
-        return;
-    }
-
-    const orders = getOrders();
-
-    if(orders.length === 0){
-        toast("No orders stored yet — place one first");
-        return;
-    }
-
-    let order = orders.find(o => o.id.toUpperCase() === input);
-
-    if(!order && !input.startsWith("AR-")){
-        order = orders.find(o => o.id.toUpperCase() === "AR-" + input);
-    }
-
-    if(!order){
-        order = orders.find(o => o.id.toUpperCase().includes(input));
-    }
-
-    if(!order){
-        toast(`No order matches "${raw}". Tap a recent ID below.`);
-        return;
-    }
-
-    highlightOrderCard(order.id, order.status);
+    const raw=$("trackInput").value.trim();
+    const input=raw.toUpperCase().replace(/\s+/g,"");
+    if(!input){toast("Enter an Order ID");$("trackInput").focus();return;}
+    const orders=getOrders();
+    if(orders.length===0){toast("No orders stored yet");return;}
+    let order=orders.find(o=>o.id.toUpperCase()===input);
+    if(!order && !input.startsWith("AR-"))order=orders.find(o=>o.id.toUpperCase()==="AR-"+input);
+    if(!order)order=orders.find(o=>o.id.toUpperCase().includes(input));
+    if(!order){toast(`No order matches "${raw}"`);return;}
+    highlightOrderCard(order.id,order.status);
 }
-
-function highlightOrderCard(id, status){
-    let el = document.getElementById("card-" + id);
-
-    if(!el){
-        renderOrders();
-        setTimeout(() => {
-            const retry = document.getElementById("card-" + id);
-            if(retry){
-                retry.scrollIntoView({behavior:"smooth", block:"center"});
-                retry.classList.remove("order-highlight");
-                void retry.offsetWidth;
-                retry.classList.add("order-highlight");
-            }
-        }, 120);
-        return;
-    }
-
-    el.scrollIntoView({behavior:"smooth", block:"center"});
-    el.classList.remove("order-highlight");
-    void el.offsetWidth;
-    el.classList.add("order-highlight");
-
-    toast(`Found · ${id} · ${status || "Pending Review"}`);
+function highlightOrderCard(id,status){
+    let el=document.getElementById("card-"+id);
+    if(!el){renderOrders();setTimeout(()=>{const r=document.getElementById("card-"+id);if(r){r.scrollIntoView({behavior:"smooth",block:"center"});r.classList.remove("order-highlight");void r.offsetWidth;r.classList.add("order-highlight");}},120);return;}
+    el.scrollIntoView({behavior:"smooth",block:"center"});
+    el.classList.remove("order-highlight");void el.offsetWidth;el.classList.add("order-highlight");
+    toast(`Found · ${id} · ${status||"Pending Review"}`);
 }
-
-function viewOrder(id){
-    const order = getOrders().find(o => o.id === id);
-    if(!order){ toast("Order not found"); return; }
-    showOrderSuccess(order);
-}
-async function changeStatus(id, status){
-    updateOrderInList(id, { status });
-    await updateOrderInCloud(id, { status });
+function viewOrder(id){const order=getOrders().find(o=>o.id===id);if(!order){toast("Order not found");return;}showOrderSuccess(order);}
+async function changeStatus(id,status){
+    updateOrderInList(id,{status});
+    await updateOrderInCloud(id,{status});
     renderOrders();
     toast(`Status → ${statusLabel(status)}`);
 }
 async function removeOrder(id){
-    if(!confirm("Delete this order permanently?")) return;
+    if(!confirm("Delete this order permanently?"))return;
     deleteOrderFromList(id);
-    if(firebaseDB){
-        try{ await firebaseDB.collection("orders").doc(id).delete(); }
-        catch(e){ console.warn("Cloud delete failed:", e); }
-    }
-    renderOrders();
-    toast("Order deleted");
+    if(firebaseDB){try{await firebaseDB.collection("orders").doc(id).delete();}catch(e){}}
+    renderOrders();toast("Order deleted");
 }
 
-/* ====================== MERCHANT MODE (PIN) ====================== */
-
+/* ═══════════════ MERCHANT MODE ═══════════════ */
 function requestMerchantToggle(){
     if(state.merchantMode){
-        state.merchantMode = false;
-        const t = $("merchantToggle");
-        t.classList.remove("on");
-        $("merchantState").textContent = "OFF";
-        renderOrders();
-        toast("Merchant Mode disabled");
-        return;
+        state.merchantMode=false;
+        const t=$("merchantToggle");t.classList.remove("on");
+        $("merchantState").textContent="OFF";
+        renderOrders();toast("Merchant Mode disabled");return;
     }
-
-    const entered = prompt("Enter merchant PIN:");
-    if(entered === null) return;
-
-    if(entered.trim() !== MERCHANT_PIN){
-        toast("❌ Incorrect PIN");
-        return;
-    }
-
-    state.merchantMode = true;
-    const t = $("merchantToggle");
-    t.classList.add("on");
-    $("merchantState").textContent = "ON";
-    renderOrders();
-    toast("✓ Merchant Mode enabled");
+    const entered=prompt("Enter merchant PIN:");
+    if(entered===null)return;
+    if(entered.trim()!==MERCHANT_PIN){toast("❌ Incorrect PIN");return;}
+    state.merchantMode=true;
+    const t=$("merchantToggle");t.classList.add("on");
+    $("merchantState").textContent="ON";
+    renderOrders();toast("✓ Merchant Mode enabled");
 }
-
-document.addEventListener("keydown", (e) => {
-    if(e.ctrlKey && e.shiftKey && (e.key === "M" || e.key === "m")){
+document.addEventListener("keydown",(e)=>{
+    if(e.ctrlKey && e.shiftKey && (e.key==="M"||e.key==="m")){
         e.preventDefault();
-        const bar = $("merchantBar");
-        const hint = $("merchantHint");
-        if(bar){
-            bar.classList.toggle("revealed");
-            if(hint) hint.style.opacity = bar.classList.contains("revealed") ? "0" : "1";
-        }
+        const bar=$("merchantBar"),hint=$("merchantHint");
+        if(bar){bar.classList.toggle("revealed");if(hint)hint.style.opacity=bar.classList.contains("revealed")?"0":"1";}
     }
 });
+function scrollToOrders(){document.getElementById("orders").scrollIntoView({behavior:"smooth"});}
 
-function scrollToOrders(){
-    document.getElementById("orders").scrollIntoView({behavior:"smooth"});
-}
-
-/* ====================== MODAL ====================== */
-
-function closeModal(){
-    $("modal").classList.remove("open");
-}
-$("modal").addEventListener("click", e => {
-    if(e.target.id === "modal") closeModal();
-});
-
-/* ====================== TOAST ====================== */
-
+/* ═══════════════ MODAL / TOAST / CLOCK ═══════════════ */
+function closeModal(){$("modal").classList.remove("open");}
+$("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
 let toastTimer;
-function toast(message){
-    const el = $("toast");
-    el.textContent = message;
-    el.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove("show"), 3200);
-}
-
-/* ====================== CLOCK + YEAR ====================== */
-
+function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),3200);}
 function tickClock(){
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2,"0");
-    const mm = String(now.getMinutes()).padStart(2,"0");
-    const ss = String(now.getSeconds()).padStart(2,"0");
-    const t = `${hh}:${mm}:${ss}`;
-    const c = $("consoleClock");
-    if(c) c.textContent = t;
-    const n = $("navClock");
-    if(n) n.textContent = "ONLINE · " + t;
+    const now=new Date();
+    const t=`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`;
+    const c=$("consoleClock");if(c)c.textContent=t;
+    const n=$("navClock");if(n)n.textContent="ONLINE · "+t;
 }
-setInterval(tickClock, 1000);
-tickClock();
-$("year").textContent = new Date().getFullYear();
+setInterval(tickClock,1000);tickClock();
+$("year").textContent=new Date().getFullYear();
 
-/* ====================== LIVE FIELD SYNC ====================== */
-
-["addrLine","addrCity","addrState","addrPin","addrPhone",
- "fName","fEmail","fPhone","fOrg","fNotes"].forEach(id => {
-    const el = $(id);
-    if(el) el.addEventListener("input", () => {
-        renderSummary();
-        if(state.step === 4) renderReview();
-    });
+/* ═══════════════ LIVE FIELD SYNC ═══════════════ */
+["addrLine","addrCity","addrState","addrPin","addrPhone","fName","fEmail","fPhone","fOrg","fNotes"].forEach(id=>{
+    const el=$(id);if(el)el.addEventListener("input",()=>{renderSummary();if(state.step===4)renderReview();});
 });
-$("addrPin").addEventListener("input", e => {
-    e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6);
-});
+$("addrPin").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,6);});
 
-/* ====================== BACKGROUND PARTICLES ====================== */
-
+/* ═══════════════ BACKGROUND ═══════════════ */
 (function particles(){
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if(reduce) return;
-    const cvs = $("fx");
-    const ctx = cvs.getContext("2d");
-    let W, H, pts = [], dpr = 1;
-
+    const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(reduce)return;
+    const cvs=$("fx");const ctx=cvs.getContext("2d");
+    let W,H,pts=[],dpr=1;
     function resize(){
-        dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-        W = cvs.width  = Math.floor(innerWidth  * dpr);
-        H = cvs.height = Math.floor(innerHeight * dpr);
-        cvs.style.width  = innerWidth + "px";
-        cvs.style.height = innerHeight + "px";
-        const n = Math.min(64, Math.round(innerWidth / 24));
-        pts = Array.from({length: n}, () => ({
-            x: Math.random() * W, y: Math.random() * H,
-            vx: (Math.random() - 0.5) * 0.22 * dpr,
-            vy: (Math.random() - 0.5) * 0.22 * dpr
-        }));
+        dpr=Math.min(window.devicePixelRatio||1,1.5);
+        W=cvs.width=Math.floor(innerWidth*dpr);H=cvs.height=Math.floor(innerHeight*dpr);
+        cvs.style.width=innerWidth+"px";cvs.style.height=innerHeight+"px";
+        const n=Math.min(64,Math.round(innerWidth/24));
+        pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.22*dpr,vy:(Math.random()-0.5)*0.22*dpr}));
     }
-    const LINK = 130;
+    const LINK=130;
     function frame(){
-        ctx.clearRect(0, 0, W, H);
+        ctx.clearRect(0,0,W,H);
         for(const p of pts){
-            p.x += p.vx; p.y += p.vy;
-            if(p.x < 0 || p.x > W) p.vx *= -1;
-            if(p.y < 0 || p.y > H) p.vy *= -1;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 1.1 * dpr, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(21,216,255,0.45)";
-            ctx.fill();
+            p.x+=p.vx;p.y+=p.vy;
+            if(p.x<0||p.x>W)p.vx*=-1;
+            if(p.y<0||p.y>H)p.vy*=-1;
+            ctx.beginPath();ctx.arc(p.x,p.y,1.1*dpr,0,Math.PI*2);
+            ctx.fillStyle="rgba(21,216,255,0.45)";ctx.fill();
         }
-        const lim = LINK * dpr;
-        for(let i = 0; i < pts.length; i++){
-            for(let j = i + 1; j < pts.length; j++){
-                const dx = pts[i].x - pts[j].x;
-                const dy = pts[i].y - pts[j].y;
-                const d = Math.hypot(dx, dy);
-                if(d < lim){
-                    ctx.beginPath();
-                    ctx.moveTo(pts[i].x, pts[i].y);
-                    ctx.lineTo(pts[j].x, pts[j].y);
-                    ctx.strokeStyle = `rgba(60,150,255,${0.11 * (1 - d / lim)})`;
-                    ctx.lineWidth = dpr * 0.7;
-                    ctx.stroke();
-                }
-            }
+        const lim=LINK*dpr;
+        for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+            const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);
+            if(d<lim){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(60,150,255,${0.11*(1-d/lim)})`;ctx.lineWidth=dpr*0.7;ctx.stroke();}
         }
         requestAnimationFrame(frame);
     }
-    resize();
-    frame();
-    addEventListener("resize", resize);
+    resize();frame();addEventListener("resize",resize);
 })();
-
-/* ====================== STAT COUNTER ====================== */
 
 (function counters(){
-    const els = document.querySelectorAll("[data-count]");
-    if(!els.length) return;
-    const io = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if(!entry.isIntersecting) return;
-            const el = entry.target;
-            const target = Number(el.dataset.count);
-            let cur = 0;
-            const step = Math.max(1, Math.round(target / 28));
-            const iv = setInterval(() => {
-                cur += step;
-                if(cur >= target){ cur = target; clearInterval(iv); }
-                el.textContent = cur + "+";
-            }, 30);
+    const els=document.querySelectorAll("[data-count]");
+    if(!els.length)return;
+    const io=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+            if(!entry.isIntersecting)return;
+            const el=entry.target;const target=Number(el.dataset.count);let cur=0;
+            const step=Math.max(1,Math.round(target/28));
+            const iv=setInterval(()=>{cur+=step;if(cur>=target){cur=target;clearInterval(iv);}el.textContent=cur+"+";},30);
             io.unobserve(el);
         });
-    }, {threshold: 0.5});
-    els.forEach(el => io.observe(el));
+    },{threshold:0.5});
+    els.forEach(el=>io.observe(el));
 })();
 
-/* ====================== BOOT ====================== */
-
+/* ═══════════════ BOOT ═══════════════ */
 renderCatalog();
 renderCart();
 renderDrawer();
@@ -2790,14 +1287,14 @@ initFirebase();
 watchCloudOrders();
 renderOrders();
 
-if($("studioLabel")) $("studioLabel").textContent = STUDIO.label;
+if($("studioLabel"))$("studioLabel").textContent=STUDIO.label;
 
-console.log("%cALEX ROBOTECH ORDER CONSOLE", "color:#15d8ff;font-weight:bold;font-size:14px");
-console.log(
-    firebaseConfigured()
-        ? "%c✓ Firebase connected — orders sync across devices"
-        : "%c⚠ Firebase NOT configured — see FIREBASE_CONFIG at top of script",
-    firebaseConfigured() ? "color:#8ff0c2" : "color:#ffb547"
-);
-console.log(
-    web3forms
+console.log("%cALEX ROBOTECH ORDER CONSOLE","color:#15d8ff;font-weight:bold;font-size:14px");
+console.log(firebaseConfigured()?"%c✓ Firebase connected — orders sync across devices":"%c⚠ Firebase NOT configured — see FIREBASE_CONFIG at top of script",firebaseConfigured()?"color:#8ff0c2":"color:#ffb547");
+console.log(web3formsReady()?"%c✓ Email delivery configured":"%c⚠ Email NOT configured",web3formsReady()?"color:#8ff0c2":"color:#ffb547");
+console.log("%cStudio: "+STUDIO.label,"color:#8ea2bd");
+console.log("%cMerchant access: Ctrl+Shift+M then enter PIN","color:#69dcff");
+</script>
+
+</body>
+</html>
