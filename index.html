@@ -582,7 +582,28 @@ section{padding:110px 0;}
 .review-block .rl b{font-family:var(--mono);font-weight:700;}
 
 /* ORDERS */
-.track-bar{display:flex;gap:9px;margin-bottom:16px;max-width:560px;}
+.track-bar{display:flex;gap:9px;margin-bottom:14px;max-width:560px;}
+.track-bar input{flex:1;}
+.recent-chips{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    margin-bottom:22px;
+}
+.recent-chips .recent-label{
+    font-family:var(--mono);font-size:10px;
+    color:#5f7391;letter-spacing:1.2px;margin-right:4px;
+}
+.recent-chips .chip{
+    font-family:var(--mono);font-size:10.5px;
+    padding:6px 10px;border-radius:8px;
+    border:1px solid var(--line);
+    background:rgba(21,216,255,.05);color:#bdefff;
+    cursor:pointer;transition:.2s;letter-spacing:.5px;
+}
+.recent-chips .chip:hover{
+    background:rgba(21,216,255,.15);
+    border-color:var(--cyan);
+    transform:translateY(-1px);
+}
 .track-bar input{flex:1;}
 .merchant-bar{display:flex;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap;}
 .merchant-toggle{
@@ -1193,9 +1214,11 @@ the JavaScript. See the setup guide in the code.
 </div>
 
 <div class="track-bar">
-<input class="input" id="trackInput" placeholder="Track by Order ID · AR-241002-4821">
+<input class="input" id="trackInput" list="orderIds" placeholder="Track by Order ID · AR-251003-4821">
+<datalist id="orderIds"></datalist>
 <button class="btn primary" onclick="trackOrder()">Track ↗</button>
 </div>
+<div id="recentChips" class="recent-chips"></div>
 
 <div class="merchant-bar">
 <button class="merchant-toggle" id="merchantToggle" onclick="toggleMerchant()">
@@ -2413,7 +2436,13 @@ function renderOrders(){
                 <span>${escapeHtml(it.name)} × ${it.qty}</span>
                 <span>${it.quote ? "TBD" : inr(it.line)}</span>
             </div>`
-        ).join("");
+          }).join("");
+
+    /* Refresh the datalist and recent chips */
+    const dl = $("orderIds");
+    if(dl) dl.innerHTML = orders.map(o => `<option value="${o.id}"></option>`).join("");
+    renderRecentChips();
+}
 
         const moreLine = o.items.length > 3
             ? `<div class="order-item" style="justify-content:flex-end;color:#71849e">
@@ -2482,17 +2511,89 @@ function removeOrder(id){
     toast("Order deleted");
 }
 function trackOrder(){
-    const input = $("trackInput").value.trim().toUpperCase();
-    if(!input){ toast("Enter an Order ID"); return; }
-    const order = getOrders().find(o => o.id.toUpperCase() === input);
-    if(!order){ toast("Order not found in this browser"); return; }
-    const el = document.getElementById("card-" + order.id);
-    if(el){
-        el.scrollIntoView({behavior:"smooth", block:"center"});
-        el.classList.remove("order-highlight");
-        void el.offsetWidth;
-        el.classList.add("order-highlight");
-        toast(`Found · ${statusLabel(order.status)}`);
+    const raw   = $("trackInput").value.trim();
+    const input = raw.toUpperCase().replace(/\s+/g, "");
+
+    if(!input){
+        toast("Enter an Order ID");
+        $("trackInput").focus();
+        return;
+    }
+
+    const orders = getOrders();
+
+    if(orders.length === 0){
+        toast("No orders stored in this browser yet — place one first");
+        return;
+    }
+
+    /* Try in order: exact → add AR- prefix → partial match */
+    let order = orders.find(o => o.id.toUpperCase() === input);
+
+    if(!order && !input.startsWith("AR-")){
+        order = orders.find(o => o.id.toUpperCase() === "AR-" + input);
+    }
+
+    if(!order){
+        order = orders.find(o => o.id.toUpperCase().includes(input));
+    }
+
+    if(!order){
+        toast(`No order matches "${raw}". Tap a recent ID below.`);
+        return;
+    }
+
+    highlightOrderCard(order.id, order.status);
+}
+
+function highlightOrderCard(id, status){
+    let el = document.getElementById("card-" + id);
+
+    /* If the card isn't in the DOM yet, re-render and retry */
+    if(!el){
+        renderOrders();
+        setTimeout(() => {
+            const retry = document.getElementById("card-" + id);
+            if(retry){
+                retry.scrollIntoView({behavior:"smooth", block:"center"});
+                retry.classList.remove("order-highlight");
+                void retry.offsetWidth;
+                retry.classList.add("order-highlight");
+            }
+        }, 120);
+        return;
+    }
+
+    el.scrollIntoView({behavior:"smooth", block:"center"});
+    el.classList.remove("order-highlight");
+    void el.offsetWidth;
+    el.classList.add("order-highlight");
+
+    toast(`Found · ${id} · ${status || "Pending Review"}`);
+}
+
+function quickTrack(id){
+    $("trackInput").value = id;
+    trackOrder();
+}
+
+function renderRecentChips(){
+    const wrap = $("recentChips");
+    if(!wrap) return;
+
+    const orders = getOrders().slice(0, 5);
+
+    if(orders.length === 0){
+        wrap.innerHTML = "";
+        return;
+    }
+
+    wrap.innerHTML =
+        '<span class="recent-label">RECENT:</span>' +
+        orders.map(o =>
+            `<button class="chip" onclick="quickTrack('${o.id}')">${o.id}</button>`
+        ).join("");
+}
     }
 }
 function toggleMerchant(){
