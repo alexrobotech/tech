@@ -1204,8 +1204,7 @@ Save your Order ID, download a copy, and track the status anytime.
 <p>
 Right now, orders are only saved in this browser — they do not reach the studio.
 To receive orders, the site owner needs to add a <code>WEB3FORMS_ACCESS_KEY</code>
-or <code>TELEGRAM_BOT_TOKEN</code> + <code>TELEGRAM_CHAT_ID</code> at the top of
-the JavaScript. See the setup guide in the code.
+at the top of the JavaScript.
 </p>
 </div>
 </div>
@@ -1282,15 +1281,14 @@ Merchant Mode: <b id="merchantState">OFF</b>
 
 <script>
 /* =====================================================================
-   SETUP — FILL THESE IN TO RECEIVE ORDERS
+   DELIVERY CONFIG — YOUR KEY IS ALREADY ADDED
    =====================================================================
-   ▸ EMAIL (recommended):  https://web3forms.com  → enter email → get key
-   ▸ TELEGRAM (optional):  @BotFather → /newbot → get token & chat ID
+   Orders will arrive at the email you used to sign up at web3forms.com
    ===================================================================== */
 
-const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
-const TELEGRAM_BOT_TOKEN   = "YOUR_TELEGRAM_BOT_TOKEN";
-const TELEGRAM_CHAT_ID     = "YOUR_TELEGRAM_CHAT_ID";
+const WEB3FORMS_ACCESS_KEY = "79e7cefd-0d2c-44da-b6ae-a07eb2865328";
+const TELEGRAM_BOT_TOKEN   = "";
+const TELEGRAM_CHAT_ID     = "";
 
 /* ====================== CONFIG ====================== */
 
@@ -1696,9 +1694,6 @@ function renderSummary(){
 
         if(t.hasQuote)
             html += `<div class="side-note">Custom project item is quote-based and excluded from the total.</div>`;
-
-        if(!anyDeliveryReady())
-            html += `<div class="side-note">⚠️ Delivery not configured — order will be saved locally for manual sharing.</div>`;
     }
 
     note.innerHTML = html;
@@ -2157,28 +2152,7 @@ async function deliverToWeb3Forms(order){
 
 async function deliverToTelegram(order){
     if(!telegramReady()) return "skipped";
-    const text = buildOrderTextFromObject(order);
-    const body = text.length > 4000 ? text.slice(0, 3950) + "\n…(truncated)" : text;
-
-    try{
-        const res = await fetch(
-            `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: body,
-                    disable_web_page_preview: true
-                })
-            }
-        );
-        const data = await res.json();
-        return data.ok ? "sent" : "failed";
-    }catch(e){
-        console.warn("Telegram delivery failed:", e);
-        return "failed";
-    }
+    return "skipped";
 }
 
 async function deliverOrder(order){
@@ -2750,7 +2724,7 @@ console.log("%cALEX ROBOTECH ORDER CONSOLE", "color:#15d8ff;font-weight:bold;fon
 console.log(
     anyDeliveryReady()
         ? "%c✓ Delivery configured — orders will reach the studio"
-        : "%c⚠ Delivery NOT configured — see setup guide at top of script",
+        : "%c⚠ Delivery NOT configured",
     anyDeliveryReady() ? "color:#8ff0c2" : "color:#ffb547"
 );
 console.log("%cStudio: " + STUDIO.label, "color:#8ea2bd");
